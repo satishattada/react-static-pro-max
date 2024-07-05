@@ -220,11 +220,11 @@ export function buildConfig(state, config = {}) {
 
   process.env.REACT_STATIC_TEMPLATES_PATH = nodePath.join(
     paths.ARTIFACTS,
-    "react-static-templates.js"
+    "react-static-pro-max-templates.js"
   );
   process.env.REACT_STATIC_PLUGINS_PATH = nodePath.join(
     paths.ARTIFACTS,
-    "react-static-browser-plugins.js"
+    "react-static-pro-max-browser-plugins.js"
   );
 
   const resolvePlugin = originalLocation => {

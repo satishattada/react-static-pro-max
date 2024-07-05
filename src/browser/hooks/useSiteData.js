@@ -35,7 +35,7 @@ const useSiteData = () => {
   if (!siteDataPromise) {
     // Request the site data
     siteDataPromise = axios
-      .get("/__react-static__/siteData")
+      .get("/__react-static-pro-max__/siteData")
       .then(({ data }) => {
         siteDataReady = true;
         siteData = data;

@@ -1,6 +1,6 @@
 import path from 'path'
 import axios from 'axios'
-import { createSharedData, makePageRoutes } from 'react-static/node'
+import { createSharedData, makePageRoutes } from 'react-static-pro-max/node'
 
 //
 
@@ -83,13 +83,13 @@ export default {
     ]
   },
   plugins: [
-    require.resolve('react-static-plugin-reach-router'),
+    require.resolve('react-static-pro-max-plugin-reach-router'),
     process.env.STYLE_SYSTEM === 'emotion' &&
-      require.resolve('react-static-plugin-emotion'),
+      require.resolve('react-static-pro-max-plugin-emotion'),
     process.env.STYLE_SYSTEM === 'styled-components' &&
-      require.resolve('react-static-plugin-styled-components'),
+      require.resolve('react-static-pro-max-plugin-styled-components'),
     [
-      require.resolve('react-static-plugin-source-filesystem'),
+      require.resolve('react-static-pro-max-plugin-source-filesystem'),
       {
         location: path.resolve('./src/pages'),
       },

@@ -1,5 +1,5 @@
 import React from "react";
-import { Root, Routes } from "react-static";
+import { Root, Routes } from "react-static-pro-max";
 import { Link } from "@reach/router";
 
 import "./app.css";

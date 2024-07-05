@@ -12,17 +12,19 @@ let ignorePath;
 
 const originalRequire = Module.prototype.require;
 
-// Check and see if we are running react-static from the repo
+// Check and see if we are running react-static-pro-max from the repo
 const needsWorkspaceCheck = __dirname.includes(
-  "/react-static/packages/react-static/"
+  "/react-static-pro-max/packages/react-static-pro-max/"
 );
 
 // Recursively checks a module to see if it originated from a
-// react-static package in the repo
+// react-static-pro-max package in the repo
 const inRepo = mod => {
   if (
-    !mod.filename.includes("react-static/packages/react-static/") &&
-    mod.filename.includes("react-static/packages/")
+    !mod.filename.includes(
+      "react-static-pro-max/packages/react-static-pro-max/"
+    ) &&
+    mod.filename.includes("react-static-pro-max/packages/")
   ) {
     return true;
   }
@@ -37,7 +39,7 @@ const inRepo = mod => {
 // eslint-disable-next-line
 Module.prototype.require = function(modulePath) {
   // If we are running in the repo, we need to make sure
-  // module resolutions coming from other react-static packages
+  // module resolutions coming from other react-static-pro-max packages
   // are first attempted from the
   const isInWorkspace = needsWorkspaceCheck && inRepo(this);
 

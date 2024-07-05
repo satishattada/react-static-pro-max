@@ -37,8 +37,8 @@ export default function({ config, stage }) {
     include: [
       config.paths.PLUGINS,
       config.paths.SRC,
-      /react-static-templates\.js/,
-      /react-static-browser-plugins\.js/
+      /react-static-pro-max-templates\.js/,
+      /react-static-pro-max-browser-plugins\.js/
     ],
     use: [
       {

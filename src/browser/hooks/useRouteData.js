@@ -28,7 +28,7 @@ const useRouteData = () => {
   // unless there is data for the 404 page
   if (routeError && (!routeInfo || !routeInfo.data)) {
     throw new Error(
-      `React-Static: useRouteData() could not find any data for this route: ${routePath}. If this is a dynamic route, please remove any calls to useRouteData() from this route's components`
+      `react-static-pro-max: useRouteData() could not find any data for this route: ${routePath}. If this is a dynamic route, please remove any calls to useRouteData() from this route's components`
     );
   }
 

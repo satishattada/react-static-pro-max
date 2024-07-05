@@ -1,6 +1,6 @@
 # Templates
 
-The templates in the directory will get you started. They are designed to be selected when using the ```react-static create``` CLI command.
+The templates in the directory will get you started. They are designed to be selected when using the ```react-static-pro-max create``` CLI command.
 
 ## blank
 
@@ -12,7 +12,7 @@ A Single Page App with multiple pages and a shared navigation component. The pag
 
 ## typescript
 
-The basic template, but with `react-static-plugin-typescript` added and configured for you with every component in `.tsx` and absolute paths set up in `tsconfig.json`.
+The basic template, but with `react-static-pro-max-plugin-typescript` added and configured for you with every component in `.tsx` and absolute paths set up in `tsconfig.json`.
 
 ## stress test
 

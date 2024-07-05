@@ -45,11 +45,11 @@ export default (async function bundle(state = {}) {
 Your app is now bundled! Here's what we suggest doing next:
 
 - Export your app in staging mode to test locally
-  - ${chalk.green("react-static export --stage")}
+  - ${chalk.green("react-static-pro-max export --stage")}
 - Export your app in production mode for distribution
-  - ${chalk.green("react-static export")}
+  - ${chalk.green("react-static-pro-max export")}
 - Analyze your app's webpack bundles
-  - ${chalk.green("react-static bundle --analyze")}
+  - ${chalk.green("react-static-pro-max bundle --analyze")}
 `);
   }
 

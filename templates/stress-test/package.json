@@ -1,14 +1,14 @@
 {
-  "name": "react-static-test-site-large",
+  "name": "react-static-pro-max-test-site-large",
   "private": true,
   "scripts": {
-    "start": "react-static start",
-    "build": "rm -rf dist && react-static build",
+    "start": "react-static-pro-max start",
+    "build": "rm -rf dist && react-static-pro-max build",
     "build-styled": "STYLE_SYSTEM=styled yarn build",
     "build-emotion": "STYLE_SYSTEM=emotion yarn build",
     "build-pagination": "PAGINATION=true yarn build",
-    "bundle": "react-static bundle",
-    "export": "react-static export",
+    "bundle": "react-static-pro-max bundle",
+    "export": "react-static-pro-max export",
     "serve": "serve dist -p 3000 -s"
   },
   "dependencies": {
@@ -20,12 +20,12 @@
     "react-dom": "^16.14.0",
     "react-emotion": "^10.0.0",
     "react-hot-loader": "^4.13.0",
-    "react-static": "^7.5.1",
-    "react-static-plugin-emotion": "^7.5.0",
-    "react-static-plugin-reach-router": "^7.5.1",
-    "react-static-plugin-sitemap": "^7.5.1",
-    "react-static-plugin-source-filesystem": "^7.5.1",
-    "react-static-plugin-styled-components": "^7.5.0",
+    "react-static-pro-max": "^7.5.1",
+    "react-static-pro-max-plugin-emotion": "^7.5.0",
+    "react-static-pro-max-plugin-reach-router": "^7.5.1",
+    "react-static-pro-max-plugin-sitemap": "^7.5.1",
+    "react-static-pro-max-plugin-source-filesystem": "^7.5.1",
+    "react-static-pro-max-plugin-styled-components": "^7.5.0",
     "styled-components": "^4.4.1"
   },
   "devDependencies": {

@@ -114,20 +114,23 @@ async function runExpressServer(state) {
       buildDevRoutes = async newState => {
         latestState = await fetchSiteData(newState);
 
-        app.get("/__react-static__/siteData", async (req, res, next) => {
-          try {
-            res.send(latestState.siteData);
-          } catch (err) {
-            res.status(500);
-            res.send(err);
-            next(err);
+        app.get(
+          "/__react-static-pro-max__/siteData",
+          async (req, res, next) => {
+            try {
+              res.send(latestState.siteData);
+            } catch (err) {
+              res.status(500);
+              res.send(err);
+              next(err);
+            }
           }
-        });
+        );
 
         // Serve each routes data
         latestState.routes.forEach(({ path: routePath }) => {
           app.get(
-            `/__react-static__/routeInfo/${encodeURI(
+            `/__react-static-pro-max__/routeInfo/${encodeURI(
               routePath === "/" ? "" : routePath
             )}`,
             async (req, res, next) => {
@@ -183,7 +186,7 @@ If this is a dynamic route, consider adding it to the prefetchExcludes list:
 
   devCompiler.hooks.invalid.tap(
     {
-      name: "React-Static"
+      name: "react-static-pro-max"
     },
     (file, changed) => {
       // If a file is changed within the first two seconds of
@@ -200,7 +203,7 @@ If this is a dynamic route, consider adding it to the prefetchExcludes list:
 
   devCompiler.hooks.done.tap(
     {
-      name: "React-Static"
+      name: "react-static-pro-max"
     },
     stats => {
       const messages = stats.toJson({}, true);

@@ -1,5 +1,5 @@
 import React from "react";
-import { useRouteData } from "react-static";
+import { useRouteData } from "react-static-pro-max";
 import { Link } from "@reach/router";
 //
 

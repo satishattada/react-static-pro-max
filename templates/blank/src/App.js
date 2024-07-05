@@ -25,7 +25,7 @@ class App extends Component {
             and{" "}
             <a
               className="App-link"
-              href="https://react-static.js.org"
+              href="https://react-static-pro-max.js.org"
               target="_blank"
               rel="noopener noreferrer"
             >

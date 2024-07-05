@@ -1,7 +1,7 @@
 // Helmet
 export { Helmet as Head } from "react-helmet";
 
-// React-Static
+// react-static-pro-max
 export { default as Root } from "./browser/components/Root";
 export { default as Routes } from "./browser/components/Routes";
 export { default as useRouteData } from "./browser/hooks/useRouteData";

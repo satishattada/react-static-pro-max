@@ -1,5 +1,5 @@
 // For convenience, only declare the exports here that are exported from
-// the react-static main index.js.
+// the react-static-pro-max main index.js.
 
 /**
  * addPrefetchExcludes allows you to register dynamic route exclusions at

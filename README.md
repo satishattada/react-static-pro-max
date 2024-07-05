@@ -1,5 +1,5 @@
-# React Static Core
+# React Static Core Pro
 
-This is the core package for React Static and is managed using `lerna` in a monorepo.
+This is the core package for React Static Pro and is managed using `lerna` in a monorepo.
 
-### [Click here for Documentation or to visit the Monorepo](https://github.com/react-static/react-static)
+### [Click here for Documentation](https://github.com/satishattada/react-static-pro-max.git)

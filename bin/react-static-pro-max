@@ -12,7 +12,7 @@ function init() {
   let packageConfig = {}
   try {
     packageConfig = require(path.resolve(process.cwd(), 'package.json'))
-    packageConfig = packageConfig['react-static'] || {}
+    packageConfig = packageConfig['react-static-pro-max'] || {}
   } catch (err) {
     //
   }
@@ -61,7 +61,7 @@ function init() {
 React Static - ${pkg.description}
 Version: ${pkg.name}@${pkg.version}
 
-Usage: react-static <command> [options]
+Usage: react-static-pro-max <command> [options]
 
 Options:
   -V, --version  output the version number
@@ -77,12 +77,12 @@ Commands:
 
 Examples:
 
-  $ react-static -v
-  $ react-static create
-  $ react-static start
-  $ react-static build
-  $ react-static bundle
-  $ react-static export
+  $ react-static-pro-max -v
+  $ react-static-pro-max create
+  $ react-static-pro-max start
+  $ react-static-pro-max build
+  $ react-static-pro-max bundle
+  $ react-static-pro-max export
 
   `)
 
@@ -96,13 +96,13 @@ Description: Creates a new React Static project
   
 Options:
   -n, --name <name>                 The name of your new project
-  -t, --template <template-name>    The react-static template for your project
+  -t, --template <template-name>    The react-static-pro-max template for your project
 
 Examples:
-  react-static create
-  react-static create --name= my-static-site
-  react-static create -n my-static-site
-  react-static create -n my-static-site --template styled-components
+  react-static-pro-max create
+  react-static-pro-max create --name= my-static-site
+  react-static-pro-max create -n my-static-site
+  react-static-pro-max create -n my-static-site --template styled-components
 `)
     return
   }
@@ -120,11 +120,11 @@ Options:
   -d, --debug           Turn on debug mode
 
 Examples:
-  react-static start
-  react-static start --config=path/to/my/static.config.js
-  react-static start -c path/to/my/static.config.js
-  react-static start --debug
-  react-static start -d
+  react-static-pro-max start
+  react-static-pro-max start --config=path/to/my/static.config.js
+  react-static-pro-max start -c path/to/my/static.config.js
+  react-static-pro-max start --debug
+  react-static-pro-max start -d
 `)
     return
   }
@@ -144,13 +144,13 @@ Options:
   -d, --debug           Turn on debug mode
 
 Examples:
-  react-static export
-  react-static export --config=path/to/my/static.config.js
-  react-static export -c path/to/my/static.config.js
-  react-static export --incremental
-  react-static export -i
-  react-static export --debug
-  react-static export -d
+  react-static-pro-max export
+  react-static-pro-max export --config=path/to/my/static.config.js
+  react-static-pro-max export -c path/to/my/static.config.js
+  react-static-pro-max export --incremental
+  react-static-pro-max export -i
+  react-static-pro-max export --debug
+  react-static-pro-max export -d
 `)
     return
   }
@@ -170,13 +170,13 @@ Options:
   -a, --analyze         Turn on the bundle analyzer
 
 Examples:
-  react-static bundle
-  react-static bundle --config=path/to/my/static.config.js
-  react-static bundle -c path/to/my/static.config.js
-  react-static bundle --debug
-  react-static bundle -d
-  react-static build --analyze
-  react-static build -a
+  react-static-pro-max bundle
+  react-static-pro-max bundle --config=path/to/my/static.config.js
+  react-static-pro-max bundle -c path/to/my/static.config.js
+  react-static-pro-max bundle --debug
+  react-static-pro-max bundle -d
+  react-static-pro-max build --analyze
+  react-static-pro-max build -a
 `)
     return
   }
@@ -199,13 +199,13 @@ Options:
   -a, --analyze         Turn on the bundle analyzer
 
 Examples:
-  react-static build
-  react-static build --config=path/to/my/static.config.js
-  react-static build -c path/to/my/static.config.js
-  react-static build --debug
-  react-static build -d
-  react-static build --analyze
-  react-static build -a
+  react-static-pro-max build
+  react-static-pro-max build --config=path/to/my/static.config.js
+  react-static-pro-max build -c path/to/my/static.config.js
+  react-static-pro-max build --debug
+  react-static-pro-max build -d
+  react-static-pro-max build --analyze
+  react-static-pro-max build -a
 `)
     return
   }

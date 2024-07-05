@@ -1,5 +1,5 @@
 import React from 'react'
-import { Root, Routes, addPrefetchExcludes } from 'react-static'
+import { Root, Routes, addPrefetchExcludes } from 'react-static-pro-max'
 import { Link, Router } from '@reach/router'
 
 import FancyDiv from 'components/FancyDiv'

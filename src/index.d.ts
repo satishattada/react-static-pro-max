@@ -1,6 +1,6 @@
-// Type definitions for react-static 7.1.0
-// Project: https://github.com/react-static/react-static
-// Definitions by: Various Contributors https://github.com/react-static/react-static/blame/master/packages/react-static/src/index.d.ts
+// Type definitions for react-static-pro-max 7.1.0
+// Project: https://github.com/react-static-pro-max/react-static-pro-max
+// Definitions by: Various Contributors https://github.com/react-static-pro-max/react-static-pro-max/blame/master/packages/react-static-pro-max/src/index.d.ts
 //
 // VERY lightly maintained, we need all the help we can get
 
@@ -43,7 +43,7 @@ interface SiteDataProps<T extends object> {
  * only works if it is called in a child of `routePathContext.Provider`, which
  * is always the case in a child of the `Routes` component:
  * - any template/container (the `template` key in `Route`)
- * - any page via the react-static-plugin-source-filesystem
+ * - any page via the react-static-pro-max-plugin-source-filesystem
  * - if you manually wrap a component with `<routePathContext.Provider>`
  *
  * Alternatives include the `RouteData` component and the `withRouteData` HOC.
@@ -104,7 +104,7 @@ export function useSiteData<T extends object = any>(): T;
  * @example Using the prefetch hook to prefetch a link
  *
  *   import { useRef } from 'react'
- *   import { usePrefetch } from 'react-static'
+ *   import { usePrefetch } from 'react-static-pro-max'
  *   export default () => {
  *     // Use it to create a ref
  *     const myRef = usePrefetch('/blog')
@@ -141,7 +141,7 @@ export function useBasepath(): string;
 
 /**
  * Primarily used during the build process and to hydrate the app from static
- * data. You probably don't need this when writing your app using `react-static`
+ * data. You probably don't need this when writing your app using `react-static-pro-max`
  *
  * @template T the siteData
  * @returns {(StaticInfo<T> | undefined)} the static info, if any
@@ -240,7 +240,7 @@ export function SiteData<T extends object = any>(
 ): React.ReactNode
 
 /**
- * The root component for a `react-static` app
+ * The root component for a `react-static-pro-max` app
  */
 export class Root extends React.Component {}
 
@@ -255,9 +255,9 @@ export class Root extends React.Component {}
  * custom way. The most common use-case is illustrated in the animated-routes
  * example transitions. To do this, utilize a render prop. (see second example).
  *
- * @example handle all the routes in `react-static`
+ * @example handle all the routes in `react-static-pro-max`
  *
- *   import { Root, Routes } from 'react-static'
+ *   import { Root, Routes } from 'react-static-pro-max'
  *   export default () => (<Root>
  *     <Router>
  *        <Routes path="*" />
@@ -291,7 +291,7 @@ type AnyReactComponent = React.ComponentType<Record<string, any>>
 
 
 /**
- * @see https://github.com/react-static/react-static/blob/master/docs/config.md
+ * @see https://github.com/react-static-pro-max/react-static-pro-max/blob/master/docs/config.md
  */
 export interface ReactStaticConfig {
   /**
@@ -423,7 +423,7 @@ export interface ReactStaticConfig {
   disableDuplicateRoutesWarning?: boolean
 
   /**
-   * An object of internal directories used by react-static that can be customized.
+   * An object of internal directories used by react-static-pro-max that can be customized.
    * Each path is relative to your project root.
    */
   paths?: PathsConfig
@@ -515,7 +515,7 @@ export interface RouteFlags {
 
 /**
  * A route is an object that represents a unique location in your site and is
- * the backbone of every React-Static site.
+ * the backbone of every react-static-pro-max site.
  */
 export interface Route {
   /**

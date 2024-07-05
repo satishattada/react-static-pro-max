@@ -1,12 +1,12 @@
 {
-  "name": "react-static-example-typescript",
+  "name": "react-static-pro-max-example-typescript",
   "private": true,
   "scripts": {
-    "start": "react-static start",
-    "stage": "react-static build --staging",
-    "build": "react-static build",
-    "bundle": "react-static bundle",
-    "export": "react-static export",
+    "start": "react-static-pro-max start",
+    "stage": "react-static-pro-max build --staging",
+    "build": "react-static-pro-max build",
+    "bundle": "react-static-pro-max bundle",
+    "export": "react-static-pro-max export",
     "serve": "serve dist -p 3000 -s"
   },
   "dependencies": {
@@ -15,11 +15,11 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-hot-loader": "^4.13.0",
-    "react-static": "^7.5.1",
-    "react-static-plugin-reach-router": "^7.5.1",
-    "react-static-plugin-sitemap": "^7.5.1",
-    "react-static-plugin-source-filesystem": "^7.5.1",
-    "react-static-plugin-typescript": "^7.5.1"
+    "react-static-pro-max": "^7.5.1",
+    "react-static-pro-max-plugin-reach-router": "^7.5.1",
+    "react-static-pro-max-plugin-sitemap": "^7.5.1",
+    "react-static-pro-max-plugin-source-filesystem": "^7.5.1",
+    "react-static-pro-max-plugin-typescript": "^7.5.1"
   },
   "devDependencies": {
     "@types/node": "^14.14.31",

@@ -1,16 +1,17 @@
 {
-  "name": "react-static",
+  "name": "react-static-pro-max",
   "description": "A progressive static site generator for React",
-  "version": "7.6.2",
+  "version": "1.3.0",
   "license": "MIT",
-  "repository": "https://github.com/react-static/react-static",
+  "repository": "https://github.com/satishattada/react-static-pro.git",
   "main": "lib/index.js",
+  "author": "Satish Attada <satishattada@gmail.com>",
   "types": "src/index.d.ts",
   "engines": {
     "node": ">=8.9.0"
   },
   "bin": {
-    "react-static": "./bin/react-static"
+    "react-static-pro-max": "./bin/react-static-pro-max"
   },
   "scripts": {
     "prebuild": "rimraf lib",

@@ -132,7 +132,7 @@ function init() {
         });
       } catch (err) {
         console.log(
-          "React-Static data hot-loader websocket encountered the following error:"
+          "react-static-pro-max data hot-loader websocket encountered the following error:"
         );
         console.error(err);
       }
@@ -222,7 +222,7 @@ export async function getRouteInfo(path, { priority } = {}) {
       // In dev, request from the webpack dev server
       if (!inflightRouteInfo[path]) {
         inflightRouteInfo[path] = axios.get(
-          `/__react-static__/routeInfo/${path === "/" ? "" : path}`
+          `/__react-static-pro-max__/routeInfo/${path === "/" ? "" : path}`
         );
       }
       const { data } = await inflightRouteInfo[path];
@@ -438,7 +438,7 @@ export function isPrefetchableRoute(path) {
   } catch (e) {
     if (typeof URL !== "function") {
       console.error(
-        "URL polyfill is required for this browser. https://github.com/react-static/react-static/blob/master/docs/concepts.md#browser-support"
+        "URL polyfill is required for this browser. https://github.com/react-static-pro-max/react-static-pro-max/blob/master/docs/concepts.md#browser-support"
       );
     }
     // Return false on invalid URLs

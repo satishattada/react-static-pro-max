@@ -57,7 +57,7 @@ ${
   - ${chalk.green("npx netlify-cli deploy")}`
 }
 - Analyze your app's webpack bundles
-  - ${chalk.green("react-static bundle --analyze")}
+  - ${chalk.green("react-static-pro-max bundle --analyze")}
 `);
 
   return state;

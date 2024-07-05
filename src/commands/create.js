@@ -77,7 +77,7 @@ export default (async function create({ name, template, isCLI }) {
   }
 
   time(chalk.green(`[\u2713] Project "${name}" created`));
-  console.log("Creating new react-static project...");
+  console.log("Creating new react-static-pro-max project...");
 
   if (template === typeLocal) {
     templateType = typeLocal;
@@ -139,7 +139,7 @@ export default (async function create({ name, template, isCLI }) {
           : chalk.hex(ChalkColor.npm)("NPM")
       }...`
     );
-    // We install react-static separately to ensure we always have the latest stable release
+    // We install react-static-pro-max separately to ensure we always have the latest stable release
     execSync(`cd "${name}" && ${isYarn ? "yarn" : "npm install"}`);
     console.log("");
   }

@@ -8,7 +8,7 @@ module.exports = (api, { external, hot, node, modules } = {}) => {
   // Turn on the cache
   api.cache(true)
 
-  // This is for compiling react-static's source modules
+  // This is for compiling react-static-pro-max's source modules
   if (INTERNAL) {
     return {
       presets: [r('@babel/preset-env'), r('@babel/preset-react')],
@@ -60,7 +60,7 @@ module.exports = (api, { external, hot, node, modules } = {}) => {
     }
   }
 
-  // This preset is for react-static and user code
+  // This preset is for react-static-pro-max and user code
   return {
     presets: [
       r('@babel/preset-env'),

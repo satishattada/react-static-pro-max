@@ -112,13 +112,13 @@ export function isObject(a) {
 
 export function deprecate(from, to) {
   console.warn(
-    `React-Static deprecation notice: ${from} will be deprecated in favor of ${to} in the next major release.`
+    `react-static-pro-max deprecation notice: ${from} will be deprecated in favor of ${to} in the next major release.`
   );
 }
 
 export function removal(from) {
   console.warn(
-    `React-Static removal notice: ${from} is no longer supported in this version of React-Static. Please refer to the CHANGELOG for details.`
+    `react-static-pro-max removal notice: ${from} is no longer supported in this version of react-static-pro-max. Please refer to the CHANGELOG for details.`
   );
 }
 

@@ -5,14 +5,11 @@ import { execSync } from "child_process";
 import inquirer from "inquirer";
 import autoCompletePrompt from "inquirer-autocomplete-prompt";
 import matchSorter from "match-sorter";
-
-//
 import { ChalkColor, time, timeEnd } from "../utils";
 
 inquirer.registerPrompt("autocomplete", autoCompletePrompt);
 
 const typeLocal = "Local Directory...";
-const typeGit = "GIT Repository...";
 const typeExample = "React Static Example";
 
 const templatesDir = path.resolve(__dirname, "../../templates");
@@ -26,7 +23,7 @@ export default (async function create({ name, template, isCLI }) {
 
   console.log("");
 
-  const exampleChoices = [...templates, typeLocal, typeGit];
+  const exampleChoices = [...templates, typeLocal];
 
   let templateType = typeExample;
 

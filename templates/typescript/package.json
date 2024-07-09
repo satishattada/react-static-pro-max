@@ -15,11 +15,11 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-hot-loader": "^4.13.0",
-    "react-static-pro-max": "^7.5.1",
-    "react-static-pro-max-plugin-reach-router": "^7.5.1",
-    "react-static-pro-max-plugin-sitemap": "^7.5.1",
-    "react-static-pro-max-plugin-source-filesystem": "^7.5.1",
-    "react-static-pro-max-plugin-typescript": "^7.5.1"
+    "react-static-pro-max": "^1.13.0",
+    "react-static-pro-plugin-reach-router": "^1.9.0",
+    "react-static-pro-plugin-sitemap": "^1.6.0",
+    "react-static-pro-plugin-source-filesystem": "^2.6.0",
+    "react-static-pro-plugin-typescript": "^1.5.0"
   },
   "devDependencies": {
     "@types/node": "^14.14.31",

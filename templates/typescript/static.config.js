@@ -27,14 +27,14 @@ export default {
     ]
   },
   plugins: [
-    'react-static-pro-max-plugin-typescript',
+    'react-static-pro-plugin-typescript',
     [
-      require.resolve('react-static-pro-max-plugin-source-filesystem'),
+      require.resolve('react-static-pro-plugin-source-filesystem'),
       {
         location: path.resolve('./src/pages'),
       },
     ],
-    require.resolve('react-static-pro-max-plugin-reach-router'),
-    require.resolve('react-static-pro-max-plugin-sitemap'),
+    require.resolve('react-static-pro-plugin-reach-router'),
+    require.resolve('react-static-pro-plugin-sitemap'),
   ],
 }

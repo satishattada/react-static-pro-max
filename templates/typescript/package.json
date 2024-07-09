@@ -15,10 +15,10 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-hot-loader": "^4.13.0",
-    "react-static-pro-max": "^1.15.0",
-    "react-static-pro-plugin-reach-router": "^1.11.0",
-    "react-static-pro-plugin-sitemap": "^1.8.0",
-    "react-static-pro-plugin-source-filesystem": "^2.8.0",
+    "react-static-pro-max": "^1.14.0",
+    "react-static-pro-plugin-reach-router": "^1.10.0",
+    "react-static-pro-plugin-sitemap": "^1.7.0",
+    "react-static-pro-plugin-source-filesystem": "^2.7.0",
     "react-static-pro-plugin-typescript": "^1.5.0"
   },
   "devDependencies": {

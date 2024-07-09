@@ -1,6 +1,6 @@
 import {
   chunkNameFromFile,
-  absoluteToRelativeChunkName
+  absoluteToRelativeChunkName,
 } from "../chunkBuilder";
 
 describe("utils/chunkBuilder", () => {
@@ -15,13 +15,13 @@ describe("utils/chunkBuilder", () => {
 
     it("can generate chunkNames from absolute files", () => {
       expect(chunkNameFromFile("/bar/bazz/component.jsx")).toBe(
-        "bar-bazz-component"
+        "bar-bazz-component",
       );
     });
 
     it("can generate chunkNames from absolute files on windows", () => {
       expect(chunkNameFromFile("C:\\bar\\bazz\\component.jsx")).toBe(
-        "bar-bazz-component"
+        "bar-bazz-component",
       );
     });
   });
@@ -31,8 +31,8 @@ describe("utils/chunkBuilder", () => {
       expect(
         absoluteToRelativeChunkName(
           "/foo/bar/bazz/",
-          "foo-bar-bazz-src-component.jsx"
-        )
+          "foo-bar-bazz-src-component.jsx",
+        ),
       ).toBe("src-component");
     });
 
@@ -40,28 +40,28 @@ describe("utils/chunkBuilder", () => {
       expect(
         absoluteToRelativeChunkName(
           "C:\\foo\\bar\\bazz\\",
-          "foo-bar-bazz-src-component.jsx"
-        )
+          "foo-bar-bazz-src-component.jsx",
+        ),
       ).toBe("src-component");
     });
 
     it("leaves relative chunk names untouched", () => {
       expect(absoluteToRelativeChunkName("/foo/bar/bazz/", "src-bar")).toBe(
-        "src-bar"
+        "src-bar",
       );
     });
 
     it("leaves relative chunk names untouched on windows", () => {
       expect(
-        absoluteToRelativeChunkName("C:\\foo\\bar\\bazz\\", "src-bar")
+        absoluteToRelativeChunkName("C:\\foo\\bar\\bazz\\", "src-bar"),
       ).toBe("src-bar");
     });
     it("generates relative chunk names on absolute routes", () => {
       expect(
         absoluteToRelativeChunkName(
           "/foo/bar/bazz/",
-          "/foo/bar/bazz/src/component.jsx"
-        )
+          "/foo/bar/bazz/src/component.jsx",
+        ),
       ).toBe("src-component");
     });
 
@@ -69,20 +69,20 @@ describe("utils/chunkBuilder", () => {
       expect(
         absoluteToRelativeChunkName(
           "C:\\foo\\bar\\bazz\\",
-          "C:\\foo\\bar\\bazz\\src\\component.jsx"
-        )
+          "C:\\foo\\bar\\bazz\\src\\component.jsx",
+        ),
       ).toBe("src-component");
     });
 
     it("generates relative chunk names on relative routes", () => {
       expect(absoluteToRelativeChunkName("/foo/bar/bazz/", "src/bar")).toBe(
-        "src-bar"
+        "src-bar",
       );
     });
 
     it("generates relative chunk names on relative routes on windows", () => {
       expect(
-        absoluteToRelativeChunkName("C:\\foo\\bar\\bazz\\", "src\\bar")
+        absoluteToRelativeChunkName("C:\\foo\\bar\\bazz\\", "src\\bar"),
       ).toBe("src-bar");
     });
   });

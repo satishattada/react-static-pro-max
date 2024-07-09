@@ -6,7 +6,7 @@ const { DefaultDocument } = require("./components/RootComponents");
 const { poolAll } = require("../utils");
 const exportRoute = require("./exportRoute").default;
 
-process.on("message", async state => {
+process.on("message", async (state) => {
   try {
     const { routes } = state;
     // Get config again
@@ -17,10 +17,9 @@ process.on("message", async state => {
 
     // Use the node version of the app created with webpack
     // eslint-disable-next-line
-    const Comp = require(path.resolve(
-      state.config.paths.ARTIFACTS,
-      "static-app.js"
-    )).default;
+    const Comp = require(
+      path.resolve(state.config.paths.ARTIFACTS, "static-app.js"),
+    ).default;
     // Retrieve the document template
     const DocumentTemplate = state.config.Document || DefaultDocument;
 
@@ -33,7 +32,7 @@ process.on("message", async state => {
           ...state,
           route,
           Comp,
-          DocumentTemplate
+          DocumentTemplate,
         });
         if (process.connected) {
           process.send({ type: "tick" });

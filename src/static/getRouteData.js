@@ -1,7 +1,7 @@
 export default async function getRouteData(
   route,
   state,
-  sharedDataByHash = new Map()
+  sharedDataByHash = new Map(),
 ) {
   // Fetch data from each route
   let data = !!route.getData && (await route.getData({ ...state, route }));
@@ -12,7 +12,7 @@ export default async function getRouteData(
   const newSharedData = {};
 
   if (route.sharedData) {
-    Object.keys(route.sharedData).forEach(name => {
+    Object.keys(route.sharedData).forEach((name) => {
       const sharedPiece = route.sharedData[name];
       sharedDataByHash.set(sharedPiece.hash, sharedPiece);
       sharedHashesByProp[name] = sharedPiece.hash;
@@ -24,6 +24,6 @@ export default async function getRouteData(
     ...route,
     data,
     sharedHashesByProp,
-    sharedData: newSharedData
+    sharedData: newSharedData,
   };
 }

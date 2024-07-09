@@ -8,6 +8,6 @@ export default (async function fetchSiteData(state) {
   timeEnd(chalk.green("[\u2713] Site Data Downloaded"));
   return {
     ...state,
-    siteData
+    siteData,
   };
 });

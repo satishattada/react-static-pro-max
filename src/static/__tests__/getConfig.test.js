@@ -8,7 +8,7 @@ const testConfiguration = (configuration, configurationMock) => {
 };
 
 const defaultConfig = {
-  packageConfig: {}
+  packageConfig: {},
 };
 
 describe("buildConfig", () => {
@@ -17,10 +17,10 @@ describe("buildConfig", () => {
   let reactStaticDisableRoutePreFixing;
   let spyProcess;
 
-  const defaultConfigDevelopment = require("../__mocks__/config.development.mock.js")
-    .default;
-  const defaultConfigProduction = require("../__mocks__/config.production.mock.js")
-    .default;
+  const defaultConfigDevelopment =
+    require("../__mocks__/config.development.mock.js").default;
+  const defaultConfigProduction =
+    require("../__mocks__/config.production.mock.js").default;
 
   beforeEach(() => {
     reactStaticEnviroment = process.env.REACT_STATIC_ENV;
@@ -67,7 +67,8 @@ describe("buildConfig", () => {
   afterEach(() => {
     process.env.REACT_STATIC_ENV = reactStaticEnviroment;
     process.env.REACT_STATIC_PREFETCH_RATE = reactStaticPrefetchRate;
-    process.env.REACT_STATIC_DISABLE_ROUTE_PREFIXING = reactStaticDisableRoutePreFixing;
+    process.env.REACT_STATIC_DISABLE_ROUTE_PREFIXING =
+      reactStaticDisableRoutePreFixing;
 
     spyProcess.mockRestore();
   });
@@ -93,7 +94,7 @@ describe("buildConfig", () => {
     test("when absolute user-supplied assetsPath exists without trailing slash", () => {
       const { config } = buildConfig(
         {},
-        { assetsPath: "https://example.com/assets" }
+        { assetsPath: "https://example.com/assets" },
       );
 
       expect(config.assetsPath).toBe("https://example.com/assets/");
@@ -102,7 +103,7 @@ describe("buildConfig", () => {
     test("when absolute user-supplied assetsPath exists with trailing slash", () => {
       const { config } = buildConfig(
         {},
-        { assetsPath: "https://example.com/assets/" }
+        { assetsPath: "https://example.com/assets/" },
       );
 
       expect(config.assetsPath).toBe("https://example.com/assets/");
@@ -123,7 +124,7 @@ describe("buildConfig", () => {
     test("when user supplies a site root and a basePath", () => {
       const { config } = buildConfig(
         {},
-        { siteRoot: "http://example.com", basePath: "dist" }
+        { siteRoot: "http://example.com", basePath: "dist" },
       );
       expect(config.publicPath).toBe("http://example.com/dist/");
     });
@@ -133,8 +134,8 @@ describe("buildConfig", () => {
 describe("getConfig", () => {
   let spyProcess;
 
-  const defaultConfigProduction = require("../__mocks__/config.production.mock.js")
-    .default;
+  const defaultConfigProduction =
+    require("../__mocks__/config.production.mock.js").default;
 
   beforeEach(() => {
     spyProcess = jest.spyOn(process, "cwd").mockImplementation(() => "./root/");
@@ -152,8 +153,8 @@ describe("getConfig", () => {
     it("should find the configuration file using any supported extension", async () => {
       const state = await getConfig({
         configPath: path.resolve(
-          "./src/static/__mocks__/static.config.jsx.mock.jsx"
-        )
+          "./src/static/__mocks__/static.config.jsx.mock.jsx",
+        ),
       });
 
       testConfiguration(state.config, defaultConfigProduction);
@@ -163,8 +164,8 @@ describe("getConfig", () => {
     it("should pass on plugin options to those plugins", async () => {
       await getConfig({
         configPath: path.resolve(
-          "./src/static/__mocks__/config.with-plugin.mock.js"
-        )
+          "./src/static/__mocks__/config.with-plugin.mock.js",
+        ),
       });
     });
   });
@@ -174,7 +175,7 @@ describe("getConfig", () => {
       // TODO mock / inject a promise-plugin
 
       expect(() => getConfig(defaultConfig)).toReject(
-        "Expected hook to return a value, but received promise instead. A plugin is attempting to use a sync plugin with an async function!"
+        "Expected hook to return a value, but received promise instead. A plugin is attempting to use a sync plugin with an async function!",
       );
     });
   });

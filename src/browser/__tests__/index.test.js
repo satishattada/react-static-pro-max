@@ -8,13 +8,13 @@ describe("browser", () => {
     beforeEach(() => {
       originalDocumentDescriptor = Object.getOwnPropertyDescriptor(
         global,
-        "document"
+        "document",
       );
 
       getDocumentMock = jest.fn();
 
       Object.defineProperty(global, "document", {
-        get: getDocumentMock
+        get: getDocumentMock,
       });
     });
 
@@ -43,8 +43,8 @@ describe("browser", () => {
         location: {
           href: "http://foo:1337/foo",
           host: "foo",
-          protocol: "http:"
-        }
+          protocol: "http:",
+        },
       });
 
       expect(isPrefetchableRoute("http://foo:1337/bar")).toBe(false);
@@ -54,8 +54,8 @@ describe("browser", () => {
         location: {
           href: "http://foo:1337/foo",
           host: "foo:1337",
-          protocol: "http:"
-        }
+          protocol: "http:",
+        },
       });
 
       expect(isPrefetchableRoute("http://foo:1337/bar")).toBe(true);
@@ -65,8 +65,8 @@ describe("browser", () => {
         location: {
           href: "http://foo",
           host: "foo",
-          protocol: "http:"
-        }
+          protocol: "http:",
+        },
       });
 
       expect(isPrefetchableRoute("foo")).toBe(true);
@@ -76,8 +76,8 @@ describe("browser", () => {
         location: {
           href: "http://foo",
           host: "foo",
-          protocol: "http:"
-        }
+          protocol: "http:",
+        },
       });
 
       expect(isPrefetchableRoute("./foo")).toBe(true);
@@ -87,8 +87,8 @@ describe("browser", () => {
         location: {
           href: "http://foo",
           host: "foo",
-          protocol: "http:"
-        }
+          protocol: "http:",
+        },
       });
 
       expect(isPrefetchableRoute("../foo")).toBe(true);
@@ -98,8 +98,8 @@ describe("browser", () => {
         location: {
           href: "http://foo",
           host: "foo",
-          protocol: "http:"
-        }
+          protocol: "http:",
+        },
       });
 
       expect(isPrefetchableRoute("/foo")).toBe(true);
@@ -109,8 +109,8 @@ describe("browser", () => {
         location: {
           href: "http://foo",
           host: "foo",
-          protocol: "http:"
-        }
+          protocol: "http:",
+        },
       });
 
       expect(isPrefetchableRoute("//www.example.com")).toBe(false);

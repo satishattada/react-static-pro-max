@@ -21,19 +21,19 @@ describe("HeadWithMeta", () => {
         link: "",
         noscript: "",
         script: "",
-        style: ""
+        style: "",
       },
       route: { redirect: false },
       embeddedRouteInfo: {
-        routeDate: "here"
+        routeDate: "here",
       },
       clientScripts: ["main.js", "bootstrap.js"],
       clientStyleSheets: ["main.css", "bootstrap.css"],
       clientCss: <style>{inlineCSS}</style>,
       config: {
-        inlineCss: false
+        inlineCss: false,
       },
-      plugins: []
+      plugins: [],
     };
   });
 
@@ -43,7 +43,7 @@ describe("HeadWithMeta", () => {
     const headWithMeta = mount(
       <HeadWithMeta className="body">
         <meta name="description" content="Helmet application" />
-      </HeadWithMeta>
+      </HeadWithMeta>,
     );
 
     expect(headWithMeta).toMatchSnapshot();
@@ -56,7 +56,7 @@ describe("HeadWithMeta", () => {
     const headWithMeta = mount(
       <HeadWithMeta className="body">
         <meta name="description" content="Helmet application" />
-      </HeadWithMeta>
+      </HeadWithMeta>,
     );
 
     expect(headWithMeta).toMatchSnapshot();
@@ -69,7 +69,7 @@ describe("HeadWithMeta", () => {
     const headWithMeta = mount(
       <HeadWithMeta className="body">
         <meta name="description" content="Helmet application" />
-      </HeadWithMeta>
+      </HeadWithMeta>,
     );
 
     expect(headWithMeta).toMatchSnapshot();
@@ -82,7 +82,7 @@ describe("HeadWithMeta", () => {
       <HeadWithMeta className="body">
         <title>Document Title</title>
         <meta name="description" content="Helmet application" />
-      </HeadWithMeta>
+      </HeadWithMeta>,
     );
 
     expect(headWithMeta).toMatchSnapshot();
@@ -93,15 +93,15 @@ describe("HeadWithMeta", () => {
       ...data,
       head: {
         ...data.head,
-        title: []
-      }
+        title: [],
+      },
     });
 
     const headWithMeta = mount(
       <HeadWithMeta className="body">
         <title>Document Title</title>
         <meta name="description" content="Helmet application" />
-      </HeadWithMeta>
+      </HeadWithMeta>,
     );
 
     expect(headWithMeta).toMatchSnapshot();

@@ -19,7 +19,7 @@ export const trimDoubleSlashes = (string = "") => {
     const [scheme = "", path = ""] = string.split("://");
 
     return [scheme, path.replace(REGEX_TO_REMOVE_DOUBLE_SLASH, "/")].join(
-      "://"
+      "://",
     );
   }
 
@@ -84,7 +84,7 @@ export function getRoutePath(routePath) {
   if (process.env.REACT_STATIC_BASE_PATH) {
     routePath = routePath.replace(
       new RegExp(`^\\/?${process.env.REACT_STATIC_BASE_PATH}(\\/|$)`),
-      ""
+      "",
     );
   }
   routePath = routePath || "/";
@@ -112,13 +112,13 @@ export function isObject(a) {
 
 export function deprecate(from, to) {
   console.warn(
-    `react-static-pro-max deprecation notice: ${from} will be deprecated in favor of ${to} in the next major release.`
+    `react-static-pro-max deprecation notice: ${from} will be deprecated in favor of ${to} in the next major release.`,
   );
 }
 
 export function removal(from) {
   console.warn(
-    `react-static-pro-max removal notice: ${from} is no longer supported in this version of react-static-pro-max. Please refer to the CHANGELOG for details.`
+    `react-static-pro-max removal notice: ${from} is no longer supported in this version of react-static-pro-max. Please refer to the CHANGELOG for details.`,
   );
 }
 
@@ -158,7 +158,7 @@ export function reduceHooks(hooks, { sync } = {}) {
         const next = hook(prev, options);
         if (next instanceof Promise) {
           throw new Error(
-            "Expected hook to return a value, but received promise instead. A plugin is attempting to use a sync plugin with an async function!"
+            "Expected hook to return a value, but received promise instead. A plugin is attempting to use a sync plugin with an async function!",
           );
         }
         return typeof next !== "undefined" ? next : prev;
@@ -168,7 +168,7 @@ export function reduceHooks(hooks, { sync } = {}) {
   // We create a map of hook handlers that point to the next hook
   // in line and reduce the value throughout (or return it if it's done)
   return (startValue, options) => {
-    const hookList = hooks.map((hook, index) => async lastValue => {
+    const hookList = hooks.map((hook, index) => async (lastValue) => {
       let nextValue = await hook(lastValue, options);
       nextValue = typeof nextValue !== "undefined" ? nextValue : lastValue;
       if (hookList[index + 1]) {
@@ -184,13 +184,13 @@ export function mapHooks(hooks, { sync } = {}) {
   // Returns a function that takes state and returns
   // a flat array of values mapped from each hook
   if (sync) {
-    return state => {
-      const results = hooks.map(hook => hook(state));
-      return results.filter(d => typeof d !== "undefined");
+    return (state) => {
+      const results = hooks.map((hook) => hook(state));
+      return results.filter((d) => typeof d !== "undefined");
     };
   }
 
-  return state => {
+  return (state) => {
     const results = [];
     const hookList = hooks.map((hook, index) => async () => {
       results[index] = await hook(state);
@@ -199,7 +199,7 @@ export function mapHooks(hooks, { sync } = {}) {
         return hookList[index + 1]();
       }
 
-      return results.filter(d => typeof d !== "undefined");
+      return results.filter((d) => typeof d !== "undefined");
     });
     return hookList.length ? hookList[0]() : [];
   };
@@ -213,7 +213,7 @@ export function getHooks(plugins, hook) {
   const hooks = [];
 
   // Adds a plugin hook to the hook list
-  const addToHooks = plugin => {
+  const addToHooks = (plugin) => {
     // Add the hook
     hooks.push(plugin.hooks[hook]);
 
@@ -232,7 +232,7 @@ export function getHooks(plugins, hook) {
 export function getFullRouteData(routeInfo) {
   return {
     ...(routeInfo.sharedData ? routeInfo.sharedData : {}),
-    ...routeInfo.data
+    ...routeInfo.data,
   };
 }
 

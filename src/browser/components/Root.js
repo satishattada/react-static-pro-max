@@ -5,14 +5,14 @@ import { plugins } from "..";
 export default function Root({ children }) {
   const ResolvedRoot = React.useMemo(
     () => plugins.Root(({ children }) => children),
-    [plugins]
+    [plugins],
   );
 
   const [error, setError] = React.useState(null);
 
   React.useEffect(() => {
     if (module && module.hot) {
-      const hotReloadHandler = status => {
+      const hotReloadHandler = (status) => {
         if (status === "idle") {
           setError(null);
         }
@@ -40,7 +40,7 @@ export default function Root({ children }) {
             margin: 0,
             padding: "1rem",
             overflow: "scroll",
-            fontSize: "14px"
+            fontSize: "14px",
           }}
         >
           {`An internal error occured!

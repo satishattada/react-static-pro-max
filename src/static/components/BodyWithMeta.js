@@ -4,7 +4,7 @@ import { pathJoin, makePathAbsolute } from "../../utils";
 // Not only do we pass react-helmet attributes and the app.js here, but
 // we also need to  hard code site props and route props into the page to
 // prevent flashing when react mounts onto the HTML.
-const makeBodyWithMeta = async state => {
+const makeBodyWithMeta = async (state) => {
   const { head, route, inlineScripts, clientScripts = [] } = state;
 
   // This embeddedRouteInfo will be inlined into the HTML for this route.
@@ -20,13 +20,13 @@ const makeBodyWithMeta = async state => {
         />
       ) : null}
       {!route.redirect
-        ? clientScripts.map(script => (
+        ? clientScripts.map((script) => (
             <script
               key={script}
               defer
               type="text/javascript"
               src={makePathAbsolute(
-                pathJoin(process.env.REACT_STATIC_ASSETS_PATH, script)
+                pathJoin(process.env.REACT_STATIC_ASSETS_PATH, script),
               )}
             />
           ))

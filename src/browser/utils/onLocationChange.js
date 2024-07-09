@@ -1,10 +1,10 @@
 let locationSubscribers = [];
-const triggerLocationChange = location =>
-  locationSubscribers.forEach(s => s(location));
-const onLocationChange = cb => {
+const triggerLocationChange = (location) =>
+  locationSubscribers.forEach((s) => s(location));
+const onLocationChange = (cb) => {
   locationSubscribers.push(cb);
   return () => {
-    locationSubscribers = locationSubscribers.filter(d => d !== cb);
+    locationSubscribers = locationSubscribers.filter((d) => d !== cb);
   };
 };
 
@@ -21,7 +21,7 @@ function init() {
       }
       triggerLocationChange(window.location);
     };
-    ["pushState", "replaceState"].forEach(methodName => {
+    ["pushState", "replaceState"].forEach((methodName) => {
       const old = window.history[methodName];
       window.history[methodName] = (...args) => {
         setTimeout(() => triggerLocationChange(window.location), 0);

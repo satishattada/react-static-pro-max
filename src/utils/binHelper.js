@@ -14,15 +14,15 @@ const originalRequire = Module.prototype.require;
 
 // Check and see if we are running react-static-pro-max from the repo
 const needsWorkspaceCheck = __dirname.includes(
-  "/react-static-pro-max/packages/react-static-pro-max/"
+  "/react-static-pro-max/packages/react-static-pro-max/",
 );
 
 // Recursively checks a module to see if it originated from a
 // react-static-pro-max package in the repo
-const inRepo = mod => {
+const inRepo = (mod) => {
   if (
     !mod.filename.includes(
-      "react-static-pro-max/packages/react-static-pro-max/"
+      "react-static-pro-max/packages/react-static-pro-max/",
     ) &&
     mod.filename.includes("react-static-pro-max/packages/")
   ) {
@@ -37,7 +37,7 @@ const inRepo = mod => {
 // The following ensures that there is always only a single (and same)
 // copy of React in an app at any given moment.
 // eslint-disable-next-line
-Module.prototype.require = function(modulePath) {
+Module.prototype.require = function (modulePath) {
   // If we are running in the repo, we need to make sure
   // module resolutions coming from other react-static-pro-max packages
   // are first attempted from the
@@ -49,12 +49,12 @@ Module.prototype.require = function(modulePath) {
       // If module is in the repo try and redirect
       isInWorkspace ||
       // Always try and redirect react and react-dom resolutions
-      ["react", "react-dom"].some(d => modulePath.includes(d))
+      ["react", "react-dom"].some((d) => modulePath.includes(d))
     ) {
       try {
         modulePath = resolveFrom(
           path.resolve(process.cwd(), "node_modules"),
-          modulePath
+          modulePath,
         );
       } catch (err) {
         //
@@ -70,21 +70,21 @@ require("@babel/register")({
     [
       path.resolve(__dirname, "../../babel-preset.js"),
       {
-        node: true
-      }
-    ]
+        node: true,
+      },
+    ],
   ],
   ignore: [
     function babelIgnore(filename) {
       // true if should ignore
       return (
         new RegExp(escapeRegExp(`${path.sep}node_modules${path.sep}`)).test(
-          filename
+          filename,
         ) ||
         (ignorePath && ignorePath.test(filename))
       );
-    }
-  ]
+    },
+  ],
 });
 
 // necessary at any entry point of the cli to ensure that Babel-register
@@ -110,9 +110,9 @@ const ignoredExtensions = [
   "mp3",
   "wav",
   "md",
-  "yaml"
+  "yaml",
 ];
-ignoredExtensions.forEach(ext => {
+ignoredExtensions.forEach((ext) => {
   require.extensions[`.${ext}`] = () => {};
 });
 
@@ -132,12 +132,12 @@ console.error = (...args) => {
 
 // Be sure to log useful information about unhandled exceptions. This should seriously
 // be a default: https://github.com/nodejs/node/issues/9523#issuecomment-259303079
-process.on("unhandledRejection", r => {
+process.on("unhandledRejection", (r) => {
   console.error(r);
 });
 
 module.exports = {
   setIgnorePath(path) {
     ignorePath = path ? new RegExp(escapeRegExp(path)) : undefined;
-  }
+  },
 };

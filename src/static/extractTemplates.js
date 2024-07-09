@@ -12,7 +12,7 @@ export default (async function extractTemplates(state) {
   const templates = [];
   let notFoundPending = true;
 
-  routes.forEach(route => {
+  routes.forEach((route) => {
     if (!route.template) {
       return;
     }
@@ -20,8 +20,8 @@ export default (async function extractTemplates(state) {
     route.template = slash(
       `__react_static_root__/${path.relative(
         config.paths.ROOT,
-        route.template
-      )}`
+        route.template,
+      )}`,
     );
 
     // Check if the template has already been added
@@ -41,12 +41,12 @@ export default (async function extractTemplates(state) {
 
   if (!incremental && notFoundPending) {
     throw new Error(
-      "A 404 template was not found at template extraction time. It should have been at least defaulted to one by now, so this is very bad. File an issue if you see this."
+      "A 404 template was not found at template extraction time. It should have been at least defaulted to one by now, so this is very bad. File an issue if you see this.",
     );
   }
 
   return {
     ...state,
-    templates
+    templates,
   };
 });

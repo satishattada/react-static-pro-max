@@ -8,8 +8,8 @@ function initCSSLoader() {
       loader: "css-loader",
       options: {
         importLoaders: 1,
-        sourceMap: false
-      }
+        sourceMap: false,
+      },
     },
     {
       loader: "postcss-loader",
@@ -21,21 +21,21 @@ function initCSSLoader() {
         plugins: () => [
           postcssFlexbugsFixes,
           autoprefixer({
-            flexbox: "no-2009" // I'd opt in for this - safari 9 & IE 10.
-          })
-        ]
-      }
-    }
+            flexbox: "no-2009", // I'd opt in for this - safari 9 & IE 10.
+          }),
+        ],
+      },
+    },
   ];
   return cssLoader;
 }
 
-export default function({ stage, isNode }) {
+export default function ({ stage, isNode }) {
   let cssLoader = initCSSLoader();
   if (stage === "node" || isNode) {
     return {
       test: /\.css$/,
-      loader: cssLoader
+      loader: cssLoader,
     };
   }
 
@@ -44,14 +44,14 @@ export default function({ stage, isNode }) {
       loader: ExtractCssChunks.loader,
       options: {
         hot: true,
-        hmr: true
-      }
+        hmr: true,
+      },
     },
-    ...cssLoader
+    ...cssLoader,
   ]; // seeing as it's HMR, why not :)
 
   return {
     test: /\.css$/,
-    loader: cssLoader
+    loader: cssLoader,
   };
 }

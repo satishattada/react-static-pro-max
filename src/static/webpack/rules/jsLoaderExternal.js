@@ -1,6 +1,6 @@
 import babelPreset from "../../../../babel-preset";
 
-export default function({ config }) {
+export default function ({ config }) {
   return {
     test: /\.(js|jsx|mjs)$/,
     exclude: [/@babel(?:\/|\\{1,2})runtime/, ...(config.babelExcludes || [])],
@@ -13,10 +13,10 @@ export default function({ config }) {
           compact: false,
           presets: [[babelPreset, { external: true }]],
           cacheDirectory: true,
-          sourceMaps: false
-        }
+          sourceMaps: false,
+        },
       },
-      "react-hot-loader/webpack"
-    ]
+      "react-hot-loader/webpack",
+    ],
   };
 }

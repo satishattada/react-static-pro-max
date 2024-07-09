@@ -26,7 +26,7 @@ export default (async function fetchRoutes(state) {
 
   state = {
     ...state,
-    sharedDataByHash
+    sharedDataByHash,
   };
 
   await poolAll(downloadTasks, Number(config.outputFileRate));

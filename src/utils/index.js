@@ -8,13 +8,13 @@ export * from "../browser/utils";
 export { default as progress } from "./progress";
 export const ChalkColor = {
   yarn: "#2c8ebb",
-  npm: "#cb3837"
+  npm: "#cb3837",
 };
 
-export const findAvailablePort = start =>
+export const findAvailablePort = (start) =>
   PortFinder.getPortPromise({
     port: start,
-    stopPort: start + 1000
+    stopPort: start + 1000,
   });
 
 const times = {};

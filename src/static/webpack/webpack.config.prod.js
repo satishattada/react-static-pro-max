@@ -37,19 +37,19 @@ function common(state) {
       vendors: {
         test: /[\\/]node_modules[\\/]/,
         priority: -10,
-        chunks: "all"
+        chunks: "all",
       },
       default: {
         minChunks: 2,
         priority: -20,
-        reuseExistingChunk: true
-      }
-    }
+        reuseExistingChunk: true,
+      },
+    },
   };
 
   let extrackCSSChunks = new ExtractCssChunks({
     filename: "[name].[contentHash:8].css",
-    chunkFilename: "[id].[contentHash:8].css"
+    chunkFilename: "[id].[contentHash:8].css",
   });
 
   if (!config.extractCssChunks) {
@@ -58,11 +58,11 @@ function common(state) {
         name: "styles",
         test: /\.css$/,
         chunks: "all",
-        enforce: true
-      }
+        enforce: true,
+      },
     };
     extrackCSSChunks = new ExtractCssChunks({
-      filename: "[name].[contentHash:8].css"
+      filename: "[name].[contentHash:8].css",
     });
   }
 
@@ -74,13 +74,13 @@ function common(state) {
       : [
           require.resolve("../../bootstrapPlugins"),
           require.resolve("../../bootstrapTemplates"),
-          require.resolve("../../bootstrapApp")
+          require.resolve("../../bootstrapApp"),
         ],
     output: {
       filename: "[name].[contentHash:8].js",
       chunkFilename: "templates/[name].[contentHash:8].js",
       path: ASSETS,
-      publicPath: process.env.REACT_STATIC_ASSETS_PATH || "/"
+      publicPath: process.env.REACT_STATIC_ASSETS_PATH || "/",
     },
     optimization: {
       sideEffects: true,
@@ -99,29 +99,29 @@ function common(state) {
             mangle: { safari10: true, ...config.terser.terserOptions.mangle },
             parse: { ecma: 8, ...config.terser.terserOptions.parse },
             compress: { ecma: 5, ...config.terser.terserOptions.compress },
-            output: { ecma: 5, ...config.terser.terserOptions.output }
-          }
+            output: { ecma: 5, ...config.terser.terserOptions.output },
+          },
         }),
-        new OptimizeCSSAssetsPlugin({})
+        new OptimizeCSSAssetsPlugin({}),
       ],
-      splitChunks
+      splitChunks,
     },
     performance: {
-      maxEntrypointSize: 300000
+      maxEntrypointSize: 300000,
     },
     module: {
       rules: rules({ config, stage: "prod", isNode: false }),
-      strictExportPresence: true
+      strictExportPresence: true,
     },
     resolve: {
       modules: [
         NODE_MODULES,
         SRC,
         DIST,
-        ...[NODE_MODULES, SRC, DIST].map(d =>
-          DIST.startsWith(ROOT) ? path.resolve(__dirname, d) : path.resolve(d)
+        ...[NODE_MODULES, SRC, DIST].map((d) =>
+          DIST.startsWith(ROOT) ? path.resolve(__dirname, d) : path.resolve(d),
         ),
-        "node_modules"
+        "node_modules",
       ],
       extensions: [".wasm", ".mjs", ".js", ".json", ".jsx"],
       alias: {
@@ -129,10 +129,10 @@ function common(state) {
         "react-dom$": resolveFrom(config.paths.NODE_MODULES, "react-dom"),
         "react-universal-component": resolveFrom(
           __dirname,
-          "react-universal-component"
+          "react-universal-component",
         ),
-        __react_static_root__: config.paths.ROOT
-      }
+        __react_static_root__: config.paths.ROOT,
+      },
     },
     externals: [],
     target: undefined,
@@ -140,16 +140,16 @@ function common(state) {
       new webpack.EnvironmentPlugin(process.env),
       extrackCSSChunks,
       new CaseSensitivePathsPlugin(),
-      analyze && new BundleAnalyzerPlugin()
-    ].filter(d => d),
-    devtool: debug || config.productionSourceMaps ? "source-map" : false
+      analyze && new BundleAnalyzerPlugin(),
+    ].filter((d) => d),
+    devtool: debug || config.productionSourceMaps ? "source-map" : false,
   };
 }
 
-export default function(state) {
+export default function (state) {
   const {
     stage,
-    config: { paths }
+    config: { paths },
   } = state;
 
   const result = common(state);
@@ -170,24 +170,24 @@ export default function(state) {
       if (
         [
           /react-static-pro-max(\\|\/)lib(\\|\/)browser/,
-          /webpack-flush-chunks/
-        ].some(d => d.test(resolved))
+          /webpack-flush-chunks/,
+        ].some((d) => d.test(resolved))
       ) {
         return callback(null, `commonjs ${resolved}`);
       }
       callback();
     },
     nodeExternals({
-      whitelist: ["react-universal-component"]
-    })
+      whitelist: ["react-universal-component"],
+    }),
   ];
   result.module.rules = rules(state);
   result.plugins = [
     new webpack.EnvironmentPlugin(process.env),
     new CaseSensitivePathsPlugin(),
     new webpack.optimize.LimitChunkCountPlugin({
-      maxChunks: 1
-    })
+      maxChunks: 1,
+    }),
   ];
   return result;
 }

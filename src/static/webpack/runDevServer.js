@@ -59,9 +59,9 @@ async function runExpressServer(state) {
     console.log(
       chalk.red(
         `Warning! Port ${intendedPort} is not available. Using port ${chalk.green(
-          port
-        )} instead!`
-      )
+          port,
+        )} instead!`,
+      ),
     );
   }
 
@@ -71,9 +71,9 @@ async function runExpressServer(state) {
       ...state.config,
       devServer: {
         ...state.config.devServer,
-        port
-      }
-    }
+        port,
+      },
+    },
   };
 
   const devConfig = makeWebpackConfig(state);
@@ -93,9 +93,9 @@ async function runExpressServer(state) {
     proxy: {
       "/socket.io": {
         target: `${messageHost}:${messagePort}`,
-        ws: true
+        ws: true,
       },
-      ...(state.config.devServer ? state.config.devServer.proxy || {} : {})
+      ...(state.config.devServer ? state.config.devServer.proxy || {} : {}),
     },
     watchOptions: {
       ...(state.config.devServer
@@ -104,14 +104,14 @@ async function runExpressServer(state) {
       ignored: [
         /node_modules/,
 
-        ...((state.config.devServer.watchOptions || {}).ignored || [])
-      ]
+        ...((state.config.devServer.watchOptions || {}).ignored || []),
+      ],
     },
-    before: app => {
+    before: (app) => {
       // Since routes may change during dev, this function can rebuild all of the config
       // routes. It also references the original config when possible, to make sure it
       // uses any up to date getData callback generated from new or replacement routes.
-      buildDevRoutes = async newState => {
+      buildDevRoutes = async (newState) => {
         latestState = await fetchSiteData(newState);
 
         app.get(
@@ -124,19 +124,19 @@ async function runExpressServer(state) {
               res.send(err);
               next(err);
             }
-          }
+          },
         );
 
         // Serve each routes data
         latestState.routes.forEach(({ path: routePath }) => {
           app.get(
             `/__react-static-pro-max__/routeInfo/${encodeURI(
-              routePath === "/" ? "" : routePath
+              routePath === "/" ? "" : routePath,
             )}`,
             async (req, res, next) => {
               // Make sure we have the most up to date route from the config, not
               // an out of date object.
-              let route = latestState.routes.find(d => d.path === routePath);
+              let route = latestState.routes.find((d) => d.path === routePath);
               try {
                 if (!route) {
                   const err = new Error(
@@ -146,7 +146,7 @@ If you removed this route, disregard this error.
 If this is a dynamic route, consider adding it to the prefetchExcludes list:
 
   addPrefetchExcludes(['${routePath}'])
-`
+`,
                   );
                   delete err.stack;
                   throw err;
@@ -161,10 +161,10 @@ If this is a dynamic route, consider adding it to the prefetchExcludes list:
                 res.status(404);
                 next(err);
               }
-            }
+            },
           );
         });
-        return new Promise(resolve => setTimeout(resolve, 1));
+        return new Promise((resolve) => setTimeout(resolve, 1));
       };
 
       buildDevRoutes(state);
@@ -174,7 +174,7 @@ If this is a dynamic route, consider adding it to the prefetchExcludes list:
       }
 
       return app;
-    }
+    },
   };
 
   let first = true;
@@ -186,7 +186,7 @@ If this is a dynamic route, consider adding it to the prefetchExcludes list:
 
   devCompiler.hooks.invalid.tap(
     {
-      name: "react-static-pro-max"
+      name: "react-static-pro-max",
     },
     (file, changed) => {
       // If a file is changed within the first two seconds of
@@ -198,14 +198,14 @@ If this is a dynamic route, consider adding it to the prefetchExcludes list:
         console.log("Updating bundle...");
         time(chalk.green("[\u2713] Bundle Updated"));
       }
-    }
+    },
   );
 
   devCompiler.hooks.done.tap(
     {
-      name: "react-static-pro-max"
+      name: "react-static-pro-max",
     },
-    stats => {
+    (stats) => {
       const messages = stats.toJson({}, true);
       const isSuccessful = !messages.errors.length;
       const hasWarnings = messages.warnings.length;
@@ -216,8 +216,8 @@ If this is a dynamic route, consider adding it to the prefetchExcludes list:
           if (hasWarnings) {
             console.log(
               chalk.yellowBright(
-                `\n[\u0021] There were ${messages.warnings.length} warnings during compilation\n`
-              )
+                `\n[\u0021] There were ${messages.warnings.length} warnings during compilation\n`,
+              ),
             );
             messages.warnings.forEach((message, index) => {
               console.warn(`[warning ${index}]: ${message}\n`);
@@ -228,8 +228,8 @@ If this is a dynamic route, consider adding it to the prefetchExcludes list:
           const protocol = state.config.devServer.https ? "https" : "http";
           console.log(
             `${chalk.green("[\u2713] App serving at")} ${chalk.blue(
-              `${protocol}://${state.config.devServer.host}:${state.config.devServer.port}`
-            )}`
+              `${protocol}://${state.config.devServer.host}:${state.config.devServer.port}`,
+            )}`,
           );
         } else {
           timeEnd(chalk.green("[\u2713] Bundle Updated"));
@@ -241,7 +241,7 @@ If this is a dynamic route, consider adding it to the prefetchExcludes list:
       }
 
       first = false;
-    }
+    },
   );
 
   // Start the webpack dev server
@@ -256,7 +256,7 @@ If this is a dynamic route, consider adding it to the prefetchExcludes list:
   };
 
   await new Promise((resolve, reject) => {
-    devServer.listen(port, null, err => {
+    devServer.listen(port, null, (err) => {
       if (err) {
         console.error(`Listening on ${port} failed: ${err}`);
         return reject(err);

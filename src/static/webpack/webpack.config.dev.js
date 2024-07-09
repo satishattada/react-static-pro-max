@@ -7,7 +7,7 @@ import path from "path";
 
 import rules from "./rules";
 
-export default function({ config }) {
+export default function ({ config }) {
   const { DIST, NODE_MODULES, SRC, HTML_TEMPLATE } = config.paths;
 
   process.env.REACT_STATIC_BASE_PATH = config.basePath;
@@ -18,7 +18,7 @@ export default function({ config }) {
     mode: "development",
     optimization: {
       noEmitOnErrors: true,
-      concatenateModules: true
+      concatenateModules: true,
     },
     context: path.resolve(__dirname, "../../../node_modules"),
     entry: [
@@ -27,27 +27,27 @@ export default function({ config }) {
         ? []
         : [
             require.resolve("../../bootstrapPlugins"),
-            require.resolve("../../bootstrapTemplates")
+            require.resolve("../../bootstrapTemplates"),
           ]),
-      config.entry
+      config.entry,
     ].filter(Boolean),
     output: {
       filename: "[name].js", // never hash dev code
       chunkFilename: "templates/[name].js",
       path: DIST,
-      publicPath: process.env.REACT_STATIC_ASSETS_PATH || "/"
+      publicPath: process.env.REACT_STATIC_ASSETS_PATH || "/",
     },
     module: {
       rules: rules({ config, stage: "dev" }),
-      strictExportPresence: true
+      strictExportPresence: true,
     },
     resolve: {
       modules: [
         NODE_MODULES,
         SRC,
         DIST,
-        ...[NODE_MODULES, SRC, DIST].map(d => path.resolve(__dirname, d)),
-        "node_modules"
+        ...[NODE_MODULES, SRC, DIST].map((d) => path.resolve(__dirname, d)),
+        "node_modules",
       ],
       extensions: [".wasm", ".mjs", ".js", ".json", ".jsx"],
       alias: {
@@ -55,25 +55,25 @@ export default function({ config }) {
         "react-dom$": resolveFrom(NODE_MODULES, "react-dom"),
         "react-universal-component": resolveFrom(
           __dirname,
-          "react-universal-component"
+          "react-universal-component",
         ),
         __react_static_root__: config.paths.ROOT,
         // This is here so HMR modules use the same emitter instance.
         // Likely this is only needed for locally linked dev on RS, but still...
-        "webpack/hot/emitter": resolveFrom(__dirname, "webpack/hot/emitter")
-      }
+        "webpack/hot/emitter": resolveFrom(__dirname, "webpack/hot/emitter"),
+      },
     },
     plugins: [
       new webpack.EnvironmentPlugin(process.env),
       new HtmlWebpackPlugin({
         inject: true,
-        template: `!!raw-loader!${HTML_TEMPLATE}`
+        template: `!!raw-loader!${HTML_TEMPLATE}`,
       }),
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NamedModulesPlugin(),
       new CaseSensitivePathsPlugin(),
-      new ExtractCssChunks({ filename: "[name].css" }) // never hash dev code
+      new ExtractCssChunks({ filename: "[name].css" }), // never hash dev code
     ],
-    devtool: "cheap-module-source-map"
+    devtool: "cheap-module-source-map",
   };
 }

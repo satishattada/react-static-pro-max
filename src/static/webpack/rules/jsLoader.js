@@ -2,16 +2,16 @@ import fs from "fs-extra";
 import babelPreset from "../../../../babel-preset";
 
 // we check which babel config file exists in the project root
-const readBabelConfig = root => {
+const readBabelConfig = (root) => {
   const babelFiles = [
     `${root}/.babelrc`,
     `${root}/.babelrc.js`,
-    `${root}/babel.config.js`
+    `${root}/babel.config.js`,
   ];
 
   let extendsFile = {};
 
-  babelFiles.forEach(file => {
+  babelFiles.forEach((file) => {
     try {
       fs.statSync(file);
       extendsFile = { extends: file };
@@ -23,7 +23,7 @@ const readBabelConfig = root => {
   return extendsFile;
 };
 
-export default function({ config, stage }) {
+export default function ({ config, stage }) {
   let babelFile = {};
 
   const isRelativePath = config.paths.DIST.startsWith(config.paths.ROOT);
@@ -38,7 +38,7 @@ export default function({ config, stage }) {
       config.paths.PLUGINS,
       config.paths.SRC,
       /react-static-pro-max-templates\.js/,
-      /react-static-pro-max-browser-plugins\.js/
+      /react-static-pro-max-browser-plugins\.js/,
     ],
     use: [
       {
@@ -49,10 +49,10 @@ export default function({ config, stage }) {
           presets: [[babelPreset, { modules: false }]],
           cacheDirectory: isRelativePath ? stage !== "prod" : config.paths.TEMP,
           compact: stage === "prod",
-          highlightCode: true
-        }
+          highlightCode: true,
+        },
       },
-      "react-hot-loader/webpack"
-    ]
+      "react-hot-loader/webpack",
+    ],
   };
 }

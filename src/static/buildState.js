@@ -5,15 +5,15 @@ export async function outputBuildState(state) {
   await fs.outputFile(
     path.join(
       state.config.paths.ARTIFACTS,
-      "react-static-pro-max-build-state.json"
+      "react-static-pro-max-build-state.json",
     ),
-    JSON.stringify(state.config, null, 2)
+    JSON.stringify(state.config, null, 2),
   );
   return state;
 }
 
 export function importBuildState(config) {
   return fs.readJson(
-    path.join(config.paths.ARTIFACTS, "react-static-pro-max-build-state.json")
+    path.join(config.paths.ARTIFACTS, "react-static-pro-max-build-state.json"),
   );
 }

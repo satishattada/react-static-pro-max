@@ -8,7 +8,7 @@ import {
   trimTrailingSlashes,
   trimDoubleSlashes,
   makePathAbsolute,
-  getFullRouteData
+  getFullRouteData,
 } from "..";
 
 describe("browser/utils", () => {
@@ -115,7 +115,7 @@ describe("browser/utils", () => {
     });
     it("should work for absolute path", () => {
       expect(cleanSlashes("https://example.com/foo//bar/")).toEqual(
-        "https://example.com/foo/bar"
+        "https://example.com/foo/bar",
       );
     });
   });
@@ -148,7 +148,7 @@ describe("browser/utils", () => {
     });
     it("should return if already absolute", () => {
       expect(makePathAbsolute("http://example.com")).toEqual(
-        "http://example.com"
+        "http://example.com",
       );
     });
     it("should make path absolute", () => {
@@ -159,14 +159,14 @@ describe("browser/utils", () => {
     it("should return the data merged with the shared data", () => {
       const routeInfo = {
         data: { foo: "foo" },
-        sharedData: { bar: "bar" }
+        sharedData: { bar: "bar" },
       };
       const expected = { foo: "foo", bar: "bar" };
       expect(getFullRouteData(routeInfo)).toEqual(expected);
     });
     it("should return the data when no shared data was available", () => {
       const routeInfo = {
-        data: { foo: "foo" }
+        data: { foo: "foo" },
       };
       const expected = { foo: "foo" };
       expect(getFullRouteData(routeInfo)).toEqual(expected);
@@ -174,7 +174,7 @@ describe("browser/utils", () => {
     it("should override the shared data with the route data for duplicate keys", () => {
       const routeInfo = {
         data: { foo: "foo" },
-        sharedData: { foo: "bar", bar: "bar" }
+        sharedData: { foo: "bar", bar: "bar" },
       };
       const expected = { foo: "foo", bar: "bar" };
       expect(getFullRouteData(routeInfo)).toEqual(expected);

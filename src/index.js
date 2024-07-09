@@ -32,7 +32,7 @@ export {
   sharedDataByHash,
   templateErrorByPath,
   templates,
-  templatesByPath
+  templatesByPath,
 } from "./browser";
 
 // Utils

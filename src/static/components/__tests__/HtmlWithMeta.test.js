@@ -6,7 +6,7 @@ describe("HtmlWithMeta", () => {
   test("when route is a static route", async () => {
     const HtmlWithMeta = await makeHtmlWithMeta({
       head: { htmlProps: { lang: "en" } },
-      plugins: []
+      plugins: [],
     });
 
     const htmlWithMeta = mount(
@@ -14,7 +14,7 @@ describe("HtmlWithMeta", () => {
         <head>
           <title>React Static</title>
         </head>
-      </HtmlWithMeta>
+      </HtmlWithMeta>,
     );
 
     expect(htmlWithMeta).toMatchSnapshot();

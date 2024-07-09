@@ -14,14 +14,14 @@ export default function makeWebpackConfig(state) {
     webpackConfig = require("./webpack.config.prod").default(state);
   } else {
     throw new Error(
-      `An invalid stage option was detected: ${stage.toString()}. Stage must equal one of: 'prod', 'dev', or 'node'.`
+      `An invalid stage option was detected: ${stage.toString()}. Stage must equal one of: 'prod', 'dev', or 'node'.`,
     );
   }
 
   // set the default loaders
   state = {
     ...state,
-    defaultLoaders: getStagedRules(state)
+    defaultLoaders: getStagedRules(state),
   };
 
   // run the webpack plugin (should be synchronous)

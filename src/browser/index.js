@@ -8,7 +8,7 @@ import {
   makePathAbsolute,
   getHooks,
   reduceHooks,
-  PATH_404
+  PATH_404,
 } from "./utils";
 import onVisible from "./utils/Visibility";
 
@@ -20,7 +20,7 @@ const inflightRouteInfo = {};
 const inflightPropHashes = {};
 let prefetchExcludes = [];
 
-export const addPrefetchExcludes = excludes => {
+export const addPrefetchExcludes = (excludes) => {
   if (!Array.isArray(excludes)) {
     throw new Error("Excludes must be an array of strings/regex!");
   }
@@ -28,12 +28,12 @@ export const addPrefetchExcludes = excludes => {
 };
 
 const requestPool = createPool({
-  concurrency: Number(process.env.REACT_STATIC_PREFETCH_RATE)
+  concurrency: Number(process.env.REACT_STATIC_PREFETCH_RATE),
 });
 
 // Plugins
 export const pluginHooks = [];
-export const registerPlugins = newPlugins => {
+export const registerPlugins = (newPlugins) => {
   pluginHooks.splice(0, Infinity, ...newPlugins);
 };
 
@@ -41,34 +41,34 @@ export const registerPlugins = newPlugins => {
 export const templates = {};
 export const templatesByPath = {};
 export const templateErrorByPath = {};
-export const onReloadTemplates = fn => {
+export const onReloadTemplates = (fn) => {
   onReloadTemplates.listeners.push(fn);
   return () => {
     onReloadTemplates.listeners = onReloadTemplates.listeners.filter(
-      d => d !== fn
+      (d) => d !== fn,
     );
   };
 };
 onReloadTemplates.listeners = [];
 
 export const registerTemplates = async (tmps, notFoundKey) => {
-  Object.keys(templatesByPath).forEach(key => {
+  Object.keys(templatesByPath).forEach((key) => {
     delete templatesByPath[key];
   });
-  Object.keys(templateErrorByPath).forEach(key => {
+  Object.keys(templateErrorByPath).forEach((key) => {
     delete templateErrorByPath[key];
   });
-  Object.keys(templates).forEach(key => {
+  Object.keys(templates).forEach((key) => {
     delete templates[key];
   });
-  Object.keys(tmps).forEach(key => {
+  Object.keys(tmps).forEach((key) => {
     templates[key] = tmps[key];
     if (!templates[key]) {
       console.warn(
         `Template registered without default export: ${key.replace(
           /__react_static_root__\//,
-          ""
-        )}`
+          "",
+        )}`,
       );
     }
   });
@@ -81,7 +81,7 @@ export const registerTemplates = async (tmps, notFoundKey) => {
     await prefetch(window.location.pathname);
   }
 
-  onReloadTemplates.listeners.forEach(fn => fn());
+  onReloadTemplates.listeners.forEach((fn) => fn());
 
   if (
     typeof document !== "undefined" &&
@@ -96,14 +96,14 @@ export const registerTemplateForPath = (path, template) => {
   templatesByPath[path] = templates[template];
 };
 
-export const onReloadClientData = fn => {
-  Object.keys(routeErrorByPath).forEach(key => {
+export const onReloadClientData = (fn) => {
+  Object.keys(routeErrorByPath).forEach((key) => {
     delete routeErrorByPath[key];
   });
   onReloadClientData.listeners.push(fn);
   return () => {
     onReloadClientData.listeners = onReloadClientData.listeners.filter(
-      d => d !== fn
+      (d) => d !== fn,
     );
   };
 };
@@ -132,7 +132,7 @@ function init() {
         });
       } catch (err) {
         console.log(
-          "react-static-pro-max data hot-loader websocket encountered the following error:"
+          "react-static-pro-max data hot-loader websocket encountered the following error:",
         );
         console.error(err);
       }
@@ -159,7 +159,7 @@ function startPreloader() {
   const run = () => {
     const els = [].slice.call(document.getElementsByTagName("a"));
 
-    els.forEach(el => {
+    els.forEach((el) => {
       const href = el.getAttribute("href");
       const prefetchOption = el.getAttribute("data-prefetch");
       const shouldPrefetch =
@@ -184,9 +184,9 @@ async function reloadClientData() {
     sharedDataByHash,
     routeErrorByPath,
     inflightRouteInfo,
-    inflightPropHashes
-  ].forEach(part => {
-    Object.keys(part).forEach(key => {
+    inflightPropHashes,
+  ].forEach((part) => {
+    Object.keys(part).forEach((key) => {
       delete part[key];
     });
   });
@@ -194,7 +194,7 @@ async function reloadClientData() {
   // Prefetch the current route's data before you reload routes
   await prefetch(window.location.pathname);
 
-  onReloadClientData.listeners.forEach(fn => fn());
+  onReloadClientData.listeners.forEach((fn) => fn());
 }
 
 export async function getRouteInfo(path, { priority } = {}) {
@@ -222,7 +222,7 @@ export async function getRouteInfo(path, { priority } = {}) {
       // In dev, request from the webpack dev server
       if (!inflightRouteInfo[path]) {
         inflightRouteInfo[path] = axios.get(
-          `/__react-static-pro-max__/routeInfo/${path === "/" ? "" : path}`
+          `/__react-static-pro-max__/routeInfo/${path === "/" ? "" : path}`,
         );
       }
       const { data } = await inflightRouteInfo[path];
@@ -295,7 +295,7 @@ export async function prefetchData(path, { priority } = {}) {
 
   // Request the template and loop over the routeInfo.sharedHashesByProp, requesting each prop
   await Promise.all(
-    Object.keys(routeInfo.sharedHashesByProp).map(async key => {
+    Object.keys(routeInfo.sharedHashesByProp).map(async (key) => {
       const hash = routeInfo.sharedHashesByProp[key];
 
       // Check the sharedDataByHash first
@@ -304,7 +304,7 @@ export async function prefetchData(path, { priority } = {}) {
         try {
           const staticDataPath = pathJoin(
             process.env.REACT_STATIC_ASSETS_PATH,
-            `staticData/${hash}.json`
+            `staticData/${hash}.json`,
           );
           const absoluteStaticDataPath = makePathAbsolute(staticDataPath);
 
@@ -316,7 +316,7 @@ export async function prefetchData(path, { priority } = {}) {
             // Non priority, share inflight requests and use pool
             if (!inflightPropHashes[hash]) {
               inflightPropHashes[hash] = requestPool.add(() =>
-                axios.get(absoluteStaticDataPath)
+                axios.get(absoluteStaticDataPath),
               );
             }
             const { data: prop } = await inflightPropHashes[hash];
@@ -326,7 +326,7 @@ export async function prefetchData(path, { priority } = {}) {
         } catch (err) {
           console.log(
             "Error: There was an error retrieving a prop for this route! hashID:",
-            hash
+            hash,
           );
           console.error(err);
         }
@@ -337,7 +337,7 @@ export async function prefetchData(path, { priority } = {}) {
 
       // Otherwise, just set it as the key
       routeInfo.sharedData[key] = sharedDataByHash[hash];
-    })
+    }),
   );
 
   return getFullRouteData(routeInfo);
@@ -398,7 +398,7 @@ export async function prefetch(path, options = {}) {
   } else {
     [data] = await Promise.all([
       prefetchData(path, options),
-      prefetchTemplate(path, options)
+      prefetchTemplate(path, options),
     ]);
   }
 
@@ -417,7 +417,7 @@ export function isPrefetchableRoute(path) {
   }
 
   if (
-    prefetchExcludes.some(exclude => {
+    prefetchExcludes.some((exclude) => {
       if (typeof exclude === "string" && path.startsWith(exclude)) {
         return true;
       }
@@ -438,7 +438,7 @@ export function isPrefetchableRoute(path) {
   } catch (e) {
     if (typeof URL !== "function") {
       console.error(
-        "URL polyfill is required for this browser. https://github.com/react-static-pro-max/react-static-pro-max/blob/master/docs/concepts.md#browser-support"
+        "URL polyfill is required for this browser. https://github.com/react-static-pro-max/react-static-pro-max/blob/master/docs/concepts.md#browser-support",
       );
     }
     // Return false on invalid URLs
@@ -460,12 +460,12 @@ export function isPrefetchableRoute(path) {
 }
 
 export const plugins = {
-  Root: Comp => {
+  Root: (Comp) => {
     const hooks = getHooks(pluginHooks, "Root");
     return reduceHooks(hooks, { sync: true })(Comp);
   },
-  Routes: Comp => {
+  Routes: (Comp) => {
     const hooks = getHooks(pluginHooks, "Routes");
     return reduceHooks(hooks, { sync: true })(Comp);
-  }
+  },
 };

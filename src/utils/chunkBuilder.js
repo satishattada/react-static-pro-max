@@ -6,18 +6,18 @@ import { escapeRegExp } from ".";
 // the tests consistent and means we can write tests with either separator
 const escapedPathSeps = escapeRegExp(`${path.win32.sep}${path.posix.sep}`);
 
-export const chunkNameFromFile = filename => {
+export const chunkNameFromFile = (filename) => {
   // Normalize filename for path.join
   filename = filename.replace(
     new RegExp(`[${escapedPathSeps}]`, "g"),
-    path.sep
+    path.sep,
   );
   // Remove the extension
   return (
     path
       .join(
         path.dirname(filename),
-        path.basename(filename, path.extname(filename))
+        path.basename(filename, path.extname(filename)),
       )
       // Remove the drive letter or leading (back)slash
       .replace(/^(?:[A-Z]:)?(?:\\|\/)/, "")

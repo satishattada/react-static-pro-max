@@ -21,5 +21,5 @@ module.exports = {
   getWebpackConfig,
   normalizeRoutes,
   createSharedData,
-  rebuildRoutes
+  rebuildRoutes,
 };

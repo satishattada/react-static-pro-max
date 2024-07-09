@@ -16,7 +16,7 @@ const templatesDir = path.resolve(__dirname, "../../templates");
 
 const templates = fs
   .readdirSync(templatesDir)
-  .filter(d => !d.startsWith(".") && !d.startsWith("README"));
+  .filter((d) => !d.startsWith(".") && !d.startsWith("README"));
 
 export default (async function create({ name, template, isCLI }) {
   const isYarn = shouldUseYarn();
@@ -37,14 +37,14 @@ export default (async function create({ name, template, isCLI }) {
       type: "input",
       name: "name",
       message: "What should we name this project?",
-      default: "my-static-site"
+      default: "my-static-site",
     });
     name = answers.name;
   }
 
   if (!name) {
     throw new Error(
-      "A project name is required. Please use options.name to define one."
+      "A project name is required. Please use options.name to define one.",
     );
   }
 
@@ -52,7 +52,7 @@ export default (async function create({ name, template, isCLI }) {
 
   if (fs.existsSync(dest)) {
     throw new Error(
-      `Could not create project. Directory already exists at ${dest}!`
+      `Could not create project. Directory already exists at ${dest}!`,
     );
   }
 
@@ -62,14 +62,14 @@ export default (async function create({ name, template, isCLI }) {
       name: "template",
       message: "Select a template below...",
       source: async (answersSoFar, input) =>
-        !input ? exampleChoices : matchSorter(exampleChoices, input)
+        !input ? exampleChoices : matchSorter(exampleChoices, input),
     });
     template = answers.template;
   }
 
   if (!template) {
     throw new Error(
-      "A project template is required. Please use options.template to define one."
+      "A project template is required. Please use options.template to define one.",
     );
   }
 
@@ -82,8 +82,8 @@ export default (async function create({ name, template, isCLI }) {
       {
         type: "input",
         name: "localDirectory",
-        message: `Enter an local directory's absolute location (~/Desktop/my-template)`
-      }
+        message: `Enter an local directory's absolute location (~/Desktop/my-template)`,
+      },
     ]);
     template = localDirectory;
   }
@@ -93,11 +93,11 @@ export default (async function create({ name, template, isCLI }) {
     try {
       await fs.copy(
         path.resolve(templatesDir, template),
-        path.resolve(process.cwd(), dest)
+        path.resolve(process.cwd(), dest),
       );
     } catch (err) {
       console.log(
-        chalk.red(`Copying React Static template: ${template} failed!`)
+        chalk.red(`Copying React Static template: ${template} failed!`),
       );
       throw err;
     }
@@ -108,7 +108,7 @@ export default (async function create({ name, template, isCLI }) {
       await fs.copy(path.resolve(process.cwd(), template), dest);
     } catch (err) {
       console.log(
-        chalk.red(`Copying the template from directory: ${template} failed!`)
+        chalk.red(`Copying the template from directory: ${template} failed!`),
       );
       throw err;
     }
@@ -134,7 +134,7 @@ export default (async function create({ name, template, isCLI }) {
         isYarn
           ? chalk.hex(ChalkColor.yarn)("Yarn")
           : chalk.hex(ChalkColor.npm)("NPM")
-      }...`
+      }...`,
     );
     // We install react-static-pro-max separately to ensure we always have the latest stable release
     execSync(`cd "${name}" && ${isYarn ? "yarn" : "npm install"}`);
@@ -147,14 +147,14 @@ export default (async function create({ name, template, isCLI }) {
   ${chalk.green("To get started:")}
 
     cd "${name}" ${
-    !isCLI
-      ? `&& ${
-          isYarn
-            ? chalk.hex(ChalkColor.yarn)("yarn")
-            : chalk.hex(ChalkColor.npm)("npm install")
-        }`
-      : ""
-  }
+      !isCLI
+        ? `&& ${
+            isYarn
+              ? chalk.hex(ChalkColor.yarn)("yarn")
+              : chalk.hex(ChalkColor.npm)("npm install")
+          }`
+        : ""
+    }
 
     ${
       isYarn

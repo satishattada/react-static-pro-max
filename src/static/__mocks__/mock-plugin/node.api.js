@@ -1,5 +1,5 @@
 export default () => ({
-  webpack: config => {
+  webpack: (config) => {
     return config;
-  }
+  },
 });

@@ -43,7 +43,7 @@ async function runExpressServer(state) {
   // or environment variables
   const intendedPort = Number(state.config.devServer.port);
   const port = await findAvailablePort(intendedPort);
-  console.log("Running the server");
+
   let defaultMessagePort = 4000;
 
   if (process.env.REACT_STATIC_MESSAGE_SOCKET_PORT) {
@@ -51,7 +51,7 @@ async function runExpressServer(state) {
   }
   // Find an available port for messages, as long as it's not the devServer port
   const messagePort = await findAvailablePort(defaultMessagePort, [port]);
-  console.log("Messaging the port");
+
   const messageHost =
     process.env.REACT_STATIC_MESSAGE_SOCKET_HOST || "http://localhost";
 
@@ -64,7 +64,7 @@ async function runExpressServer(state) {
       ),
     );
   }
-  console.log("Localhost configured");
+
   state = {
     ...state,
     config: {
@@ -75,7 +75,6 @@ async function runExpressServer(state) {
       },
     },
   };
-  console.log('{{{{{{{{{{{{state}}}}}}}}}}}}');
 
   console.log(state);
   const devConfig = makeWebpackConfig(state);

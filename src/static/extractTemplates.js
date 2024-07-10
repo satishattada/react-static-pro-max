@@ -15,14 +15,14 @@ export default (async function extractTemplates(state) {
     if (!route.template) {
       return;
     }
-
+    console.log("Foreach route -----");
     route.template = slash(
       `__react_static_root__/${path.relative(
         config.paths.ROOT,
         route.template,
       )}`,
     );
-
+    console.log("route template generated -----");
     // Check if the template has already been added
     const index = templates.indexOf(route.template);
     if (index === -1) {
@@ -43,7 +43,7 @@ export default (async function extractTemplates(state) {
       "A 404 template was not found at template extraction time. It should have been at least defaulted to one by now, so this is very bad. File an issue if you see this.",
     );
   }
-
+  console.log("end of templete -----");
   return {
     ...state,
     templates,

@@ -7,7 +7,7 @@ export default function makeWebpackConfig(state) {
   const { stage } = state;
 
   let webpackConfig;
-
+  console.log('{{{{{{{{{{{{makeWebpackConfig}}}}}}}}}}}}');
   if (stage === "dev") {
     webpackConfig = require("./webpack.config.dev").default(state);
   } else if (["prod", "node"].includes(stage)) {
@@ -26,6 +26,7 @@ export default function makeWebpackConfig(state) {
 
   // run the webpack plugin (should be synchronous)
   webpackConfig = plugins.webpack(webpackConfig, state);
+  console.log('{{{{{{{{{{{{webpackConfig}}}}}}}}}}}}', webpackConfig);
 
   return webpackConfig;
 }

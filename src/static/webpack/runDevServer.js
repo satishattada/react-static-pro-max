@@ -86,7 +86,7 @@ async function runExpressServer(state) {
     compress: false,
     client: {
       overlay: true,
-      logging: "warning",
+      logging: "warn",
     },
     ...state.config.devServer,
     hot: "only",

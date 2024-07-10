@@ -4,30 +4,30 @@
  * `autocomplete` type prompt
  */
 
-import ansiEscapes from 'ansi-escapes';
-import figures from 'figures';
-import Base from 'inquirer/lib/prompts/base.js';
-import Choices from 'inquirer/lib/objects/choices.js';
-import observe from 'inquirer/lib/utils/events.js';
-import * as utils from 'inquirer/lib/utils/readline.js';
-import Paginator from 'inquirer/lib/utils/paginator.js';
-import pc from 'picocolors';
-import runAsync from 'run-async';
-import { takeWhile } from 'rxjs/operators';
+import ansiEscapes from "ansi-escapes";
+import figures from "figures";
+import Base from "inquirer/lib/prompts/base.js";
+import Choices from "inquirer/lib/objects/choices.js";
+import observe from "inquirer/lib/utils/events.js";
+import * as utils from "inquirer/lib/utils/readline.js";
+import Paginator from "inquirer/lib/utils/paginator.js";
+import pc from "picocolors";
+import runAsync from "run-async";
+import { takeWhile } from "rxjs/operators";
 
 const isSelectable = (choice) =>
-  choice.type !== 'separator' && !choice.disabled;
+  choice.type !== "separator" && !choice.disabled;
 
 class AutocompletePrompt extends Base {
   constructor(
-    questions /*: Array<any> */,
-    rl /*: readline$Interface */,
-    answers /*: Array<any> */
+    questions: Array<any>,
+    rl: readline$Interface,
+    answers: Array<any>,
   ) {
     super(questions, rl, answers);
 
     if (!this.opt.source) {
-      this.throwParamError('source');
+      this.throwParamError("source");
     }
 
     this.currentChoices = new Choices([]);
@@ -52,7 +52,7 @@ class AutocompletePrompt extends Base {
    * @param  {Function} cb      Callback when prompt is done
    * @return {this}
    */
-  _run(cb /*: Function */) /*: this*/ {
+  _run(cb: Function): this {
     this.done = cb;
 
     if (Array.isArray(this.rl.history)) {
@@ -80,24 +80,24 @@ class AutocompletePrompt extends Base {
    * Render the prompt to screen
    * @return {undefined}
    */
-  render(error /*: ?string */) {
+  render(error: ?string) {
     // Render question
     let content = this.getQuestion();
-    let bottomContent = '';
+    let bottomContent = "";
 
     if (this.firstRender) {
-      const suggestText = this.opt.suggestOnly ? ', tab to autocomplete' : '';
+      const suggestText = this.opt.suggestOnly ? ", tab to autocomplete" : "";
       content += pc.dim(
-        '(Use arrow keys or type to search' + suggestText + ')'
+        "(Use arrow keys or type to search" + suggestText + ")",
       );
     }
 
     // Render choices or answer depending on the state
-    if (this.status === 'answered') {
+    if (this.status === "answered") {
       content += pc.cyan(this.shortAnswer || this.answerName || this.answer);
     } else if (this.searching) {
       content += this.rl.line;
-      bottomContent += '  ' + pc.dim(this.opt.searchText || 'Searching...');
+      bottomContent += "  " + pc.dim(this.opt.searchText || "Searching...");
     } else if (this.nbChoices) {
       const choicesStr = listRender(this.currentChoices, this.selected);
       content += this.rl.line;
@@ -108,21 +108,21 @@ class AutocompletePrompt extends Base {
           return false;
         }
         const name = choice.name;
-        realIndexPosition += name ? name.split('\n').length : 0;
+        realIndexPosition += name ? name.split("\n").length : 0;
         return true;
       });
       bottomContent += this.paginator.paginate(
         choicesStr,
         realIndexPosition,
-        this.opt.pageSize
+        this.opt.pageSize,
       );
     } else {
       content += this.rl.line;
-      bottomContent += '  ' + pc.yellow(this.opt.emptyText || 'No results...');
+      bottomContent += "  " + pc.yellow(this.opt.emptyText || "No results...");
     }
 
     if (error) {
-      bottomContent += '\n' + pc.red('>> ') + error;
+      bottomContent += "\n" + pc.red(">> ") + error;
     }
 
     this.firstRender = false;
@@ -133,20 +133,20 @@ class AutocompletePrompt extends Base {
   /**
    * When user press `enter` key
    */
-  onSubmit(line /* : string */) {
+  onSubmit(line: string) {
     let lineOrRl = line || this.rl.line;
 
     // only set default when suggestOnly (behaving as input prompt)
     // list prompt does only set default if matching actual item in list
     if (this.opt.suggestOnly && !lineOrRl) {
-      lineOrRl = this.opt.default === null ? '' : this.opt.default;
+      lineOrRl = this.opt.default === null ? "" : this.opt.default;
     }
 
-    if (typeof this.opt.validate === 'function') {
+    if (typeof this.opt.validate === "function") {
       const checkValidationResult = (validationResult) => {
         if (validationResult !== true) {
           this.render(
-            validationResult || 'Enter something, tab to autocomplete!'
+            validationResult || "Enter something, tab to autocomplete!",
           );
         } else {
           this.onSubmitAfterValidation(lineOrRl);
@@ -171,7 +171,7 @@ class AutocompletePrompt extends Base {
     }
   }
 
-  onSubmitAfterValidation(line /* : string */) {
+  onSubmitAfterValidation(line: string) {
     let choice = {};
     if (this.nbChoices <= this.selected && !this.opt.suggestOnly) {
       this.rl.write(line);
@@ -184,7 +184,7 @@ class AutocompletePrompt extends Base {
       this.answer = line || this.rl.line;
       this.answerName = line || this.rl.line;
       this.shortAnswer = line || this.rl.line;
-      this.rl.line = '';
+      this.rl.line = "";
     } else if (this.nbChoices) {
       choice = this.currentChoices.getChoice(this.selected);
       this.answer = choice.value;
@@ -204,7 +204,7 @@ class AutocompletePrompt extends Base {
         this.shortAnswer = value;
       }
 
-      this.status = 'answered';
+      this.status = "answered";
       // Rerender prompt
       this.render();
       this.screen.done();
@@ -212,7 +212,7 @@ class AutocompletePrompt extends Base {
     })(choice.value);
   }
 
-  search(searchTerm /* : ?string */) /*: Promise<any>*/ {
+  search(searchTerm: ?string): Promise<any> {
     this.selected = 0;
 
     // Only render searching state after first time
@@ -248,7 +248,7 @@ class AutocompletePrompt extends Base {
 
       const selectedIndex = realChoices.findIndex(
         (choice) =>
-          choice === this.initialValue || choice.value === this.initialValue
+          choice === this.initialValue || choice.value === this.initialValue,
       );
 
       if (selectedIndex >= 0) {
@@ -269,27 +269,27 @@ class AutocompletePrompt extends Base {
    * When user type
    */
 
-  onKeypress(e /* : {key: { name: string, ctrl: boolean }, value: string } */) {
+  onKeypress(e: { key: { name: string, ctrl: boolean }, value: string }) {
     let len;
     const keyName = (e.key && e.key.name) || undefined;
 
-    if (keyName === 'tab' && this.opt.suggestOnly) {
+    if (keyName === "tab" && this.opt.suggestOnly) {
       if (this.currentChoices.getChoice(this.selected)) {
         this.rl.write(ansiEscapes.cursorLeft);
         const autoCompleted = this.currentChoices.getChoice(
-          this.selected
+          this.selected,
         ).value;
         this.rl.write(ansiEscapes.cursorForward(autoCompleted.length));
         this.rl.line = autoCompleted;
         this.render();
       }
-    } else if (keyName === 'down' || (keyName === 'n' && e.key.ctrl)) {
+    } else if (keyName === "down" || (keyName === "n" && e.key.ctrl)) {
       len = this.nbChoices;
       this.selected = this.selected < len - 1 ? this.selected + 1 : 0;
       this.ensureSelectedInRange();
       this.render();
       utils.up(this.rl, 2);
-    } else if (keyName === 'up' || (keyName === 'p' && e.key.ctrl)) {
+    } else if (keyName === "up" || (keyName === "p" && e.key.ctrl)) {
       len = this.nbChoices;
       this.selected = this.selected > 0 ? this.selected - 1 : len - 1;
       this.ensureSelectedInRange();
@@ -309,43 +309,43 @@ class AutocompletePrompt extends Base {
  * @param  {Number} pointer Position of the pointer
  * @return {String}         Rendered content
  */
-function listRender(choices, pointer /*: string */) /*: string */ {
-  let output = '';
+function listRender(choices, pointer: string): string {
+  let output = "";
   let separatorOffset = 0;
 
   choices.forEach((choice, i) => {
-    if (choice.type === 'separator') {
+    if (choice.type === "separator") {
       separatorOffset++;
-      output += '  ' + choice + '\n';
+      output += "  " + choice + "\n";
       return;
     }
 
     if (choice.disabled) {
       separatorOffset++;
-      output += '  - ' + choice.name;
+      output += "  - " + choice.name;
       output +=
-        ' (' +
-        (typeof choice.disabled === 'string' ? choice.disabled : 'Disabled') +
-        ')';
-      output += '\n';
+        " (" +
+        (typeof choice.disabled === "string" ? choice.disabled : "Disabled") +
+        ")";
+      output += "\n";
       return;
     }
 
     const isSelected = i - separatorOffset === pointer;
-    let line = (isSelected ? figures.pointer + ' ' : '  ') + choice.name;
+    let line = (isSelected ? figures.pointer + " " : "  ") + choice.name;
 
     if (isSelected) {
       line = pc.cyan(line);
     }
 
-    output += line + ' \n';
+    output += line + " \n";
   });
 
-  return output.replace(/\n$/, '');
+  return output.replace(/\n$/, "");
 }
 
 function isPromise(value) {
-  return typeof value === 'object' && typeof value.then === 'function';
+  return typeof value === "object" && typeof value.then === "function";
 }
 
 export default AutocompletePrompt;

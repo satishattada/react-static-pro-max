@@ -17,9 +17,9 @@ export default function makeWebpackConfig(state) {
     );
   }
   console.log("state is ", state);
-  console.log('{{{{{{{{{{{{getStagedRules(state)}}}}}}}}}}}}');
+  console.log("{{{{{{{{{{{{getStagedRules(state)}}}}}}}}}}}}");
 
-  console.log(getStagedRules(state));
+  console.log(JSON.stringify(getStagedRules(state)));
 
   // set the default loaders
   state = {

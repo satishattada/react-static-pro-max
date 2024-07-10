@@ -65,7 +65,6 @@ export default function ({ config }) {
         template: `!!raw-loader!${HTML_TEMPLATE}`,
       }),
       new webpack.HotModuleReplacementPlugin(),
-      new webpack.NamedModulesPlugin(),
       new CaseSensitivePathsPlugin(),
       new ExtractCssChunks({ filename: "[name].css" }), // never hash dev code
     ],

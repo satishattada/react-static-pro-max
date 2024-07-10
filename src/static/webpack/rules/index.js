@@ -7,7 +7,7 @@ export const getStagedRules = (args) => ({
   jsLoader: jsLoader(args),
   jsLoaderExt: jsLoaderExternal(args),
   cssLoader: cssLoader(args),
-  // fileLoader: fileLoader(args),
+  fileLoader: fileLoader(args),
 });
 
 export default (args) => [

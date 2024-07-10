@@ -14,8 +14,6 @@ function initCSSLoader() {
     {
       loader: "postcss-loader",
       options: {
-        // Necessary for external CSS imports to work
-        // https://github.com/facebookincubator/create-react-app/issues/2677
         sourceMap: true,
         ident: "postcss",
         plugins: () => [
@@ -52,6 +50,6 @@ export default function ({ stage, isNode }) {
 
   return {
     test: /\.css$/,
-    loader: cssLoader,
+    use: cssLoader,
   };
 }

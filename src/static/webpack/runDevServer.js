@@ -179,7 +179,7 @@ async function runExpressServer(state) {
   const startedAt = Date.now();
   let skipLog = false;
 
-  console.log('Bundling Application...')
+  console.log("Bundling Application...");
   time(chalk.green("[\u2713] Application Bundled"));
 
   devCompiler.hooks.invalid.tap(

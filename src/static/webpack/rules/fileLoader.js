@@ -13,7 +13,7 @@ export default function ({ stage, isNode }) {
   return {
     loader: "url-loader",
     exclude: [/\.js$/, /\.html$/, /\.json$/],
-    query: {
+    options: {
       limit: 10000,
       name: "static/[name].[hash:8].[ext]",
     },

@@ -179,9 +179,8 @@ async function runExpressServer(state) {
   const startedAt = Date.now();
   let skipLog = false;
 
-  console.log("Bundling Application...");
   time(chalk.green("[\u2713] Application Bundled"));
-  console.log("Application Bundled...");
+
   devCompiler.hooks.invalid.tap(
     {
       name: "react-static-pro-max",
@@ -242,7 +241,7 @@ async function runExpressServer(state) {
       first = false;
     },
   );
-
+  console.log("Webpack Dev compoler has been bundled---");
   // Start the webpack dev server
   devServer = new WebpackDevServer(devCompiler, devServerConfig);
 

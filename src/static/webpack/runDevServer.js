@@ -97,16 +97,26 @@ async function runExpressServer(state) {
       },
       ...(state.config.devServer ? state.config.devServer.proxy || {} : {}),
     },
-    watchOptions: {
-      ...(state.config.devServer
-        ? state.config.devServer.watchOptions || {}
-        : {}),
-      ignored: [
-        /node_modules/,
+    static: {
+      watch: {
+        ...(state.config.devServer
+          ? state.config.devServer.watchOptions || {}
+          : {}),
+        ignored: [
+          /node_modules/,
+          ...((state.config.devServer.watchOptions || {}).ignored || []),
+        ],
+      }},
+    // watchOptions: {
+    //   ...(state.config.devServer
+    //     ? state.config.devServer.watchOptions || {}
+    //     : {}),
+    //   ignored: [
+    //     /node_modules/,
 
-        ...((state.config.devServer.watchOptions || {}).ignored || []),
-      ],
-    },
+    //     ...((state.config.devServer.watchOptions || {}).ignored || []),
+    //   ],
+    // },
     onBeforeSetupMiddleware: (app) => {
       // Since routes may change during dev, this function can rebuild all of the config
       // routes. It also references the original config when possible, to make sure it

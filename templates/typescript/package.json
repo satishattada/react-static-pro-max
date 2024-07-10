@@ -15,7 +15,7 @@
     "react-dom": "^18.3.1",
     "react-router": "^6.24.1",
     "react-router-dom": "^6.24.1",
-    "react-static-pro-max": "^1.43.0",
+    "react-static-pro-max": "^1.44.0",
     "react-static-pro-plugin-react-router": "^0.2.0",
     "react-static-pro-plugin-sitemap": "^1.10.0",
     "react-static-pro-plugin-source-filesystem": "^2.24.0",

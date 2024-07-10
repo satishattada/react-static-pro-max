@@ -79,9 +79,9 @@ async function runExpressServer(state) {
   const devConfig = makeWebpackConfig(state);
   const devCompiler = webpack(devConfig);
 
-  console.log('{{{{{{{{{{state.config.paths.PUBLIC}}}}}}}}}}')
-  console.log(state.config.paths.PUBLIC)
-  console.log(state.config.paths.DIST)
+  console.log("{{{{{{{{{{state.config.paths.PUBLIC}}}}}}}}}}");
+  console.log(state.config.paths.PUBLIC);
+  console.log(state.config.paths.DIST);
 
   const devServerConfig = {
     historyApiFallback: true,

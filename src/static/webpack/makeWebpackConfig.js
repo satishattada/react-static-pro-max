@@ -16,10 +16,6 @@ export default function makeWebpackConfig(state) {
       `An invalid stage option was detected: ${stage.toString()}. Stage must equal one of: 'prod', 'dev', or 'node'.`,
     );
   }
-  console.log("state is ", state);
-  console.log("{{{{{{{{{{{{getStagedRules(state)}}}}}}}}}}}}");
-
-  console.log(JSON.stringify(getStagedRules(state)));
 
   // set the default loaders
   state = {

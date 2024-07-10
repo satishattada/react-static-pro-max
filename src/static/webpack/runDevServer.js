@@ -76,10 +76,8 @@ async function runExpressServer(state) {
     },
   };
 
-  console.log(state);
   const devConfig = makeWebpackConfig(state);
   const devCompiler = webpack(devConfig);
-  console.log("Webpack configured successfully");
 
   const devServerConfig = {
     contentBase: [state.config.paths.PUBLIC, state.config.paths.DIST],
@@ -183,7 +181,7 @@ async function runExpressServer(state) {
 
   console.log("Bundling Application...");
   time(chalk.green("[\u2713] Application Bundled"));
-
+  console.log("Application Bundled...");
   devCompiler.hooks.invalid.tap(
     {
       name: "react-static-pro-max",
@@ -200,6 +198,7 @@ async function runExpressServer(state) {
       }
     },
   );
+  console.log("Webpack has been bundled---");
 
   devCompiler.hooks.done.tap(
     {

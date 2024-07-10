@@ -1,7 +1,7 @@
 {
   "name": "react-static-pro-max",
   "description": "A progressive static site generator for React",
-  "version": "1.33.0",
+  "version": "1.32.0",
   "license": "MIT",
   "repository": "https://github.com/satishattada/react-static-pro.git",
   "main": "lib/index.js",
@@ -99,7 +99,7 @@
     "url-loader": "^4.1.1",
     "webpack": "^5.92.1",
     "webpack-bundle-analyzer": "^4.10.2",
-    "webpack-dev-server": "^4.0.0-rc.0",
+    "webpack-dev-server": "^4.15.2",
     "webpack-flush-chunks": "^2.0.3"
   },
   "devDependencies": {

@@ -78,27 +78,30 @@ async function runExpressServer(state) {
 
   const devConfig = makeWebpackConfig(state);
   const devCompiler = webpack(devConfig);
-  console.log('{{{{{{{{{{{{{{{state.config.devServer}}}}}}}}}}}}}}}')
-  console.log(state.config.devServer)
+  console.log("{{{{{{{{{{{{{{{state.config.devServer}}}}}}}}}}}}}}}");
+  console.log(state.config.devServer);
 
   const devServerConfig = {
-    contentBase: [state.config.paths.PUBLIC, state.config.paths.DIST],
-    publicPath: "/",
     historyApiFallback: true,
     compress: false,
-    clientLogLevel: "warning",
-    overlay: true,
-    stats: "errors-only",
+    client: {
+      overlay: true,
+      clientLogLevel: "warning",
+    },
     ...state.config.devServer,
     hot: "only",
+    devMiddleware: {
+      stats: "errors-only",
+      publicPath: "/",
+    },
     proxy: {
       "/socket.io": {
-        target: `${messageHost}:${messagePort}`,
         ws: true,
       },
       ...(state.config.devServer ? state.config.devServer.proxy || {} : {}),
     },
     static: {
+      contentBase: [state.config.paths.PUBLIC, state.config.paths.DIST],
       watch: {
         ...(state.config.devServer
           ? state.config.devServer.watchOptions || {}
@@ -109,16 +112,6 @@ async function runExpressServer(state) {
         ],
       },
     },
-    // watchOptions: {
-    //   ...(state.config.devServer
-    //     ? state.config.devServer.watchOptions || {}
-    //     : {}),
-    //   ignored: [
-    //     /node_modules/,
-
-    //     ...((state.config.devServer.watchOptions || {}).ignored || []),
-    //   ],
-    // },
     onBeforeSetupMiddleware: (app) => {
       // Since routes may change during dev, this function can rebuild all of the config
       // routes. It also references the original config when possible, to make sure it

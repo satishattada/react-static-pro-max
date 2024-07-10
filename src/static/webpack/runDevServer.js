@@ -102,7 +102,7 @@ async function runExpressServer(state) {
       ...(state.config.devServer ? state.config.devServer.proxy || {} : {}),
     },
     static: {
-      publicPath: [state.config.paths.PUBLIC, state.config.paths.DIST],
+      directory: state.config.paths.DIST,
       watch: {
         ...(state.config.devServer
           ? state.config.devServer.watchOptions || {}

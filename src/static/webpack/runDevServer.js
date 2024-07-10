@@ -107,7 +107,7 @@ async function runExpressServer(state) {
         ...((state.config.devServer.watchOptions || {}).ignored || []),
       ],
     },
-    before: (app) => {
+    onBeforeSetupMiddleware: (app) => {
       // Since routes may change during dev, this function can rebuild all of the config
       // routes. It also references the original config when possible, to make sure it
       // uses any up to date getData callback generated from new or replacement routes.

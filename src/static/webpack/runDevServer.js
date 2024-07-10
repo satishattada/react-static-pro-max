@@ -78,6 +78,8 @@ async function runExpressServer(state) {
 
   const devConfig = makeWebpackConfig(state);
   const devCompiler = webpack(devConfig);
+  console.log('{{{{{{{{{{{{{{{state.config.devServer}}}}}}}}}}}}}}}')
+  console.log(state.config.devServer)
 
   const devServerConfig = {
     contentBase: [state.config.paths.PUBLIC, state.config.paths.DIST],
@@ -87,7 +89,6 @@ async function runExpressServer(state) {
     clientLogLevel: "warning",
     overlay: true,
     stats: "errors-only",
-    noInfo: true,
     ...state.config.devServer,
     hot: "only",
     proxy: {

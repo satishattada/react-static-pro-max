@@ -89,7 +89,7 @@ async function runExpressServer(state) {
     stats: "errors-only",
     noInfo: true,
     ...state.config.devServer,
-    hotOnly: true,
+    hot: "only",
     proxy: {
       "/socket.io": {
         target: `${messageHost}:${messagePort}`,
@@ -106,7 +106,8 @@ async function runExpressServer(state) {
           /node_modules/,
           ...((state.config.devServer.watchOptions || {}).ignored || []),
         ],
-      }},
+      },
+    },
     // watchOptions: {
     //   ...(state.config.devServer
     //     ? state.config.devServer.watchOptions || {}

@@ -78,8 +78,10 @@ async function runExpressServer(state) {
 
   const devConfig = makeWebpackConfig(state);
   const devCompiler = webpack(devConfig);
-  console.log("{{{{{{{{{{{{{{{state.config.devServer}}}}}}}}}}}}}}}");
-  console.log(state.config.devServer);
+
+  console.log('{{{{{{{{{{state.config.paths.PUBLIC}}}}}}}}}}')
+  console.log(state.config.paths.PUBLIC)
+  console.log(state.config.paths.DIST)
 
   const devServerConfig = {
     historyApiFallback: true,
@@ -89,7 +91,6 @@ async function runExpressServer(state) {
       logging: "warn",
     },
     ...state.config.devServer,
-    hot: "only",
     devMiddleware: {
       stats: "errors-only",
       publicPath: "/",
@@ -246,10 +247,8 @@ async function runExpressServer(state) {
       first = false;
     },
   );
-  console.log("Webpack Dev compoler has been bundled---");
   // Start the webpack dev server
   devServer = new WebpackDevServer(devCompiler, devServerConfig);
-  console.log("Webpack dev server started---");
   // Start the messages socket
   const socket = io();
 

@@ -140,7 +140,7 @@ const ReactRoutes = ({ ...originalProps }) => {
 
   // Get the Routes hook
   const CompWrapper = useMemo(
-    () => plugins.Routes((props) => <RoutesInner {...props} />),
+    () => plugins.ReactRoutes((props) => <RoutesInner {...props} />),
     [plugins],
   );
 

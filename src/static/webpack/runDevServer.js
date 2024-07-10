@@ -179,6 +179,7 @@ async function runExpressServer(state) {
   const startedAt = Date.now();
   let skipLog = false;
 
+  console.log('Bundling Application...')
   time(chalk.green("[\u2713] Application Bundled"));
 
   devCompiler.hooks.invalid.tap(
@@ -197,7 +198,6 @@ async function runExpressServer(state) {
       }
     },
   );
-  console.log("Webpack has been bundled---");
 
   devCompiler.hooks.done.tap(
     {
@@ -244,7 +244,7 @@ async function runExpressServer(state) {
   console.log("Webpack Dev compoler has been bundled---");
   // Start the webpack dev server
   devServer = new WebpackDevServer(devCompiler, devServerConfig);
-
+  console.log("Webpack dev server started---");
   // Start the messages socket
   const socket = io();
 

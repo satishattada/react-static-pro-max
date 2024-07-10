@@ -11,24 +11,22 @@
   },
   "dependencies": {
     "@reach/router": "^1.3.4",
-    "axios": "^0.21.1",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "react-hot-loader": "^4.13.0",
+    "axios": "^1.7.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-static-pro-max": "^1.15.0",
     "react-static-pro-plugin-reach-router": "^1.11.0",
     "react-static-pro-plugin-sitemap": "^1.8.0",
     "react-static-pro-plugin-source-filesystem": "^2.8.0",
-    "react-static-pro-plugin-typescript": "^1.5.0"
+    "react-static-pro-plugin-typescript": "^1.7.0"
   },
   "devDependencies": {
-    "@types/node": "^14.14.31",
-    "@types/reach__router": "^1.3.7",
-    "@types/react": "^16.9.1",
-    "@types/react-dom": "^16.9.11",
-    "@types/webpack-env": "^1.16.0",
-    "react-hot-loader": "^4.13.0",
-    "serve": "^11.3.2",
-    "typescript": "^4.1.5"
+    "@types/node": "^20.14.10",
+    "@types/reach__router": "^1.3.15",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/webpack-env": "^1.18.5",
+    "serve": "^14.2.3",
+    "typescript": "^5.5.3"
   }
 }

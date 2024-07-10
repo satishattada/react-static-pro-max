@@ -28,7 +28,7 @@ exports[`BodyWithMeta when route is a static route 1`] = `
     </div>
     <script
       dangerouslySetInnerHTML={
-        Object {
+        {
           "__html": "script",
         }
       }

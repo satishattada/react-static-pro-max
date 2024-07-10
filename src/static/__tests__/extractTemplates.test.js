@@ -1,6 +1,7 @@
 import path from "path";
-import slash from "slash";
+
 import extractTemplates from "../extractTemplates";
+import slash from "../components/slash";
 
 const config = {
   paths: {

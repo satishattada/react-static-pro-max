@@ -1,8 +1,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ES2023",
+    "module": "commonjs",
     "jsx": "preserve",
     "allowJs": false,
     "moduleResolution": "node",
@@ -21,7 +21,7 @@
       "containers/*": ["src/containers/*"],
       "types/*": ["types/*"]
     },
-    "lib": ["dom", "es2015", "es2016"]
+    "lib": ["dom", "es2015", "es2016", "ES2023"]
   },
   "exclude": ["artifacts/**/*", "dist/**/*", "public/**/*", "node_modules"]
 }

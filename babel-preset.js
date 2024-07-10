@@ -13,7 +13,6 @@ module.exports = (api, { external, hot, node, modules } = {}) => {
     return {
       presets: [r('@babel/preset-env'), r('@babel/preset-react')],
       plugins: [
-        r('babel-plugin-universal-import'),
         r('@babel/plugin-transform-runtime'),
         r('@babel/plugin-transform-destructuring'),
         r('@babel/plugin-syntax-dynamic-import'),
@@ -69,7 +68,6 @@ module.exports = (api, { external, hot, node, modules } = {}) => {
     plugins: [
       ...((modules && [r('@babel/plugin-transform-modules-commonjs')]) || []),
       ...((PRODUCTION && [
-        r('babel-plugin-universal-import'),
         r('babel-plugin-transform-react-remove-prop-types'),
       ]) ||
         []),

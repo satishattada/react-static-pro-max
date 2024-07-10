@@ -2,11 +2,11 @@ import fs from "fs-extra";
 import path from "path";
 import { execSync } from "child_process";
 import inquirer from "inquirer";
-// import autoCompletePrompt from "inquirer-autocomplete-prompt";
+import autoCompletePrompt from "inquirer-autocomplete-prompt";
 import matchSorter from "match-sorter";
 import { ChalkColor, time, timeEnd } from "../utils";
 
-// inquirer.registerPrompt("autocomplete", autoCompletePrompt);
+inquirer.registerPrompt("autocomplete", autoCompletePrompt);
 
 const typeLocal = "Local Directory...";
 const typeExample = "React Static Example";
@@ -26,6 +26,11 @@ export default (async function create({ name, template, isCLI }) {
 
   let templateType = typeExample;
 
+  // prompt if --name argument is not passed from CLI
+  // warning: since name will be set as a function by commander by default
+  //   unless it's assigned as an argument from the CLI, we can't simply just
+  //   check for its existence. if it has not been set by the CLI, we properly
+  //   set it to null for later conditional checks.
   if (isCLI && !name) {
     const answers = await inquirer.prompt({
       type: "input",
@@ -51,7 +56,6 @@ export default (async function create({ name, template, isCLI }) {
   }
 
   if (isCLI && !template) {
-    console.log("choices", exampleChoices);
     const answers = await inquirer.prompt({
       type: "autocomplete",
       name: "template",

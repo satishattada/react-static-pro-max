@@ -22,7 +22,6 @@ export default function ({ config }) {
     },
     context: path.resolve(__dirname, "../../../node_modules"),
     entry: [
-      "react-hot-loader/patch",
       ...(config.disableRuntime
         ? []
         : [
@@ -53,10 +52,6 @@ export default function ({ config }) {
       alias: {
         react$: resolveFrom(NODE_MODULES, "react"),
         "react-dom$": resolveFrom(NODE_MODULES, "react-dom"),
-        "react-universal-component": resolveFrom(
-          __dirname,
-          "react-universal-component",
-        ),
         __react_static_root__: config.paths.ROOT,
         // This is here so HMR modules use the same emitter instance.
         // Likely this is only needed for locally linked dev on RS, but still...

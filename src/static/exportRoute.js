@@ -2,7 +2,7 @@ import crypto from "crypto";
 import React from "react";
 import { renderToString, renderToStaticMarkup } from "react-dom/server";
 import Helmet from "react-helmet";
-import { ReportChunks } from "react-universal-component";
+import ReportChunks from "./components/ReportChunks";
 import flushChunks from "webpack-flush-chunks";
 import nodePath from "path";
 import fs from "fs-extra";

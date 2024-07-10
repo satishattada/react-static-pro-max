@@ -1,13 +1,12 @@
 import chalk from "chalk";
-import slash from "slash";
 import path from "path";
 import { time, timeEnd, is404Path } from "../utils";
+import slash from "./components/slash";
 
 export default (async function extractTemplates(state) {
   const { config, routes, incremental } = state;
   console.log("Building Templates...");
   time(chalk.green("[\u2713] Templates Built"));
-
   // Dedupe all templates into an array
   const templates = [];
   let notFoundPending = true;

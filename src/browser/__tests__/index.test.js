@@ -15,11 +15,15 @@ describe("browser", () => {
 
       Object.defineProperty(global, "document", {
         get: getDocumentMock,
+        configurable: true,
       });
     });
 
     afterEach(() => {
-      Object.defineProperty(global, "document", originalDocumentDescriptor);
+      Object.defineProperty(global, "document", {
+        originalDocumentDescriptor,
+        configurable: true,
+      });
     });
 
     it("should return false during SSR", () => {

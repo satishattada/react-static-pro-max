@@ -16,7 +16,6 @@ export default function ({ config }) {
           sourceMaps: false,
         },
       },
-      "react-hot-loader/webpack",
     ],
   };
 }

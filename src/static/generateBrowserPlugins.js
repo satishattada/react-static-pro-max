@@ -1,5 +1,5 @@
 import path from "path";
-import slash from "slash";
+import slash from "./components/slash";
 import fs from "fs-extra";
 //
 import corePlugins from "./plugins";

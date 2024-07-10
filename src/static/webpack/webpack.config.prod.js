@@ -2,18 +2,15 @@ import webpack from "webpack";
 import path from "path";
 import CaseSensitivePathsPlugin from "case-sensitive-paths-webpack-plugin";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
-import TerserPlugin from "terser-webpack-plugin";
-import nodeExternals from "webpack-node-externals";
 import ExtractCssChunks from "extract-css-chunks-webpack-plugin";
-import OptimizeCSSAssetsPlugin from "optimize-css-assets-webpack-plugin";
+import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 import resolveFrom from "resolve-from";
-//
+
 import rules from "./rules";
 
 function common(state) {
   const { analyze, config, debug } = state;
   const { ROOT, DIST, NODE_MODULES, SRC, ASSETS } = config.paths;
-
   process.env.REACT_STATIC_ENTRY_PATH = config.entry;
   process.env.REACT_STATIC_SITE_ROOT = config.siteRoot;
   process.env.REACT_STATIC_BASE_PATH = config.basePath;
@@ -86,23 +83,26 @@ function common(state) {
       sideEffects: true,
       minimize: true,
       minimizer: [
-        new TerserPlugin({
-          cache: true,
-          parallel: true,
-          exclude: /\.min\.js/,
-          ...config.terser,
-          sourceMap:
-            config.productionSourceMaps || config.terser.sourceMap || debug,
-          terserOptions: {
-            ie8: false,
-            ...config.terser.terserOptions,
-            mangle: { safari10: true, ...config.terser.terserOptions.mangle },
-            parse: { ecma: 8, ...config.terser.terserOptions.parse },
-            compress: { ecma: 5, ...config.terser.terserOptions.compress },
-            output: { ecma: 5, ...config.terser.terserOptions.output },
-          },
-        }),
-        new OptimizeCSSAssetsPlugin({}),
+        (compiler) => {
+          const TerserPlugin = require("terser-webpack-plugin");
+          new TerserPlugin({
+            cache: true,
+            parallel: true,
+            exclude: /\.min\.js/,
+            ...config.terser,
+            sourceMap:
+              config.productionSourceMaps || config.terser.sourceMap || debug,
+            terserOptions: {
+              ie8: false,
+              ...config.terser.terserOptions,
+              mangle: { safari10: true, ...config.terser.terserOptions.mangle },
+              parse: { ecma: 8, ...config.terser.terserOptions.parse },
+              compress: { ecma: 5, ...config.terser.terserOptions.compress },
+              output: { ecma: 5, ...config.terser.terserOptions.output },
+            },
+          }).apply(compiler);
+        },
+        new CssMinimizerPlugin({}),
       ],
       splitChunks,
     },
@@ -127,10 +127,6 @@ function common(state) {
       alias: {
         react$: resolveFrom(config.paths.NODE_MODULES, "react"),
         "react-dom$": resolveFrom(config.paths.NODE_MODULES, "react-dom"),
-        "react-universal-component": resolveFrom(
-          __dirname,
-          "react-universal-component",
-        ),
         __react_static_root__: config.paths.ROOT,
       },
     },
@@ -177,9 +173,6 @@ export default function (state) {
       }
       callback();
     },
-    nodeExternals({
-      whitelist: ["react-universal-component"],
-    }),
   ];
   result.module.rules = rules(state);
   result.plugins = [

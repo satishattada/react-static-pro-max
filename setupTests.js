@@ -1,8 +1,8 @@
 import 'raf/polyfill'
+import Enzyme from 'enzyme'
+import EnzymeAdapter from '@cfaester/enzyme-adapter-react-18'
+import { TextEncoder, TextDecoder } from 'util';
 
-/* eslint import/no-extraneous-dependencies: ["error", {"optionalDependencies": false}] */
-const Enzyme = require('enzyme')
-const EnzymeAdapter = require('enzyme-adapter-react-16')
-
+Object.assign(global, { TextDecoder, TextEncoder });
 // Setup enzyme's react adapter
 Enzyme.configure({ adapter: new EnzymeAdapter() })

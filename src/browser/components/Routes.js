@@ -133,7 +133,7 @@ const RoutesInner = ({ routePath, render: renderFn }) => {
   );
 };
 
-const Routes = ({ ...originalProps }) => {
+const ReactRoutes = ({ ...originalProps }) => {
   // Once a routePath goes into the Routes component,
   // useRoutePath must ALWAYS return the routePath used
   // in its parent, so we pass it down as context
@@ -148,4 +148,4 @@ const Routes = ({ ...originalProps }) => {
   return <CompWrapper {...originalProps} />;
 };
 
-export default Routes;
+export default ReactRoutes;

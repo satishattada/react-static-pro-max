@@ -43,7 +43,7 @@ async function runExpressServer(state) {
   // or environment variables
   const intendedPort = Number(state.config.devServer.port);
   const port = await findAvailablePort(intendedPort);
-
+  console.log('Running the server')
   let defaultMessagePort = 4000;
 
   if (process.env.REACT_STATIC_MESSAGE_SOCKET_PORT) {
@@ -51,7 +51,7 @@ async function runExpressServer(state) {
   }
   // Find an available port for messages, as long as it's not the devServer port
   const messagePort = await findAvailablePort(defaultMessagePort, [port]);
-
+  console.log('Messaging the port')
   const messageHost =
     process.env.REACT_STATIC_MESSAGE_SOCKET_HOST || "http://localhost";
 
@@ -64,7 +64,7 @@ async function runExpressServer(state) {
       ),
     );
   }
-
+  console.log('Localhost configured')
   state = {
     ...state,
     config: {
@@ -78,6 +78,7 @@ async function runExpressServer(state) {
 
   const devConfig = makeWebpackConfig(state);
   const devCompiler = webpack(devConfig);
+  console.log('Webpack configured successfully')
 
   const devServerConfig = {
     contentBase: [state.config.paths.PUBLIC, state.config.paths.DIST],
@@ -141,12 +142,10 @@ async function runExpressServer(state) {
                 if (!route) {
                   const err = new Error(
                     `Route could not be found for: ${routePath}
-
-If you removed this route, disregard this error.
-If this is a dynamic route, consider adding it to the prefetchExcludes list:
-
-  addPrefetchExcludes(['${routePath}'])
-`,
+                      If you removed this route, disregard this error.
+                      If this is a dynamic route, consider adding it to the prefetchExcludes list:
+                        addPrefetchExcludes(['${routePath}'])
+                      `,
                   );
                   delete err.stack;
                   throw err;
@@ -246,7 +245,7 @@ If this is a dynamic route, consider adding it to the prefetchExcludes list:
 
   // Start the webpack dev server
   devServer = new WebpackDevServer(devCompiler, devServerConfig);
-
+    
   // Start the messages socket
   const socket = io();
 

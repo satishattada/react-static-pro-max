@@ -7,9 +7,9 @@ export default (async function exportSharedRouteData(state) {
   const {
     config: {
       outputFileRate,
-      paths: { STATIC_DATA }
+      paths: { STATIC_DATA },
     },
-    sharedDataByHash
+    sharedDataByHash,
   } = state;
   // Write all shared props to file
   const sharedDataArr = Array.from(sharedDataByHash);
@@ -20,14 +20,14 @@ export default (async function exportSharedRouteData(state) {
     time(chalk.green("[\u2713] Shared Route Data Exported"));
 
     await poolAll(
-      sharedDataArr.map(cachedProp => async () => {
+      sharedDataArr.map((cachedProp) => async () => {
         await fs.outputFile(
           path.join(STATIC_DATA, `${cachedProp[1].hash}.json`),
-          JSON.stringify(cachedProp[1].data)
+          JSON.stringify(cachedProp[1].data),
         );
         jsonProgress.tick();
       }),
-      Number(outputFileRate)
+      Number(outputFileRate),
     );
     timeEnd(chalk.green("[\u2713] Shared Route Data Exported"));
   }

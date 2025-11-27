@@ -1,6 +1,5 @@
 import React from "react";
 
-// eslint-disable-next-line
 let context = React.createContext({});
 
 if (typeof document !== "undefined") {

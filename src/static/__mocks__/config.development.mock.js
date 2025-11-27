@@ -16,9 +16,9 @@ export default {
     DIST: path.resolve("./root/tmp/dev-server"),
     ASSETS: path.resolve("./root/tmp/dev-server"),
     STATIC_DATA: path.resolve("./root/tmp/dev-server/staticData"),
-    NODE_MODULES: path.resolve("./root/node_modules")
+    NODE_MODULES: path.resolve("./root/node_modules"),
   },
   terser: {
-    terserOptions: {}
-  }
+    terserOptions: {},
+  },
 };

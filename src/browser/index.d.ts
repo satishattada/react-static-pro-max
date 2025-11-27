@@ -41,7 +41,7 @@ export const pluginHooks: unknown[];
  */
 export const plugins: {
   Root: (Comp: unknown) => unknown,
-  Routes: (Comp: unknown) => unknown
+  ReactRoutes: (Comp: unknown) => unknown
 }
 
 /**

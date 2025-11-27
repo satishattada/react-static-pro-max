@@ -24,7 +24,7 @@ export default async (state = {}) => {
 
   if (!isBuildCommand) {
     console.log(
-      `Exporting application for ${staging ? "Staging" : "Production"}...`
+      `Exporting application for ${staging ? "Staging" : "Production"}...`,
     );
     console.log("");
   }
@@ -50,7 +50,7 @@ ${
     ? `
 - Test your app locally
   - ${chalk.green(
-    "serve dist -p 3000"
+    "serve dist -p 3000",
   )} (or your preferred static server utility)`
     : `
 - Upload your 'dist' directory to your favorite static host! We recommend using Netlify:

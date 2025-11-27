@@ -1,10 +1,10 @@
 import path from "path";
-import slash from "slash";
+import slash from "./components/slash";
 import fs from "fs-extra";
 //
 import corePlugins from "./plugins";
 
-export default async state => {
+export default async (state) => {
   state = await corePlugins.beforePrepareBrowserPlugins(state);
 
   const { plugins, config } = state;
@@ -12,10 +12,10 @@ export default async state => {
   // A deduped list of pluginImports
   const pluginImports = [];
 
-  const recurse = plugins =>
+  const recurse = (plugins) =>
     // Return an array of plugins
     `[${plugins
-      .map(plugin => {
+      .map((plugin) => {
         const { browserLocation } = plugin;
 
         // Add the plugin to the list of pluginImports
@@ -27,9 +27,9 @@ export default async state => {
             slash(
               `__react_static_root__/${path.relative(
                 config.paths.ROOT,
-                browserLocation
-              )}`
-            )
+                browserLocation,
+              )}`,
+            ),
           );
           pluginIndex = pluginImports.length - 1;
         }
@@ -39,7 +39,7 @@ export default async state => {
         // IIF to return the final plugin
         return `{
         location: "${slash(
-          `__react_static_root__/${path.relative(config.paths.ROOT, location)}`
+          `__react_static_root__/${path.relative(config.paths.ROOT, location)}`,
         )}",
         plugins: ${recurse(plugins || [])},
         hooks: ${

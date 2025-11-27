@@ -8,18 +8,22 @@ describe("browser", () => {
     beforeEach(() => {
       originalDocumentDescriptor = Object.getOwnPropertyDescriptor(
         global,
-        "document"
+        "document",
       );
 
       getDocumentMock = jest.fn();
 
       Object.defineProperty(global, "document", {
-        get: getDocumentMock
+        get: getDocumentMock,
+        configurable: true,
       });
     });
 
     afterEach(() => {
-      Object.defineProperty(global, "document", originalDocumentDescriptor);
+      Object.defineProperty(global, "document", {
+        originalDocumentDescriptor,
+        configurable: true,
+      });
     });
 
     it("should return false during SSR", () => {
@@ -30,7 +34,6 @@ describe("browser", () => {
     it("should return false for script links", () => {
       getDocumentMock.mockReturnValue({ location: {} });
 
-      // eslint-disable-next-line no-script-url
       expect(isPrefetchableRoute("javascript:foo")).toBe(false);
     });
     it("should return false for links with a different protocol", () => {
@@ -43,8 +46,8 @@ describe("browser", () => {
         location: {
           href: "http://foo:1337/foo",
           host: "foo",
-          protocol: "http:"
-        }
+          protocol: "http:",
+        },
       });
 
       expect(isPrefetchableRoute("http://foo:1337/bar")).toBe(false);
@@ -54,8 +57,8 @@ describe("browser", () => {
         location: {
           href: "http://foo:1337/foo",
           host: "foo:1337",
-          protocol: "http:"
-        }
+          protocol: "http:",
+        },
       });
 
       expect(isPrefetchableRoute("http://foo:1337/bar")).toBe(true);
@@ -65,8 +68,8 @@ describe("browser", () => {
         location: {
           href: "http://foo",
           host: "foo",
-          protocol: "http:"
-        }
+          protocol: "http:",
+        },
       });
 
       expect(isPrefetchableRoute("foo")).toBe(true);
@@ -76,8 +79,8 @@ describe("browser", () => {
         location: {
           href: "http://foo",
           host: "foo",
-          protocol: "http:"
-        }
+          protocol: "http:",
+        },
       });
 
       expect(isPrefetchableRoute("./foo")).toBe(true);
@@ -87,8 +90,8 @@ describe("browser", () => {
         location: {
           href: "http://foo",
           host: "foo",
-          protocol: "http:"
-        }
+          protocol: "http:",
+        },
       });
 
       expect(isPrefetchableRoute("../foo")).toBe(true);
@@ -98,8 +101,8 @@ describe("browser", () => {
         location: {
           href: "http://foo",
           host: "foo",
-          protocol: "http:"
-        }
+          protocol: "http:",
+        },
       });
 
       expect(isPrefetchableRoute("/foo")).toBe(true);
@@ -109,8 +112,8 @@ describe("browser", () => {
         location: {
           href: "http://foo",
           host: "foo",
-          protocol: "http:"
-        }
+          protocol: "http:",
+        },
       });
 
       expect(isPrefetchableRoute("//www.example.com")).toBe(false);

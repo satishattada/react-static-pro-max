@@ -1,58 +1,104 @@
-import fs from "fs-extra";
-import babelPreset from "../../../../babel-preset";
-
-// we check which babel config file exists in the project root
-const readBabelConfig = root => {
-  const babelFiles = [
-    `${root}/.babelrc`,
-    `${root}/.babelrc.js`,
-    `${root}/babel.config.js`
-  ];
-
-  let extendsFile = {};
-
-  babelFiles.forEach(file => {
-    try {
-      fs.statSync(file);
-      extendsFile = { extends: file };
-    } catch (err) {
-      // dont do anything
-    }
-  });
-
-  return extendsFile;
-};
+import path from 'path';
 
 export default function({ config, stage }) {
-  let babelFile = {};
+  const isNode = stage === 'node';
+  const isDev = stage === 'dev';
 
-  const isRelativePath = config.paths.DIST.startsWith(config.paths.ROOT);
-
-  if (!isRelativePath) {
-    babelFile = readBabelConfig(config.paths.ROOT);
+  // Check if TypeScript preset is available
+  let hasTypescriptPreset = false;
+  try {
+    require.resolve('@babel/preset-typescript');
+    hasTypescriptPreset = true;
+  } catch (e) {
+    // TypeScript preset not available, that's okay
   }
 
   return {
-    test: /\.(js|jsx|mjs)$/,
-    include: [
-      config.paths.PLUGINS,
-      config.paths.SRC,
-      /react-static-pro-max-templates\.js/,
-      /react-static-pro-max-browser-plugins\.js/
-    ],
+    test: /\.(js|jsx|mjs|cjs|ts|tsx)$/,
+    // More specific exclusion strategy
+    exclude: (modulePath) => {
+      // Don't exclude source files
+      if (!modulePath.includes('node_modules')) {
+        return false;
+      }
+
+      // Always transpile these packages even if they're in node_modules
+      const includePackages = [
+        'axios',
+        'react-static-pro-max',
+        'react-static-pro-plugin',
+      ];
+
+      const shouldInclude = includePackages.some(pkg => 
+        modulePath.includes(path.sep + 'node_modules' + path.sep + pkg + path.sep) ||
+        modulePath.endsWith(path.sep + 'node_modules' + path.sep + pkg)
+      );
+
+      // Exclude everything else in node_modules
+      return !shouldInclude;
+    },
     use: [
       {
-        loader: "babel-loader",
+        loader: require.resolve('babel-loader'),
         options: {
-          ...babelFile,
-          root: config.paths.ROOT,
-          presets: [[babelPreset, { modules: false }]],
-          cacheDirectory: isRelativePath ? stage !== "prod" : config.paths.TEMP,
-          compact: stage === "prod",
-          highlightCode: true
-        }
+          cacheDirectory: isDev,
+          cacheCompression: false,
+          compact: !isDev,
+          sourceType: 'unambiguous', // Let Babel detect module type
+          presets: [
+            [
+              require.resolve('@babel/preset-env'),
+              {
+                targets: isNode
+                  ? { node: 'current' }
+                  : { 
+                      browsers: ['last 2 versions', 'not dead', 'not ie <= 11'],
+                    },
+                // Force CommonJS for compatibility
+                modules: isNode ? 'commonjs' : false,
+                useBuiltIns: 'usage',
+                corejs: 3,
+                loose: true,
+              },
+            ],
+            [
+              require.resolve('@babel/preset-react'),
+              {
+                runtime: 'automatic',
+                development: isDev,
+                pure: !isDev,
+              },
+            ],
+            // Add TypeScript preset only if it's available
+            hasTypescriptPreset && [
+              require.resolve('@babel/preset-typescript'),
+              {
+                isTSX: true,
+                allExtensions: true,
+                onlyRemoveTypeImports: true,
+              }
+            ],
+          ].filter(Boolean),
+          plugins: [
+            require.resolve('@babel/plugin-syntax-dynamic-import'),
+            require.resolve('@babel/plugin-proposal-export-default-from'),
+            [
+              require.resolve('@babel/plugin-transform-runtime'),
+              {
+                regenerator: true,
+                corejs: false,
+                helpers: true,
+                useESModules: false,
+              },
+            ],
+            // Transform all module types to CommonJS for node_modules
+            require.resolve('@babel/plugin-transform-modules-commonjs'),
+          ].filter(Boolean),
+          // Don't look for external babel config
+          babelrc: false,
+          configFile: false,
+        },
       },
-      "react-hot-loader/webpack"
-    ]
+    ],
   };
 }

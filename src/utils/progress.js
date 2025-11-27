@@ -36,18 +36,18 @@ export default (total, label, options) => {
             .replace(":total", total)
             .replace(
               ":elapsed",
-              Number.isNaN(elapsed) ? "0.0" : (elapsed / 1000).toFixed(1)
+              Number.isNaN(elapsed) ? "0.0" : (elapsed / 1000).toFixed(1),
             )
             .replace(
               ":eta",
               Number.isNaN(eta) || !Number.isFinite(eta)
                 ? "0.0"
-                : (eta / 1000).toFixed(1)
+                : (eta / 1000).toFixed(1),
             )
             .replace(":percent", `${percent.toFixed(0)}%`)
-            .replace(":rate", Math.round(rate))}\n`
+            .replace(":rate", Math.round(rate))}\n`,
         );
       }
-    }
+    },
   };
 };

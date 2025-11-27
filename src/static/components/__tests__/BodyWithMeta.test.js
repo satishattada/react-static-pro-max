@@ -10,17 +10,17 @@ describe("BodyWithMeta", () => {
       route: { redirect: false },
       inlineScripts: {
         routeInfo: {
-          script: "script"
-        }
+          script: "script",
+        },
       },
       clientScripts: ["main.js", "bootstrap.js"],
-      plugins: []
+      plugins: [],
     });
 
     const bodyWithMeta = mount(
       <BodyWithMeta className="body">
         <div>static page</div>
-      </BodyWithMeta>
+      </BodyWithMeta>,
     );
 
     expect(bodyWithMeta).toMatchSnapshot();
@@ -32,18 +32,18 @@ describe("BodyWithMeta", () => {
       route: { redirect: true },
       inlineScripts: {
         routeInfo: {
-          script: "script"
-        }
+          script: "script",
+        },
       },
       clientScripts: ["main.js", "bootstrap.js"],
       config: {},
-      plugins: []
+      plugins: [],
     });
 
     const bodyWithMeta = mount(
       <BodyWithMeta className="body">
         <div>static page</div>
-      </BodyWithMeta>
+      </BodyWithMeta>,
     );
 
     expect(bodyWithMeta).toMatchSnapshot();

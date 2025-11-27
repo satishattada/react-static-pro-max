@@ -1,57 +1,61 @@
-import autoprefixer from "autoprefixer";
-import ExtractCssChunks from "extract-css-chunks-webpack-plugin";
-import postcssFlexbugsFixes from "postcss-flexbugs-fixes";
+import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
+import path from 'path';
 
-function initCSSLoader() {
-  const cssLoader = [
-    {
-      loader: "css-loader",
-      options: {
-        importLoaders: 1,
-        sourceMap: false
-      }
+export default function({ config, stage }) {
+  const isNode = stage === 'node';
+  const isDev = stage === 'dev';
+
+  // Base CSS loader configuration
+  const cssLoader = {
+    loader: require.resolve('css-loader'),
+    options: {
+      importLoaders: 1,
+      sourceMap: isDev,
+      modules: {
+        auto: true,
+        localIdentName: isDev 
+          ? '[path][name]__[local]--[hash:base64:5]' 
+          : '[hash:base64]',
+      },
     },
-    {
-      loader: "postcss-loader",
-      options: {
-        // Necessary for external CSS imports to work
-        // https://github.com/facebookincubator/create-react-app/issues/2677
-        sourceMap: true,
-        ident: "postcss",
-        plugins: () => [
-          postcssFlexbugsFixes,
-          autoprefixer({
-            flexbox: "no-2009" // I'd opt in for this - safari 9 & IE 10.
-          })
-        ]
-      }
-    }
-  ];
-  return cssLoader;
-}
+  };
 
-export default function({ stage, isNode }) {
-  let cssLoader = initCSSLoader();
-  if (stage === "node" || isNode) {
+  // PostCSS loader configuration (updated for postcss-loader v8)
+  const postcssLoader = {
+    loader: require.resolve('postcss-loader'),
+    options: {
+      postcssOptions: {
+        plugins: [
+          require.resolve('postcss-flexbugs-fixes'),
+          [
+            require.resolve('autoprefixer'),
+            {
+              flexbox: 'no-2009',
+            },
+          ],
+        ],
+      },
+      sourceMap: isDev,
+    },
+  };
+
+  // For server-side rendering (node stage)
+  if (isNode) {
     return {
       test: /\.css$/,
-      loader: cssLoader
+      loader: require.resolve('css-loader/locals'),
     };
   }
 
-  cssLoader = [
-    {
-      loader: ExtractCssChunks.loader,
-      options: {
-        hot: true,
-        hmr: true
-      }
-    },
-    ...cssLoader
-  ]; // seeing as it's HMR, why not :)
-
+  // For client-side (dev and prod)
   return {
     test: /\.css$/,
-    loader: cssLoader
+    use: [
+      isDev 
+        ? require.resolve('style-loader')
+        : ExtractCssChunks.loader,
+      cssLoader,
+      postcssLoader,
+    ],
   };
 }

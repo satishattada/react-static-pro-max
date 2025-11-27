@@ -13,8 +13,8 @@ export default function onVisible(element, callback) {
   if (list.get(element)) {
     return;
   }
-  const io = new window.IntersectionObserver(entries => {
-    entries.forEach(entry => {
+  const io = new window.IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
       // Edge doesn't support isIntersecting. intersectionRatio > 0 works as a fallback
       if (
         element === entry.target &&

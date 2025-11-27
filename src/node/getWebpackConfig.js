@@ -9,7 +9,7 @@ const makeWebpackConfig = require("../static/webpack/makeWebpackConfig");
 export default function getWebpackConfig(configPath, stage = "dev") {
   let state = {
     configPath,
-    stage
+    stage,
   };
   state = getConfig(state);
   return makeWebpackConfig(state);

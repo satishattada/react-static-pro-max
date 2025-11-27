@@ -7,10 +7,10 @@ import { normalizeRoute } from "../getRoutes";
 describe("normalizeRoute", () => {
   describe("when working route is provided", () => {
     it("should return a normalized route", () => {
-      const route = normalizeRoute({ path: "/path/" }, undefined, d => d);
+      const route = normalizeRoute({ path: "/path/" }, undefined, (d) => d);
 
       expect(route).toEqual({
-        path: "path"
+        path: "path",
       });
     });
 
@@ -23,12 +23,12 @@ describe("normalizeRoute", () => {
             children: [
               {
                 path: "child",
-                noindex: false
-              }
-            ]
+                noindex: false,
+              },
+            ],
           },
           undefined,
-          d => d
+          (d) => d,
         );
 
         expect(route.noindex).toEqual(true);
@@ -44,11 +44,11 @@ describe("normalizeRoute", () => {
       });
 
       it("should warns the user to use noIndex", () => {
-        normalizeRoute({ path: "/path/", noIndex: true }, undefined, d => d);
+        normalizeRoute({ path: "/path/", noIndex: true }, undefined, (d) => d);
 
         expect(spy).toHaveBeenCalled();
         expect(spy).toBeCalledWith(
-          "Warning: Route /path/ is using 'noIndex'. Did you mean 'noindex'?"
+          "Warning: Route /path/ is using 'noIndex'. Did you mean 'noindex'?",
         );
       });
 
@@ -61,8 +61,8 @@ describe("normalizeRoute", () => {
       it("should throw an error", () => {
         const route = { template: "/no/path/", noIndex: true };
 
-        expect(() => normalizeRoute(route, undefined, d => d)).toThrow(
-          `No path defined for route: ${JSON.stringify(route)}`
+        expect(() => normalizeRoute(route, undefined, (d) => d)).toThrow(
+          `No path defined for route: ${JSON.stringify(route)}`,
         );
       });
 
@@ -72,8 +72,8 @@ describe("normalizeRoute", () => {
             normalizeRoute(
               { template: "/no/path/", path: "404" },
               undefined,
-              d => d
-            )
+              (d) => d,
+            ),
           ).not.toThrow();
         });
       });
@@ -84,11 +84,11 @@ describe("normalizeRoute", () => {
         const route = normalizeRoute(
           { path: "/to/" },
           { path: "/path/" },
-          d => d
+          (d) => d,
         );
 
         expect(route).toEqual({
-          path: "path/to"
+          path: "path/to",
         });
       });
     });
@@ -97,7 +97,7 @@ describe("normalizeRoute", () => {
       it("should throw an error", () => {
         const route = { template: "windows\\path" };
 
-        expect(() => normalizeRoute(route, undefined, d => d)).toThrow(Error);
+        expect(() => normalizeRoute(route, undefined, (d) => d)).toThrow(Error);
       });
     });
   });

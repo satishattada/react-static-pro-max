@@ -8,7 +8,7 @@ An absolutely minimal app.
 
 ## basic
 
-A Single Page App with multiple pages and a shared navigation component. The pages are automatically routed based on their filename in the pages folder using ```@reach/router```.
+A Single Page App with multiple pages and a shared navigation component. The pages are automatically routed based on their filename in the pages folder using ```react-router```.
 
 ## typescript
 

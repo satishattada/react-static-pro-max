@@ -9,7 +9,7 @@ import {
   prefetch,
   plugins,
   onReloadTemplates,
-  routeErrorByPath
+  routeErrorByPath,
 } from "..";
 import { getCurrentRoutePath, is404Path, PATH_404 } from "../utils";
 import { useStaticInfo } from "../hooks/useStaticInfo";
@@ -69,7 +69,7 @@ const RoutesInner = ({ routePath, render: renderFn }) => {
       routeInfoByPath[path] = staticInfo;
 
       // Hydrate sharedDataByHash with the embedded routeInfo
-      Object.keys(sharedHashesByProp).forEach(propKey => {
+      Object.keys(sharedHashesByProp).forEach((propKey) => {
         sharedDataByHash[sharedHashesByProp[propKey]] = sharedData[propKey];
       });
 
@@ -91,8 +91,8 @@ const RoutesInner = ({ routePath, render: renderFn }) => {
 
   useEffect(() =>
     onReloadTemplates(() => {
-      setCount(old => old + 1);
-    })
+      setCount((old) => old + 1);
+    }),
   );
 
   // If SSR, force the routePath to be the statically exported one
@@ -112,13 +112,13 @@ const RoutesInner = ({ routePath, render: renderFn }) => {
   if (!Comp) {
     if (is404) {
       throw new Error(
-        "Neither the page template or 404 template could be found. This means something is terribly wrong. Please, file an issue!"
+        "Neither the page template or 404 template could be found. This means something is terribly wrong. Please, file an issue!",
       );
     }
     // Suspend while we fetch the resource
     throw Promise.all([
-      new Promise(resolve => setTimeout(resolve, 500)),
-      prefetch(routePath, { priority: true })
+      new Promise((resolve) => setTimeout(resolve, 500)),
+      prefetch(routePath, { priority: true }),
     ]);
   }
 
@@ -133,19 +133,26 @@ const RoutesInner = ({ routePath, render: renderFn }) => {
   );
 };
 
-const Routes = ({ ...originalProps }) => {
+const ReactRoutes = ({ ...originalProps }) => {
   // Once a routePath goes into the Routes component,
   // useRoutePath must ALWAYS return the routePath used
   // in its parent, so we pass it down as context
 
-  // Get the Routes hook
-  const CompWrapper = useMemo(
-    () => plugins.Routes(props => <RoutesInner {...props} />),
-    [plugins]
-  );
+  // Get the Routes hook - check if plugins.Routes exists
+  const CompWrapper = useMemo(() => {
+    // Check if plugins.Routes is defined, otherwise use identity function
+    if (plugins && typeof plugins.Routes === 'function') {
+      return plugins.Routes((props) => <RoutesInner {...props} />);
+    }
+    // Fallback to just return RoutesInner if no plugin
+    return (props) => <RoutesInner {...props} />;
+  }, []);
 
   // Pass all props so that plugins can use it
   return <CompWrapper {...originalProps} />;
 };
 
-export default Routes;
+export default ReactRoutes;
+
+// Also export as named export
+export { ReactRoutes };

@@ -3,7 +3,7 @@ export { Helmet as Head } from "react-helmet";
 
 // react-static-pro-max
 export { default as Root } from "./browser/components/Root";
-export { default as Routes } from "./browser/components/Routes";
+export { default as ReactRoutes } from "./browser/components/ReactRoutes";
 export { default as useRouteData } from "./browser/hooks/useRouteData";
 export { default as useSiteData } from "./browser/hooks/useSiteData";
 export { default as usePrefetch } from "./browser/hooks/usePrefetch";
@@ -32,7 +32,7 @@ export {
   sharedDataByHash,
   templateErrorByPath,
   templates,
-  templatesByPath
+  templatesByPath,
 } from "./browser";
 
 // Utils

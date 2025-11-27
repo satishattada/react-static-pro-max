@@ -48,7 +48,7 @@ exports[`HeadWithMeta when route has inline CSS 1`] = `
     >
       <style
         dangerouslySetInnerHTML={
-          Object {
+          {
             "__html": "[object Object]",
           }
         }

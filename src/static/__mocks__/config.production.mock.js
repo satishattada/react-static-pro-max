@@ -18,9 +18,9 @@ export default {
     PUBLIC: path.resolve("./root/public"),
     PACKAGE: path.resolve("./root/package.json"),
     NODE_MODULES: path.resolve("./root/node_modules"),
-    STATIC_DATA: path.resolve("./root/dist/staticData")
+    STATIC_DATA: path.resolve("./root/dist/staticData"),
   },
   terser: {
-    terserOptions: {}
-  }
+    terserOptions: {},
+  },
 };

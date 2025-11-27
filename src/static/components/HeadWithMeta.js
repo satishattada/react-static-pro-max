@@ -13,20 +13,14 @@ export const InlineStyle = ({ clientCss }) => (
     key="clientCss"
     type="text/css"
     dangerouslySetInnerHTML={{
-      __html: clientCss.toString().replace(REGEX_FOR_STYLE_TAG, "")
+      __html: clientCss.toString().replace(REGEX_FOR_STYLE_TAG, ""),
     }}
   />
 );
 
 export default async function makeHeadWithMeta(state) {
-  const {
-    head,
-    route,
-    clientScripts,
-    config,
-    clientStyleSheets,
-    clientCss
-  } = state;
+  const { head, route, clientScripts, config, clientStyleSheets, clientCss } =
+    state;
 
   const pluginHeads = await plugins.headElements([], state);
 
@@ -40,7 +34,7 @@ export default async function makeHeadWithMeta(state) {
 
     if (useHelmetTitle) {
       head.title[0] = React.cloneElement(head.title[0], { key: "title" });
-      childrenArray = childrenArray.filter(child => {
+      childrenArray = childrenArray.filter((child) => {
         if (child.type === "title") {
           // Filter out the title of the Document in static.config.js
           // if there is a helmet title on this route
@@ -50,7 +44,7 @@ export default async function makeHeadWithMeta(state) {
       });
     }
 
-    const childrenCSS = childrenArray.filter(child => {
+    const childrenCSS = childrenArray.filter((child) => {
       if (
         child.type === "link" &&
         child.props &&
@@ -64,9 +58,9 @@ export default async function makeHeadWithMeta(state) {
       return false;
     });
 
-    const childrenMeta = childrenArray.filter(child => child.type === "meta");
-    const childrenJS = childrenArray.filter(child => child.type === "script");
-    childrenArray = childrenArray.filter(child => {
+    const childrenMeta = childrenArray.filter((child) => child.type === "meta");
+    const childrenJS = childrenArray.filter((child) => child.type === "script");
+    childrenArray = childrenArray.filter((child) => {
       if (
         child.type === "link" &&
         child.props &&
@@ -95,13 +89,13 @@ export default async function makeHeadWithMeta(state) {
         {head.meta}
         {childrenJS}
         {!route.redirect &&
-          clientScripts.map(script => (
+          clientScripts.map((script) => (
             <link
               key={`clientScript_${script}`}
               rel="preload"
               as="script"
               href={makePathAbsolute(
-                pathJoin(process.env.REACT_STATIC_ASSETS_PATH, script)
+                pathJoin(process.env.REACT_STATIC_ASSETS_PATH, script),
               )}
             />
           ))}
@@ -109,7 +103,7 @@ export default async function makeHeadWithMeta(state) {
         {renderLinkCSS &&
           clientStyleSheets.reduce((memo, styleSheet) => {
             const href = makePathAbsolute(
-              pathJoin(process.env.REACT_STATIC_ASSETS_PATH, styleSheet)
+              pathJoin(process.env.REACT_STATIC_ASSETS_PATH, styleSheet),
             );
 
             return [
@@ -124,7 +118,7 @@ export default async function makeHeadWithMeta(state) {
                 key={`clientStyleSheet_${styleSheet}`}
                 rel="stylesheet"
                 href={href}
-              />
+              />,
             ];
           }, [])}
         {head.link}

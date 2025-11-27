@@ -7,7 +7,7 @@ import {
   time,
   timeEnd,
   PATH_404,
-  is404Path
+  is404Path,
 } from "../utils";
 import plugins from "./plugins";
 
@@ -19,7 +19,7 @@ rebuildRoutes.current = () => {
   throw new Error("Routes cannot be rebuilt yet!");
 };
 
-export default async function getRoutes(state, callback = d => d) {
+export default async function getRoutes(state, callback = (d) => d) {
   rebuildRoutes.current = async () => {
     const { silent, incremental } = state;
 
@@ -37,7 +37,7 @@ export default async function getRoutes(state, callback = d => d) {
     const {
       routes: allNormalizedRoutes,
       hasIndex,
-      has404
+      has404,
     } = normalizeAllRoutes(routes, state);
 
     // If no Index page was found, throw an error. This is required
@@ -46,7 +46,7 @@ export default async function getRoutes(state, callback = d => d) {
       throw new Error(
         'Could not find a route for the "index" page of your site! This is ' +
           "required. Please create a page or specify a route and template " +
-          "for this page."
+          "for this page.",
       );
     }
 
@@ -60,8 +60,8 @@ export default async function getRoutes(state, callback = d => d) {
         path: PATH_404,
         template: path.resolve(
           __dirname,
-          path.join("..", "browser", "components", "Default404")
-        )
+          path.join("..", "browser", "components", "Default404"),
+        ),
       });
     }
 
@@ -69,7 +69,7 @@ export default async function getRoutes(state, callback = d => d) {
 
     state = {
       ...state,
-      routes: allNormalizedRoutes
+      routes: allNormalizedRoutes,
     };
 
     return callback(await plugins.afterPrepareRoutes(state));
@@ -102,8 +102,8 @@ export function normalizeAllRoutes(routes, state) {
 
     // If the route has children, we do a depth-first recurse
     if (normalizedRoute.children) {
-      normalizedRoute.children.forEach(childRoute =>
-        recurseRoute(childRoute, normalizedRoute)
+      normalizedRoute.children.forEach((childRoute) =>
+        recurseRoute(childRoute, normalizedRoute),
       );
     }
 
@@ -136,19 +136,19 @@ export function normalizeAllRoutes(routes, state) {
     if (normalizedRoute.path.indexOf("\\") !== -1) {
       throw new Error(
         "Plugins must return a normalized path for the `path` key of a route," +
-          " which is a path with / and not \\."
+          " which is a path with / and not \\.",
       );
     }
   };
 
-  routes.forEach(route => recurseRoute(route));
+  routes.forEach((route) => recurseRoute(route));
 
   const normalizedRoutes = Object.values(routesByPath);
 
   return {
     routes: normalizedRoutes,
     hasIndex,
-    has404
+    has404,
   };
 }
 
@@ -163,7 +163,7 @@ export function normalizeRoute(route, parent = {}, pluginNormalizeRoute) {
 
   if (typeof route.noIndex !== "undefined") {
     console.warn(
-      `Warning: Route ${route.path} is using 'noIndex'. Did you mean 'noindex'?`
+      `Warning: Route ${route.path} is using 'noIndex'. Did you mean 'noindex'?`,
     );
   }
 

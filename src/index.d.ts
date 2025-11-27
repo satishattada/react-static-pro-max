@@ -7,7 +7,6 @@
 import * as React from 'react';
 
 import { Configuration as WebpackDevServerConfig } from 'webpack-dev-server';
-import { RenderFn } from 'create-react-context';
 
 export { Helmet as Head } from 'react-helmet'
 
@@ -278,7 +277,7 @@ export class Root extends React.Component {}
  *  </Root>)
  *
  */
-export class Routes extends React.Component<{
+export class ReactRoutes extends React.Component<{
   path?: string,
   default?: boolean,
   render?: (props: RoutesRenderProp) => React.ReactNode

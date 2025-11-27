@@ -1,3 +1,3 @@
 export default {
-  plugins: [["mock-plugin", { mockOption: "some-option" }]]
+  plugins: [["mock-plugin", { mockOption: "some-option" }]],
 };

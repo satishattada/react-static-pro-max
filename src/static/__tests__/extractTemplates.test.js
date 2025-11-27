@@ -1,11 +1,12 @@
 import path from "path";
-import slash from "slash";
+
 import extractTemplates from "../extractTemplates";
+import slash from "../components/slash";
 
 const config = {
   paths: {
-    ROOT: process.cwd()
-  }
+    ROOT: process.cwd(),
+  },
 };
 
 test("a 404 route is required when the build is not incremental", async () => {
@@ -14,7 +15,7 @@ test("a 404 route is required when the build is not incremental", async () => {
     await extractTemplates({
       config,
       routes: [],
-      incremental: false
+      incremental: false,
     });
   } catch (error) {
     expect(error.message).toBeTruthy();
@@ -27,7 +28,7 @@ test("a 404 route is not required when the build is incremental", async () => {
     const state = await extractTemplates({
       config,
       routes: [],
-      incremental: true
+      incremental: true,
     });
     expect(state).toBeTruthy();
   } catch (_error) {
@@ -40,8 +41,8 @@ test("the 404 template is the first one", async () => {
     config,
     routes: [
       { path: "/", template: "./src/templates/Homepage" },
-      { path: "404", template: "./src/templates/404" }
-    ]
+      { path: "404", template: "./src/templates/404" },
+    ],
   });
 
   expect(state.templates[0]).toContain("src/templates/404");
@@ -50,7 +51,7 @@ test("the 404 template is the first one", async () => {
 test("relative routes path are relative and use the __react_static_root__ alias", async () => {
   const { templates } = await extractTemplates({
     config,
-    routes: [{ path: "404", template: "./src/templates/NotFound" }]
+    routes: [{ path: "404", template: "./src/templates/NotFound" }],
   });
 
   expect(templates[0]).toBe("__react_static_root__/src/templates/NotFound");
@@ -59,15 +60,15 @@ test("relative routes path are relative and use the __react_static_root__ alias"
 test("absolute routes path are relative and use the __react_static_root__ alias", async () => {
   const { templates } = await extractTemplates({
     config,
-    routes: [{ path: "404", template: "/home/src/templates/NotFound" }]
+    routes: [{ path: "404", template: "/home/src/templates/NotFound" }],
   });
 
   expect(templates[0]).toBe(
     slash(
       `__react_static_root__/${path.relative(
         config.paths.ROOT,
-        "/home/src/templates/NotFound"
-      )}`
-    )
+        "/home/src/templates/NotFound",
+      )}`,
+    ),
   );
 });

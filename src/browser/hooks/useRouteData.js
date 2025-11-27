@@ -3,7 +3,7 @@ import {
   prefetch,
   routeInfoByPath,
   routeErrorByPath,
-  onReloadClientData
+  onReloadClientData,
 } from "..";
 import { useRoutePath } from "./useRoutePath";
 import { getFullRouteData, PATH_404 } from "../utils";
@@ -15,8 +15,8 @@ const useRouteData = () => {
 
   useEffect(() =>
     onReloadClientData(() => {
-      setCount(old => old + 1);
-    })
+      setCount((old) => old + 1);
+    }),
   );
 
   const routeError = routeErrorByPath[routePath];
@@ -28,7 +28,7 @@ const useRouteData = () => {
   // unless there is data for the 404 page
   if (routeError && (!routeInfo || !routeInfo.data)) {
     throw new Error(
-      `react-static-pro-max: useRouteData() could not find any data for this route: ${routePath}. If this is a dynamic route, please remove any calls to useRouteData() from this route's components`
+      `react-static-pro-max: useRouteData() could not find any data for this route: ${routePath}. If this is a dynamic route, please remove any calls to useRouteData() from this route's components`,
     );
   }
 
@@ -37,10 +37,10 @@ const useRouteData = () => {
   // If we need to load data, suspend while it's requested
   if (shouldLoadData(routeInfo)) {
     throw Promise.all([
-      new Promise(resolve =>
-        setTimeout(resolve, process.env.REACT_STATIC_MIN_LOAD_TIME)
+      new Promise((resolve) =>
+        setTimeout(resolve, process.env.REACT_STATIC_MIN_LOAD_TIME),
       ),
-      prefetch(targetRouteInfoPath, { priority: true })
+      prefetch(targetRouteInfoPath, { priority: true }),
     ]);
   }
 

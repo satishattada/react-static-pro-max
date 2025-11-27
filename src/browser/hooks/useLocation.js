@@ -7,11 +7,11 @@ const useLocation = () => {
   const [_, setCount] = useState(0);
   useEffect(
     () =>
-      onLocationChange(location => {
+      onLocationChange((location) => {
         setLocation(location);
-        setCount(old => old + 1);
+        setCount((old) => old + 1);
       }),
-    []
+    [],
   );
   return location;
 };

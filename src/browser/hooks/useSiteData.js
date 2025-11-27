@@ -18,8 +18,8 @@ const useSiteData = () => {
     onReloadClientData(() => {
       siteDataPromise = null;
       siteDataReady = false;
-      setCount(old => old + 1);
-    })
+      setCount((old) => old + 1);
+    }),
   );
 
   const staticInfo = useStaticInfo();

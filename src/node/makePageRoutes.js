@@ -3,7 +3,7 @@ export default function makePageRoutes({
   pageSize,
   pageToken = "page",
   route,
-  decorate
+  decorate,
 }) {
   const itemsCopy = [...items]; // Make a copy of the items
   const pages = []; // Make an array for all of the different pages
@@ -21,14 +21,14 @@ export default function makePageRoutes({
   const routes = [
     {
       ...route,
-      ...decorate(firstPage, 1, totalPages) // and only pass the first page as data
+      ...decorate(firstPage, 1, totalPages), // and only pass the first page as data
     },
     // map over each page to create an array of page routes, and spread it!
     ...pages.map((page, i) => ({
       ...route, // route defaults
       path: `${route.path}/${pageToken}/${i + 1}`,
-      ...decorate(page, i + 1, totalPages)
-    }))
+      ...decorate(page, i + 1, totalPages),
+    })),
   ];
 
   return routes;

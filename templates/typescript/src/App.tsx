@@ -1,7 +1,6 @@
 import React from 'react'
-import { Root, Routes, addPrefetchExcludes } from 'react-static-pro-max'
-import { Link, Router } from '@reach/router'
-
+import { Root, ReactRoutes, addPrefetchExcludes } from 'react-static-pro-max'
+import { Routes, Route, Link } from "react-router-dom";
 import FancyDiv from 'components/FancyDiv'
 import Dynamic from 'containers/Dynamic'
 
@@ -24,10 +23,10 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <FancyDiv>
           <React.Suspense fallback={<em>Loading...</em>}>
-            <Router>
-              <Dynamic path="dynamic" />
-              <Routes path="*" />
-            </Router>
+            <Routes>
+              <Route path="/dynamic" element={<Dynamic />} />
+              <Route path="*" element={<ReactRoutes />} />
+            </Routes>
           </React.Suspense>
         </FancyDiv>
       </div>

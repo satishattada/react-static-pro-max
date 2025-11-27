@@ -7,7 +7,7 @@ import { DefaultDocument } from "./components/RootComponents";
 import { poolAll, progress } from "../utils";
 import exportRoute from "./exportRoute";
 
-export default async state => {
+export default async (state) => {
   const { config, routes } = state;
 
   const htmlProgress = progress(routes.length);
@@ -15,9 +15,9 @@ export default async state => {
 
   setIgnorePath(config.paths.ARTIFACTS);
 
-  // eslint-disable-next-line
-  const Comp = require(path.resolve(config.paths.ARTIFACTS, "static-app.js"))
-    .default;
+  const Comp = require(
+    path.resolve(config.paths.ARTIFACTS, "static-app.js"),
+  ).default;
 
   // Retrieve the document template
   const DocumentTemplate = config.Document || DefaultDocument;
@@ -25,13 +25,13 @@ export default async state => {
   const tasks = [];
   for (let i = 0; i < routes.length; i++) {
     const route = routes[i];
-    // eslint-disable-next-line
+
     tasks.push(async () => {
       await exportRoute({
         ...state,
         Comp,
         DocumentTemplate,
-        route
+        route,
       });
       htmlProgress.tick();
     });

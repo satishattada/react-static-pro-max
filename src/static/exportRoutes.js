@@ -20,7 +20,7 @@ export default (async function exportRoutes(state) {
 async function buildHTML(state) {
   const {
     routes,
-    config: { paths, maxThreads }
+    config: { paths, maxThreads },
   } = state;
 
   time(chalk.green("[\u2713] HTML Exported"));
@@ -49,10 +49,10 @@ async function buildHTML(state) {
         fork(require.resolve("./exportRoutes.threaded"), [], {
           env: {
             ...process.env,
-            REACT_STATIC_THREAD: "true"
+            REACT_STATIC_THREAD: "true",
           },
-          stdio: "inherit"
-        })
+          stdio: "inherit",
+        }),
       );
     }
 
@@ -68,7 +68,7 @@ async function buildHTML(state) {
         return new Promise((resolve, reject) => {
           exporter.send({
             ...state,
-            routes
+            routes,
           });
           exporter.on("message", ({ type, payload }) => {
             if (type === "error") {
@@ -85,7 +85,7 @@ async function buildHTML(state) {
             }
           });
         });
-      })
+      }),
     );
   }
 

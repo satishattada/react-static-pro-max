@@ -1,4 +1,4 @@
-/* eslint-disable import/no-dynamic-require, react/no-danger, import/no-mutable-exports */
+/* eslint-disable import/no-dynamic-require, import/no-mutable-exports */
 import webpack from "webpack";
 import chalk from "chalk";
 //
@@ -14,7 +14,7 @@ export default async function buildProductionBundles(state) {
 
   const allWebpackConfigs = [
     await makeWebpackConfig(state),
-    await makeWebpackConfig({ ...state, stage: "node" }) // Make sure we're building the node config
+    await makeWebpackConfig({ ...state, stage: "node" }), // Make sure we're building the node config
   ];
 
   state = await new Promise(async (resolve, reject) => {
@@ -48,21 +48,21 @@ export default async function buildProductionBundles(state) {
               entrypoints: false,
               chunkOrigins: false,
               chunkModules: false,
-              colors: chalk.supportsColor
-            })
+              colors: chalk.supportsColor,
+            }),
           );
           if (buildErrors) {
             console.log(
               chalk.red.bold(`
                 => There were ERRORS during the ${stage} build stage! :(
                 => Fix them and try again!
-              `)
+              `),
             );
           } else if (buildWarnings) {
             console.log(
               chalk.yellow(`
 => There were WARNINGS during the ${stage} build stage. Your site will still function, but you may achieve better performance by addressing the warnings above.
-`)
+`),
             );
           }
         }

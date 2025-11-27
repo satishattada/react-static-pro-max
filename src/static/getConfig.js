@@ -12,7 +12,7 @@ import corePlugins, { validatePlugin } from "./plugins";
 const defaultConfig = {};
 const DEFAULT_NAME_FOR_STATIC_CONFIG_FILE = "static.config.js";
 const DEFAULT_PATH_FOR_STATIC_CONFIG = nodePath.resolve(
-  nodePath.join(process.cwd(), DEFAULT_NAME_FOR_STATIC_CONFIG_FILE)
+  nodePath.join(process.cwd(), DEFAULT_NAME_FOR_STATIC_CONFIG_FILE),
 );
 const DEFAULT_ROUTES = [{ path: "/" }];
 const DEFAULT_ENTRY = "index.js";
@@ -21,13 +21,13 @@ const DEFAULT_EXTENSIONS = [".js", ".jsx"];
 // Retrieves the static.config.js from the current project directory
 export default function getConfig(
   state,
-  callback = async config => {
+  callback = async (config) => {
     if (state.debug) {
       console.log("getConfig():");
       console.log(state);
     }
     return config;
-  }
+  },
 ) {
   const configPath =
     state.configPath ||
@@ -36,7 +36,7 @@ export default function getConfig(
 
   state = {
     ...state,
-    originalConfig: configPath
+    originalConfig: configPath,
   };
 
   const resolvedPath = nodePath.resolve(configPath);
@@ -55,7 +55,7 @@ export default function getConfig(
   if (state.stage === "dev") {
     chokidar
       .watch(resolvedPath, {
-        ignoreInitial: true
+        ignoreInitial: true,
       })
       .on("all", async () => {
         console.log("");
@@ -88,11 +88,11 @@ export function buildConfig(state, config = {}) {
     pages: "src/pages",
     nodeModules: "node_modules",
     assets: "",
-    ...(config.paths || {})
+    ...(config.paths || {}),
   };
 
   // Use the root to resolve all other relative paths
-  const resolvePath = relativePath =>
+  const resolvePath = (relativePath) =>
     nodePath.resolve(paths.root, relativePath);
 
   // Resolve and replace all pathss
@@ -116,7 +116,7 @@ export function buildConfig(state, config = {}) {
       paths.excludeResolvedModules || resolvePath(paths.nodeModules),
     PACKAGE: resolvePath("package.json"),
     HTML_TEMPLATE: nodePath.join(DIST, "index.html"),
-    STATIC_DATA: nodePath.join(ASSETS, "staticData")
+    STATIC_DATA: nodePath.join(ASSETS, "staticData"),
   };
 
   // siteRoot, basePath, publicPath, and assetPath resolution
@@ -136,7 +136,7 @@ export function buildConfig(state, config = {}) {
     assetsPath = config.assetsPath || paths.assets || assetsPath;
   }
   const publicPath = `${cleanSlashes(`${siteRoot}/${basePath}`, {
-    leading: false
+    leading: false,
   })}/`;
 
   if (assetsPath && !isAbsoluteUrl(assetsPath)) {
@@ -194,8 +194,8 @@ export function buildConfig(state, config = {}) {
     devServer: {
       host: "localhost",
       port: 3000,
-      ...(config.devServer || {})
-    }
+      ...(config.devServer || {}),
+    },
   };
 
   config.terser = config.terser || {};
@@ -220,14 +220,14 @@ export function buildConfig(state, config = {}) {
 
   process.env.REACT_STATIC_TEMPLATES_PATH = nodePath.join(
     paths.ARTIFACTS,
-    "react-static-pro-max-templates.js"
+    "react-static-pro-max-templates.js",
   );
   process.env.REACT_STATIC_PLUGINS_PATH = nodePath.join(
     paths.ARTIFACTS,
-    "react-static-pro-max-browser-plugins.js"
+    "react-static-pro-max-browser-plugins.js",
   );
 
-  const resolvePlugin = originalLocation => {
+  const resolvePlugin = (originalLocation) => {
     let options = {};
     if (Array.isArray(originalLocation)) {
       options = originalLocation[1] || {};
@@ -287,13 +287,13 @@ export function buildConfig(state, config = {}) {
           // Allow plugins to be mocked
           return require("path").resolve("./src/static/__mocks__/mock-plugin");
         }
-      }
+      },
     ].reduce((prev, curr) => prev || curr(), null);
 
     // TODO: We have to do this because we don't have a good mock for process.cwd() :(
     if (!location) {
       throw new Error(
-        `Could not find a plugin directory for the plugin: "${originalLocation}". We must bail!`
+        `Could not find a plugin directory for the plugin: "${originalLocation}". We must bail!`,
       );
     }
 
@@ -318,7 +318,7 @@ export function buildConfig(state, config = {}) {
         throw new Error(
           `Could not find a valid node.api.js or browser.api.js plugin file in "${location}". \n` +
             `The original location: "${originalLocation}". \n` +
-            `The root location: "${paths.ROOT}".`
+            `The root location: "${paths.ROOT}".`,
         );
       }
 
@@ -327,7 +327,7 @@ export function buildConfig(state, config = {}) {
         nodeLocation,
         browserLocation,
         options,
-        hooks: buildPluginHooks(options) || {}
+        hooks: buildPluginHooks(options) || {},
       };
 
       validatePlugin(resolvedPlugin);
@@ -340,7 +340,7 @@ export function buildConfig(state, config = {}) {
       return resolvedPlugin;
     } catch (err) {
       console.error(
-        `The following error occurred in the plugin: "${originalLocation}"`
+        `The following error occurred in the plugin: "${originalLocation}"`,
       );
       throw err;
     }
@@ -349,7 +349,7 @@ export function buildConfig(state, config = {}) {
   state = {
     ...state,
     plugins: config.plugins.map(resolvePlugin),
-    config
+    config,
   };
 
   return corePlugins.afterGetConfig(state);

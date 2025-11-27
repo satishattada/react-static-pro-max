@@ -2,7 +2,7 @@ import crypto from "crypto";
 import React from "react";
 import { renderToString, renderToStaticMarkup } from "react-dom/server";
 import Helmet from "react-helmet";
-import { ReportChunks } from "react-universal-component";
+import ReportChunks from "./components/ReportChunks";
 import flushChunks from "webpack-flush-chunks";
 import nodePath from "path";
 import fs from "fs-extra";
@@ -36,14 +36,14 @@ export function getEmbeddedRouteInfoScript(embeddedRouteInfo) {
   const routeInfoJSON = jsesc(JSON.stringify(embeddedRouteInfo), {
     isScriptContext: true,
     wrap: true,
-    json: true
+    json: true,
   });
   const script = `window.__routeInfo = JSON.parse(${routeInfoJSON});`;
   const hash = getSubresourceHash(script);
 
   return {
     hash,
-    script
+    script,
   };
 }
 
@@ -54,7 +54,7 @@ export default (async function exportRoute(state) {
     route,
     siteData,
     clientStats,
-    incremental
+    incremental,
   } = state;
 
   let { Comp } = state;
@@ -65,7 +65,7 @@ export default (async function exportRoute(state) {
     data,
     sharedData,
     path: routePath,
-    remove
+    remove,
   } = route;
 
   if (incremental && remove) {
@@ -73,7 +73,7 @@ export default (async function exportRoute(state) {
       throw new Error(
         `You are attempting to incrementally remove the ${
           is404Path(route.path) ? "404" : "index"
-        } route from your export. This is currently not supported (or recommended) by React Static.`
+        } route from your export. This is currently not supported (or recommended) by React Static.`,
       );
     }
     const removeLocation = nodePath.join(config.paths.DIST, route.path);
@@ -86,14 +86,14 @@ export default (async function exportRoute(state) {
     cachedHrefReplace ||
     (cachedHrefReplace = new RegExp(
       `(href=["'])\\/(${basePath ? `${basePath}\\/` : ""})?([^\\/])`,
-      "gm"
+      "gm",
     ));
 
   const srcReplace =
     cachedSrcReplace ||
     (cachedSrcReplace = new RegExp(
       `(src=["'])\\/(${basePath ? `${basePath}\\/` : ""})?([^\\/])`,
-      "gm"
+      "gm",
     ));
 
   // This routeInfo will be saved to disk. It should only include the
@@ -102,7 +102,7 @@ export default (async function exportRoute(state) {
     template,
     sharedHashesByProp,
     data,
-    path: routePath
+    path: routePath,
   });
 
   // This embeddedRouteInfo will be inlined into the HTML for this route.
@@ -110,18 +110,18 @@ export default (async function exportRoute(state) {
   const embeddedRouteInfo = {
     ...routeInfo,
     sharedData,
-    siteData
+    siteData,
   };
 
   const inlineScripts = {
-    routeInfo: getEmbeddedRouteInfoScript(embeddedRouteInfo)
+    routeInfo: getEmbeddedRouteInfoScript(embeddedRouteInfo),
   };
 
   state = {
     ...state,
     routeInfo,
     embeddedRouteInfo,
-    inlineScripts
+    inlineScripts,
   };
 
   // Make a place to collect chunks, meta info and head tags
@@ -142,16 +142,16 @@ export default (async function exportRoute(state) {
   if (route.redirect) {
     FinalComp = () => <Redirect fromPath={route.path} to={route.redirect} />;
   } else {
-    FinalComp = props => (
+    FinalComp = (props) => (
       <ReportChunks
-        report={chunkName => {
+        report={(chunkName) => {
           // if we are building to a absolute path we must make the detected
           // chunkName relative and matching to the one we set in
           // generateTemplates
           if (!config.paths.DIST.startsWith(config.paths.ROOT)) {
             chunkName = absoluteToRelativeChunkName(
               config.paths.ROOT,
-              chunkName
+              chunkName,
             );
           }
 
@@ -163,12 +163,12 @@ export default (async function exportRoute(state) {
     );
   }
 
-  const renderToStringAndExtract = comp => {
+  const renderToStringAndExtract = (comp) => {
     // Rend the app to string!
     const appHtml = renderToString(comp);
     const { scripts, stylesheets, css } = flushChunks(clientStats, {
       chunkNames,
-      outputPath: config.paths.DIST
+      outputPath: config.paths.DIST,
     });
 
     clientScripts = scripts;
@@ -186,7 +186,7 @@ export default (async function exportRoute(state) {
       noscript: helmet.noscript.toComponent(),
       script: helmet.script.toComponent(),
       style: helmet.style.toComponent(),
-      title: helmet.title.toComponent()
+      title: helmet.title.toComponent(),
     };
 
     return appHtml;
@@ -196,7 +196,7 @@ export default (async function exportRoute(state) {
 
   state = {
     ...state,
-    meta
+    meta,
   };
 
   try {
@@ -205,7 +205,7 @@ export default (async function exportRoute(state) {
     if (config.renderToElement) {
       throw new Error(
         `config.renderToElement has been deprecated in favor of the ` +
-          `'beforeRenderToElement' or 'beforeRenderToHtml' hooks instead.`
+          `'beforeRenderToElement' or 'beforeRenderToHtml' hooks instead.`,
       );
     }
 
@@ -218,7 +218,7 @@ export default (async function exportRoute(state) {
     if (config.renderToHtml) {
       throw new Error(
         `config.renderToHtml has been deprecated in favor of the ` +
-          `'beforeRenderToHtml' or 'beforeHtmlToDocument' hooks instead.`
+          `'beforeRenderToHtml' or 'beforeHtmlToDocument' hooks instead.`,
       );
     }
 
@@ -240,7 +240,7 @@ export default (async function exportRoute(state) {
     head,
     clientScripts,
     clientStyleSheets,
-    clientCss
+    clientCss,
   };
 
   const DocumentHtml = renderToStaticMarkup(
@@ -251,7 +251,7 @@ export default (async function exportRoute(state) {
       state={state}
     >
       <div id="root" dangerouslySetInnerHTML={{ __html: appHtml }} />
-    </DocumentTemplate>
+    </DocumentTemplate>,
   );
 
   // Render the html for the page inside of the base document.
@@ -278,14 +278,14 @@ export default (async function exportRoute(state) {
   const routeInfoFilename = nodePath.join(
     config.paths.DIST,
     route.path,
-    "routeInfo.json"
+    "routeInfo.json",
   );
 
   const res = await Promise.all([
     fs.outputFile(htmlFilename, html),
     !route.redirect
       ? fs.outputJson(routeInfoFilename, routeInfo)
-      : Promise.resolve()
+      : Promise.resolve(),
   ]);
   return res;
 });

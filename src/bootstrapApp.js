@@ -12,7 +12,7 @@ React.default.Suspense = Suspense;
 
 const App = require(`${process.env.REACT_STATIC_ENTRY_PATH}`).default;
 
-export default staticInfo => props => (
+export default (staticInfo) => (props) => (
   <staticInfoContext.Provider value={staticInfo}>
     <App {...props} />
   </staticInfoContext.Provider>

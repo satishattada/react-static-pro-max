@@ -34,7 +34,6 @@ describe("browser", () => {
     it("should return false for script links", () => {
       getDocumentMock.mockReturnValue({ location: {} });
 
-      // eslint-disable-next-line no-script-url
       expect(isPrefetchableRoute("javascript:foo")).toBe(false);
     });
     it("should return false for links with a different protocol", () => {

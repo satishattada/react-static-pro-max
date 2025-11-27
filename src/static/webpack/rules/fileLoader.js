@@ -1,21 +1,29 @@
-export default function ({ stage, isNode }) {
-  if (stage === "node" || isNode) {
+export default function ({ config, stage }) {
+  const isNode = stage === 'node';
+
+  // For node/SSR stage
+  if (isNode) {
     return {
-      loader: "url-loader",
-      exclude: [/\.js$/, /\.html$/, /\.json$/],
-      options: {
-        limit: 10000,
-        name: "static/[name].[hash:8].[ext]",
+      test: /\.(png|jpe?g|gif|webp|svg|woff2?|ttf|eot|otf|ico)$/,
+      type: 'asset/resource',
+      generator: {
+        emit: false,
+        filename: 'static/[name].[hash:8][ext]',
       },
-      // Don't generate extra files during node build
     };
   }
+
+  // For browser stages (dev and prod)
   return {
-    loader: "url-loader",
-    exclude: [/\.js$/, /\.html$/, /\.json$/],
-    options: {
-      limit: 10000,
-      name: "static/[name].[hash:8].[ext]",
+    test: /\.(png|jpe?g|gif|webp|svg|woff2?|ttf|eot|otf|ico)$/,
+    type: 'asset',
+    parser: {
+      dataUrlCondition: {
+        maxSize: 10 * 1024, // 10kb - inline files smaller than this
+      },
+    },
+    generator: {
+      filename: 'static/[name].[hash:8][ext]',
     },
   };
 }

@@ -17,7 +17,7 @@ export default (async function fetchRoutes(state) {
   const downloadTasks = [];
   for (let i = 0; i < routes.length; i++) {
     const route = routes[i];
-    /* eslint-disable no-loop-func */
+
     downloadTasks.push(async () => {
       routes[i] = await getRouteData(route, state, sharedDataByHash);
       dataProgress.tick();

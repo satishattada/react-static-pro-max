@@ -1,4 +1,4 @@
-/* eslint-disable import/no-dynamic-require, react/no-danger, import/no-mutable-exports */
+/* eslint-disable import/no-dynamic-require, import/no-mutable-exports */
 import webpack from "webpack";
 import chalk from "chalk";
 //

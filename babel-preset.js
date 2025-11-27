@@ -11,13 +11,14 @@ module.exports = (api, { external, hot, node, modules } = {}) => {
   // This is for compiling react-static-pro-max's source modules
   if (INTERNAL) {
     return {
-      presets: [r('@babel/preset-env'), r('@babel/preset-react')],
+      presets: [
+        [r('@babel/preset-env'), { targets: { node: '18' } }], 
+        r('@babel/preset-react')
+      ],
       plugins: [
         r('@babel/plugin-transform-runtime'),
         r('@babel/plugin-transform-destructuring'),
         r('@babel/plugin-syntax-dynamic-import'),
-        r('@babel/plugin-proposal-class-properties'),
-        r('@babel/plugin-proposal-optional-chaining'),
         r('@babel/plugin-proposal-export-default-from'),
       ],
     }
@@ -27,7 +28,7 @@ module.exports = (api, { external, hot, node, modules } = {}) => {
   if (external) {
     return {
       sourceType: 'unambiguous',
-      presets: [r('@babel/preset-env')],
+      presets: [[r('@babel/preset-env'), { targets: { node: '18' } }]],
       plugins: [
         [
           r('@babel/plugin-transform-runtime'),
@@ -44,7 +45,7 @@ module.exports = (api, { external, hot, node, modules } = {}) => {
   if (node) {
     return {
       presets: [
-        r('@babel/preset-env'),
+        [r('@babel/preset-env'), { targets: { node: '18' } }],
         [r('@babel/preset-react'), { development: false }],
       ],
       plugins: [
@@ -52,8 +53,6 @@ module.exports = (api, { external, hot, node, modules } = {}) => {
         r('@babel/plugin-syntax-dynamic-import'),
         r('@babel/plugin-transform-destructuring'),
         r('@babel/plugin-transform-runtime'),
-        r('@babel/plugin-proposal-class-properties'),
-        r('@babel/plugin-proposal-optional-chaining'),
         r('@babel/plugin-proposal-export-default-from'),
       ],
     }
@@ -62,7 +61,7 @@ module.exports = (api, { external, hot, node, modules } = {}) => {
   // This preset is for react-static-pro-max and user code
   return {
     presets: [
-      r('@babel/preset-env'),
+      [r('@babel/preset-env'), { targets: { browsers: ['> 1%', 'last 2 versions'] } }],
       [r('@babel/preset-react'), { development: !PRODUCTION }],
     ],
     plugins: [
@@ -75,8 +74,6 @@ module.exports = (api, { external, hot, node, modules } = {}) => {
       r('babel-plugin-macros'),
       r('@babel/plugin-transform-destructuring'),
       r('@babel/plugin-syntax-dynamic-import'),
-      r('@babel/plugin-proposal-class-properties'),
-      r('@babel/plugin-proposal-optional-chaining'),
       r('@babel/plugin-proposal-export-default-from'),
     ],
   }

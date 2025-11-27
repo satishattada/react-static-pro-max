@@ -36,7 +36,7 @@ const inRepo = (mod) => {
 
 // The following ensures that there is always only a single (and same)
 // copy of React in an app at any given moment.
-// eslint-disable-next-line
+
 Module.prototype.require = function (modulePath) {
   // If we are running in the repo, we need to make sure
   // module resolutions coming from other react-static-pro-max packages

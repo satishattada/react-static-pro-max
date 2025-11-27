@@ -15,7 +15,6 @@ export default async (state) => {
 
   setIgnorePath(config.paths.ARTIFACTS);
 
-  // eslint-disable-next-line
   const Comp = require(
     path.resolve(config.paths.ARTIFACTS, "static-app.js"),
   ).default;
@@ -26,7 +25,7 @@ export default async (state) => {
   const tasks = [];
   for (let i = 0; i < routes.length; i++) {
     const route = routes[i];
-    // eslint-disable-next-line
+
     tasks.push(async () => {
       await exportRoute({
         ...state,

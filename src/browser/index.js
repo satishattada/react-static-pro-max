@@ -1,4 +1,83 @@
 import axios from "axios";
+import React from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+
+// React Router v6 compatibility - withRouter replacement
+export function withRouter(Component) {
+  return function ComponentWithRouterProp(props) {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const params = useParams();
+
+    return (
+      <Component
+        {...props}
+        router={{ location, navigate, params }}
+        location={location}
+        navigate={navigate}
+        params={params}
+      />
+    );
+  };
+}
+
+// Hook to get route data
+export function useRouteData() {
+  const location = useLocation();
+  const path = getRoutePath(location.pathname);
+  const routeInfo = routeInfoByPath[path];
+  
+  if (routeInfo && routeInfo.sharedData) {
+    return getFullRouteData(routeInfo);
+  }
+  
+  return {};
+}
+
+// Hook to get site data
+export function useSiteData() {
+  if (typeof window !== 'undefined' && window.__siteData) {
+    return window.__siteData;
+  }
+  return {};
+}
+
+// Prefetch component
+export function Prefetch({ path, children, ...rest }) {
+  const handleMouseEnter = () => {
+    prefetch(path);
+  };
+
+  return (
+    <div onMouseEnter={handleMouseEnter} {...rest}>
+      {children}
+    </div>
+  );
+}
+
+// Head component placeholder
+export function Head({ children }) {
+  return null;
+}
+
+// Root component
+export function Root({ children }) {
+  return <>{children}</>;
+}
+
+// Routes component
+export function Routes() {
+  const location = useLocation();
+  const path = getRoutePath(location.pathname);
+  const Template = templatesByPath[path] || templatesByPath[PATH_404];
+  
+  if (!Template) {
+    return <div>Loading...</div>;
+  }
+  
+  return <Template />;
+}
+
 //
 import {
   createPool,
@@ -123,7 +202,7 @@ function init() {
       try {
         const socket = io();
         socket.on("connect", () => {
-          // Do nothing
+          console.log("Client connected to Socket.IO");
         });
         socket.on("message", ({ type }) => {
           if (type === "reloadClientData") {

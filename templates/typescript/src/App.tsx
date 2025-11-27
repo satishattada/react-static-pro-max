@@ -25,7 +25,7 @@ function App() {
           <React.Suspense fallback={<em>Loading...</em>}>
             <Routes>
               <Route path="/dynamic" element={<Dynamic />} />
-              <ReactRoutes path="*" />
+              <Route path="*" element={<ReactRoutes />} />
             </Routes>
           </React.Suspense>
         </FancyDiv>

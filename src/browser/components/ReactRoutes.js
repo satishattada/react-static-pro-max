@@ -138,14 +138,21 @@ const ReactRoutes = ({ ...originalProps }) => {
   // useRoutePath must ALWAYS return the routePath used
   // in its parent, so we pass it down as context
 
-  // Get the Routes hook
-  const CompWrapper = useMemo(
-    () => plugins.ReactRoutes((props) => <RoutesInner {...props} />),
-    [plugins],
-  );
+  // Get the Routes hook - check if plugins.Routes exists
+  const CompWrapper = useMemo(() => {
+    // Check if plugins.Routes is defined, otherwise use identity function
+    if (plugins && typeof plugins.Routes === 'function') {
+      return plugins.Routes((props) => <RoutesInner {...props} />);
+    }
+    // Fallback to just return RoutesInner if no plugin
+    return (props) => <RoutesInner {...props} />;
+  }, []);
 
   // Pass all props so that plugins can use it
   return <CompWrapper {...originalProps} />;
 };
 
 export default ReactRoutes;
+
+// Also export as named export
+export { ReactRoutes };

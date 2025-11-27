@@ -1,7 +1,8 @@
-/* eslint-disable import/no-dynamic-require, react/no-danger, import/no-mutable-exports */
+/* eslint-disable import/no-dynamic-require, import/no-mutable-exports */
 import webpack from "webpack";
 import chalk from "chalk";
-import io from "socket.io";
+import { Server as SocketIOServer } from "socket.io";
+import { createServer } from "http";
 import WebpackDevServer from "webpack-dev-server";
 //
 import makeWebpackConfig from "./makeWebpackConfig";
@@ -13,6 +14,7 @@ import fetchSiteData from "../fetchSiteData";
 let devServer;
 let latestState;
 let buildDevRoutes = () => {};
+let socketServer; // Add socket server reference
 
 export const reloadClientData = () => {
   if (reloadClientData.current) {
@@ -22,19 +24,7 @@ export const reloadClientData = () => {
 
 // Starts the development server
 export default async function runDevServer(state) {
-  // TODO check config.devServer for changes and notify user
-  // if the server needs to be restarted for changes to take
-  // effect.
-
-  // If the server is already running, trigger a refresh to the client
-
-  if (devServer) {
-    await buildDevRoutes(state);
-    await reloadClientData();
-  } else {
-    state = await runExpressServer(state);
-  }
-
+  state = await runExpressServer(state);
   return state;
 }
 
@@ -51,9 +41,6 @@ async function runExpressServer(state) {
   }
   // Find an available port for messages, as long as it's not the devServer port
   const messagePort = await findAvailablePort(defaultMessagePort, [port]);
-
-  const messageHost =
-    process.env.REACT_STATIC_MESSAGE_SOCKET_HOST || "http://localhost";
 
   if (intendedPort !== port) {
     console.log(
@@ -79,13 +66,42 @@ async function runExpressServer(state) {
   const devConfig = makeWebpackConfig(state);
   const devCompiler = webpack(devConfig);
 
-  console.log("{{{{{{{{{{state.config.paths.PUBLIC}}}}}}}}}}");
-  console.log(state.config.paths.PUBLIC);
-  console.log(state.config.paths.DIST);
+  // Convert proxy object to array format for webpack-dev-server v5
+  const userProxy = state.config.devServer?.proxy || {};
+  const proxyArray = [];
+  
+  // Add Socket.IO proxy
+  proxyArray.push({
+    context: ['/socket.io'],
+    target: `http://localhost:${messagePort}`,
+    ws: true,
+    changeOrigin: true,
+  });
+
+  // Convert user proxy config from object to array
+  if (userProxy && typeof userProxy === 'object' && !Array.isArray(userProxy)) {
+    Object.entries(userProxy).forEach(([context, options]) => {
+      if (typeof options === 'string') {
+        proxyArray.push({
+          context: [context],
+          target: options,
+          changeOrigin: true,
+        });
+      } else {
+        proxyArray.push({
+          context: [context],
+          ...options,
+        });
+      }
+    });
+  } else if (Array.isArray(userProxy)) {
+    proxyArray.push(...userProxy);
+  }
 
   const devServerConfig = {
     historyApiFallback: true,
     compress: false,
+    hot: true,
     client: {
       overlay: true,
       logging: "warn",
@@ -95,32 +111,25 @@ async function runExpressServer(state) {
       stats: "errors-only",
       publicPath: "/",
     },
-    proxy: {
-      "/socket.io": {
-        ws: true,
+    // Proxy must be an array in webpack-dev-server v5
+    proxy: proxyArray.length > 0 ? proxyArray : undefined,
+    static: [
+      {
+        directory: state.config.paths.PUBLIC,
       },
-      ...(state.config.devServer ? state.config.devServer.proxy || {} : {}),
-    },
-    static: {
-      directory: state.config.paths.DIST,
-      watch: {
-        ...(state.config.devServer
-          ? state.config.devServer.watchOptions || {}
-          : {}),
-        ignored: [
-          /node_modules/,
-          ...((state.config.devServer.watchOptions || {}).ignored || []),
-        ],
+      {
+        directory: state.config.paths.DIST,
       },
-    },
-    onBeforeSetupMiddleware: (app) => {
-      // Since routes may change during dev, this function can rebuild all of the config
-      // routes. It also references the original config when possible, to make sure it
-      // uses any up to date getData callback generated from new or replacement routes.
+    ],
+    setupMiddlewares: (middlewares, devServer) => {
+      if (!devServer) {
+        throw new Error("webpack-dev-server is not defined");
+      }
+      
       buildDevRoutes = async (newState) => {
         latestState = await fetchSiteData(newState);
 
-        app.get(
+        devServer.app.get(
           "/__react-static-pro-max__/siteData",
           async (req, res, next) => {
             try {
@@ -135,7 +144,7 @@ async function runExpressServer(state) {
 
         // Serve each routes data
         latestState.routes.forEach(({ path: routePath }) => {
-          app.get(
+          devServer.app.get(
             `/__react-static-pro-max__/routeInfo/${encodeURI(
               routePath === "/" ? "" : routePath,
             )}`,
@@ -173,11 +182,7 @@ async function runExpressServer(state) {
 
       buildDevRoutes(state);
 
-      if (state.config.devServer && state.config.devServer.before) {
-        state.config.devServer.before(app);
-      }
-
-      return app;
+      return middlewares;
     },
   };
 
@@ -247,33 +252,76 @@ async function runExpressServer(state) {
       first = false;
     },
   );
+
   // Start the webpack dev server
-  devServer = new WebpackDevServer(devCompiler, devServerConfig);
-  // Start the messages socket
-  const socket = io();
+  devServer = new WebpackDevServer(devServerConfig, devCompiler);
+
+  // Create HTTP server for Socket.IO
+  const httpServer = createServer();
+  
+  // Initialize Socket.IO server properly
+  socketServer = new SocketIOServer(httpServer, {
+    cors: {
+      origin: `http://localhost:${port}`,
+      methods: ["GET", "POST"],
+      credentials: true,
+    },
+    transports: ['polling', 'websocket'],
+  });
+
+  // Handle Socket.IO connections
+  socketServer.on('connection', (socket) => {
+    console.log('Client connected to Socket.IO');
+    
+    socket.on('disconnect', () => {
+      console.log('Client disconnected from Socket.IO');
+    });
+  });
 
   reloadClientData.current = async () => {
-    latestState = await fetchSiteData(latestState);
-    socket.emit("message", { type: "reloadClientData" });
+    try {
+      latestState = await fetchSiteData(latestState);
+      socketServer.emit("message", { type: "reloadClientData" });
+    } catch (error) {
+      console.error('Error reloading client data:', error);
+    }
   };
 
   await new Promise((resolve, reject) => {
-    devServer.listen(port, null, (err) => {
+    devServer.startCallback((err) => {
       if (err) {
-        console.error(`Listening on ${port} failed: ${err}`);
+        console.error(`Dev server failed to start: ${err}`);
         return reject(err);
       }
+      console.log("Dev server started successfully");
       resolve();
     });
   });
 
-  // Make sure we start listening on the message port after the dev server.
-  // We do this mostly to appease codesandbox.io, since they autobind to the first
-  // port that opens up for their preview window.
-  socket.listen(messagePort);
+  // Start the Socket.IO server on the message port
+  await new Promise((resolve, reject) => {
+    httpServer.listen(messagePort, (err) => {
+      if (err) {
+        console.error(`Socket.IO server failed to start on port ${messagePort}: ${err}`);
+        return reject(err);
+      }
+      console.log(`Socket.IO server listening on port ${messagePort}`);
+      resolve();
+    });
+  });
 
   console.log("Running plugins...");
   state = await plugins.afterDevServerStart(state);
 
   return state;
 }
+
+// Add cleanup function
+export const cleanup = () => {
+  if (socketServer) {
+    socketServer.close();
+  }
+  if (devServer) {
+    devServer.close();
+  }
+};

@@ -1,18 +1,34 @@
 {
   "name": "react-static-pro-max",
   "description": "A progressive static site generator for React",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "license": "MIT",
-  "repository": "https://github.com/satishattada/react-static-pro.git",
+  "repository": "https://github.com/satishattada/react-static-pro-max.git",
   "main": "lib/index.js",
   "author": "Satish Attada <satishattada@gmail.com>",
   "types": "src/index.d.ts",
+  "keywords": [
+    "react",
+    "static",
+    "generator",
+    "ssr",
+    "spa"
+  ],
+  "bugs": {
+    "url": "https://github.com/satishattada/react-static-pro-max/issues"
+  },
+  "homepage": "https://github.com/satishattada/react-static-pro-max#readme",
   "engines": {
     "node": ">=20.0.0"
   },
   "bin": {
     "react-static-pro-max": "./bin/react-static-pro-max"
   },
+  "files": [
+    "lib",
+    "bin",
+    "templates"
+  ],
   "scripts": {
     "prebuild": "rimraf lib",
     "build": "cross-env REACT_STATIC_INTERNAL=true babel src --out-dir lib --ignore \"**/__tests__/*\" --ignore \"**/__mocks__/*\" --source-maps inline",
@@ -77,6 +93,7 @@
     "intersection-observer": "^0.12.2",
     "jsesc": "^3.1.0",
     "match-sorter": "^6.3.4",
+    "mini-css-extract-plugin": "^2.9.2",
     "minimist": "^1.2.8",
     "mutation-observer": "^1.0.3",
     "picocolors": "^1.1.1",
@@ -129,7 +146,6 @@
     "jsdom": "^25.0.1",
     "jsdom-global": "^3.0.2",
     "lerna": "^8.1.9",
-    "mini-css-extract-plugin": "^2.9.2",
     "onchange": "^7.1.0",
     "prettier": "^3.3.3",
     "react": "^18.3.1",

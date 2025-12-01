@@ -2,7 +2,7 @@ import React from 'react'
 import { useRouteData } from 'react-static-pro-max'
 import { Link } from 'react-router-dom'
 
-import { Post } from 'types'
+import { Post } from '../../types'
 
 export default () => {
   const { posts }: { posts: Post[] } = useRouteData()

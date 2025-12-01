@@ -82,7 +82,7 @@ async function create(nameOrOptions) {
     // Copy template files
     const templatePath = getTemplatePath(template);
 
-    console.log(chalk.gray(`Template path: ${templatePath}`));
+    // console.log(chalk.gray(`Template path: ${templatePath}`));
     console.log(chalk.gray(`Template exists: ${fs.existsSync(templatePath)}`));
 
     if (!fs.existsSync(templatePath)) {
@@ -102,8 +102,8 @@ async function create(nameOrOptions) {
 
       if (fs.existsSync(altTemplatePath)) {
         console.log(chalk.blue("Copying template files...\n"));
-        console.log(chalk.gray(`From: ${altTemplatePath}`));
-        console.log(chalk.gray(`To: ${projectPath}`));
+        // console.log(chalk.gray(`From: ${altTemplatePath}`));
+        // console.log(chalk.gray(`To: ${projectPath}`));
 
         try {
           const templateFiles = fs.readdirSync(altTemplatePath);

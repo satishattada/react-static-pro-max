@@ -69,19 +69,19 @@ async function runExpressServer(state) {
   // Convert proxy object to array format for webpack-dev-server v5
   const userProxy = state.config.devServer?.proxy || {};
   const proxyArray = [];
-  
+
   // Add Socket.IO proxy
   proxyArray.push({
-    context: ['/socket.io'],
+    context: ["/socket.io"],
     target: `http://localhost:${messagePort}`,
     ws: true,
     changeOrigin: true,
   });
 
   // Convert user proxy config from object to array
-  if (userProxy && typeof userProxy === 'object' && !Array.isArray(userProxy)) {
+  if (userProxy && typeof userProxy === "object" && !Array.isArray(userProxy)) {
     Object.entries(userProxy).forEach(([context, options]) => {
-      if (typeof options === 'string') {
+      if (typeof options === "string") {
         proxyArray.push({
           context: [context],
           target: options,
@@ -125,7 +125,7 @@ async function runExpressServer(state) {
       if (!devServer) {
         throw new Error("webpack-dev-server is not defined");
       }
-      
+
       buildDevRoutes = async (newState) => {
         latestState = await fetchSiteData(newState);
 
@@ -258,7 +258,7 @@ async function runExpressServer(state) {
 
   // Create HTTP server for Socket.IO
   const httpServer = createServer();
-  
+
   // Initialize Socket.IO server properly
   socketServer = new SocketIOServer(httpServer, {
     cors: {
@@ -266,15 +266,15 @@ async function runExpressServer(state) {
       methods: ["GET", "POST"],
       credentials: true,
     },
-    transports: ['polling', 'websocket'],
+    transports: ["polling", "websocket"],
   });
 
   // Handle Socket.IO connections
-  socketServer.on('connection', (socket) => {
-    console.log('Client connected to Socket.IO');
-    
-    socket.on('disconnect', () => {
-      console.log('Client disconnected from Socket.IO');
+  socketServer.on("connection", (socket) => {
+    console.log("Client connected to Socket.IO");
+
+    socket.on("disconnect", () => {
+      console.log("Client disconnected from Socket.IO");
     });
   });
 
@@ -283,7 +283,7 @@ async function runExpressServer(state) {
       latestState = await fetchSiteData(latestState);
       socketServer.emit("message", { type: "reloadClientData" });
     } catch (error) {
-      console.error('Error reloading client data:', error);
+      console.error("Error reloading client data:", error);
     }
   };
 
@@ -302,7 +302,9 @@ async function runExpressServer(state) {
   await new Promise((resolve, reject) => {
     httpServer.listen(messagePort, (err) => {
       if (err) {
-        console.error(`Socket.IO server failed to start on port ${messagePort}: ${err}`);
+        console.error(
+          `Socket.IO server failed to start on port ${messagePort}: ${err}`,
+        );
         return reject(err);
       }
       console.log(`Socket.IO server listening on port ${messagePort}`);

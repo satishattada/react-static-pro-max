@@ -1,6 +1,6 @@
-import jsLoader from './jsLoader';
-import cssLoader from './cssLoader';
-import fileLoader from './fileLoader';
+import jsLoader from "./jsLoader";
+import cssLoader from "./cssLoader";
+import fileLoader from "./fileLoader";
 
 export default function rules({ config, stage }) {
   // Get all loader rules
@@ -10,37 +10,37 @@ export default function rules({ config, stage }) {
 
   // Validate loaders
   if (!jsLoaderRule) {
-    throw new Error('jsLoader returned undefined');
+    throw new Error("jsLoader returned undefined");
   }
   if (!cssLoaderRule) {
-    throw new Error('cssLoader returned undefined');
+    throw new Error("cssLoader returned undefined");
   }
   if (!fileLoaderRule) {
-    throw new Error('fileLoader returned undefined');
+    throw new Error("fileLoader returned undefined");
   }
 
   // Special rule for axios to handle mixed module formats
   const axiosRule = {
     test: /\.cjs$/,
     include: /node_modules[\\/]axios/,
-    type: 'javascript/auto',
+    type: "javascript/auto",
     use: [
       {
-        loader: require.resolve('babel-loader'),
+        loader: require.resolve("babel-loader"),
         options: {
-          cacheDirectory: stage === 'dev',
-          sourceType: 'unambiguous',
+          cacheDirectory: stage === "dev",
+          sourceType: "unambiguous",
           presets: [
             [
-              require.resolve('@babel/preset-env'),
+              require.resolve("@babel/preset-env"),
               {
-                modules: 'commonjs',
+                modules: "commonjs",
                 loose: true,
               },
             ],
           ],
           plugins: [
-            require.resolve('@babel/plugin-transform-modules-commonjs'),
+            require.resolve("@babel/plugin-transform-modules-commonjs"),
           ],
         },
       },
@@ -57,9 +57,9 @@ export default function rules({ config, stage }) {
         // Fallback for any other files
         {
           exclude: [/\.(js|mjs|jsx|cjs|ts|tsx)$/, /\.html$/, /\.json$/],
-          type: 'asset/resource',
+          type: "asset/resource",
           generator: {
-            filename: 'static/[name].[hash:8][ext]',
+            filename: "static/[name].[hash:8][ext]",
           },
         },
       ],

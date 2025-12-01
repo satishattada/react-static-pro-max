@@ -1,6 +1,6 @@
 import axios from "axios";
-import React from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import React from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 // React Router v6 compatibility - withRouter replacement
 export function withRouter(Component) {
@@ -26,17 +26,17 @@ export function useRouteData() {
   const location = useLocation();
   const path = getRoutePath(location.pathname);
   const routeInfo = routeInfoByPath[path];
-  
+
   if (routeInfo && routeInfo.sharedData) {
     return getFullRouteData(routeInfo);
   }
-  
+
   return {};
 }
 
 // Hook to get site data
 export function useSiteData() {
-  if (typeof window !== 'undefined' && window.__siteData) {
+  if (typeof window !== "undefined" && window.__siteData) {
     return window.__siteData;
   }
   return {};
@@ -70,11 +70,11 @@ export function Routes() {
   const location = useLocation();
   const path = getRoutePath(location.pathname);
   const Template = templatesByPath[path] || templatesByPath[PATH_404];
-  
+
   if (!Template) {
     return <div>Loading...</div>;
   }
-  
+
   return <Template />;
 }
 

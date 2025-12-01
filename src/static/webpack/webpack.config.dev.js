@@ -197,7 +197,7 @@ export default function ({ config }) {
       type: "filesystem",
       cacheDirectory: path.resolve(
         config.paths.ROOT,
-        "node_modules/.cache/webpack"
+        "node_modules/.cache/webpack",
       ),
       buildDependencies: {
         config: [__filename],

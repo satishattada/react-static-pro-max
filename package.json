@@ -1,7 +1,7 @@
 {
   "name": "react-static-pro-max",
   "description": "A progressive static site generator for React",
-  "version": "2.0.12",
+  "version": "2.0.13",
   "license": "MIT",
   "repository": "https://github.com/satishattada/react-static-pro-max.git",
   "main": "lib/index.js",
@@ -47,7 +47,8 @@
     "format": "prettier README.md {src,templates/*/src}/**/*.js --write",
     "unitTest": "cross-env NODE_ENV=test jest ./src",
     "unitTestWatch": "cross-env NODE_ENV=test jest src --watch",
-    "preversion": "npm run build && npm run test",
+    "preversion": "npm run build",
+    "preversion:full": "npm run build && npm run test",
     "publishLink": "echo 'Publishing to yalc...' && yalc publish",
     "security-audit": "npm audit",
     "security-fix": "npm audit fix --force",

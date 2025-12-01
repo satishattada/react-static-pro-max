@@ -1,8 +1,12 @@
-import 'raf/polyfill'
-import Enzyme from 'enzyme'
-import EnzymeAdapter from '@cfaester/enzyme-adapter-react-18'
-import { TextEncoder, TextDecoder } from 'util';
+require('raf/polyfill')
+const { TextEncoder, TextDecoder } = require('util');
 
-Object.assign(global, { TextDecoder, TextEncoder });
+// Setup globals
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
+
+const Enzyme = require('enzyme')
+const EnzymeAdapter = require('@cfaester/enzyme-adapter-react-18').default
+
 // Setup enzyme's react adapter
 Enzyme.configure({ adapter: new EnzymeAdapter() })

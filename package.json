@@ -140,7 +140,7 @@
     "@types/react": "^18.3.12",
     "@types/react-helmet": "^6.1.11",
     "babel-jest": "^29.7.0",
-    "cheerio": "^1.0.0-rc.12",
+    "cheerio": "^0.22.0",
     "cross-env": "^7.0.3",
     "enzyme": "^3.11.0",
     "enzyme-to-json": "^3.6.2",
@@ -166,6 +166,12 @@
   "jest": {
     "testEnvironment": "jsdom",
     "verbose": true,
+    "testEnvironmentOptions": {
+      "customExportConditions": [
+        "node",
+        "node-addons"
+      ]
+    },
     "moduleDirectories": [
       "node_modules",
       "src"

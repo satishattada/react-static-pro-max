@@ -23,7 +23,8 @@ const getTemplatePath = (template) => {
 async function create(nameOrOptions) {
   try {
     // Handle both string name and options object from CLI
-    let projectName = typeof nameOrOptions === "string" ? nameOrOptions : nameOrOptions?.name;
+    let projectName =
+      typeof nameOrOptions === "string" ? nameOrOptions : nameOrOptions?.name;
 
     if (!projectName || typeof projectName !== "string") {
       const answers = await inquirer.prompt([
@@ -116,7 +117,9 @@ async function create(nameOrOptions) {
             filter: (src) => {
               // Skip node_modules subdirectories in the template, but allow paths that contain node_modules in parent directories
               const relativePath = path.relative(altTemplatePath, src);
-              const shouldCopy = !relativePath.split(path.sep).includes("node_modules");
+              const shouldCopy = !relativePath
+                .split(path.sep)
+                .includes("node_modules");
               return shouldCopy;
             },
             errorOnExist: false,
@@ -133,10 +136,7 @@ async function create(nameOrOptions) {
             throw new Error("No files were copied!");
           }
         } catch (copyError) {
-          console.error(
-            chalk.red("\nError copying files:"),
-            copyError.message,
-          );
+          console.error(chalk.red("\nError copying files:"), copyError.message);
           throw copyError;
         }
       } else {
@@ -161,7 +161,9 @@ async function create(nameOrOptions) {
           filter: (src) => {
             // Skip node_modules subdirectories in the template, but allow paths that contain node_modules in parent directories
             const relativePath = path.relative(templatePath, src);
-            const shouldCopy = !relativePath.split(path.sep).includes("node_modules");
+            const shouldCopy = !relativePath
+              .split(path.sep)
+              .includes("node_modules");
             return shouldCopy;
           },
           errorOnExist: false,

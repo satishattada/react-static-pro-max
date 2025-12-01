@@ -1,0 +1,30 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "esnext",
+    "jsx": "preserve",
+    "allowJs": false,
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "components/*": ["src/components/*"],
+      "containers/*": ["src/containers/*"],
+      "types/*": ["types/*"]
+    },
+    "lib": ["dom", "dom.iterable", "ES2022"]
+  },
+  "exclude": ["artifacts/**/*", "dist/**/*", "public/**/*", "node_modules"]
+}

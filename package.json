@@ -27,10 +27,15 @@
   "files": [
     "lib",
     "bin",
+    "node",
     "templates",
     "babel-preset.js",
     "setupTests.js"
   ],
+  "exports": {
+    ".": "./lib/index.js",
+    "./node": "./node/index.js"
+  },
   "scripts": {
     "prebuild": "rimraf lib",
     "build": "cross-env REACT_STATIC_INTERNAL=true babel src --out-dir lib --ignore \"**/__tests__/*\" --ignore \"**/__mocks__/*\" --source-maps inline",

@@ -2,41 +2,45 @@ import makeWebpackConfig from "../webpack/makeWebpackConfig";
 import staticConfig from "../__mocks__/config.development.mock";
 
 describe("webpack", () => {
-  it("should return after executing plugin hooks synchronously", () => {
+  it("should return a valid webpack config", () => {
     const myWebpackConfig = makeWebpackConfig({
-      config: staticConfig,
+      config: {
+        ...staticConfig,
+        stage: "prod",
+      },
+    });
+
+    expect(myWebpackConfig).toBeDefined();
+    expect(myWebpackConfig.mode).toBeDefined();
+    expect(myWebpackConfig.entry).toBeDefined();
+    expect(myWebpackConfig.output).toBeDefined();
+  });
+
+  it("should allow webpack customization via config.webpack function", () => {
+    const customConfig = {
+      ...staticConfig,
       stage: "prod",
-      plugins: [
-        {
-          hooks: {
-            webpack: (wpConfig) => ({
-              ...wpConfig,
-              mode: "development",
-            }),
-          },
-        },
-      ],
+      webpack: (wpConfig) => ({
+        ...wpConfig,
+        mode: "development",
+      }),
+    };
+
+    const myWebpackConfig = makeWebpackConfig({
+      config: customConfig,
     });
 
     expect(myWebpackConfig.mode).toBe("development");
   });
 
-  it("should throw if plugin hooks execute async", () => {
+  it("should throw if unknown stage is provided", () => {
     expect(() =>
       makeWebpackConfig({
-        config: staticConfig,
-        stage: "prod",
-        plugins: [
-          {
-            hooks: {
-              webpack: (wpConfig) =>
-                Promise.resolve({ ...wpConfig, mode: "development" }),
-            },
-          },
-        ],
+        config: {
+          ...staticConfig,
+          stage: "invalid-stage",
+        },
       }),
-    ).toThrow(
-      "Expected hook to return a value, but received promise instead. A plugin is attempting to use a sync plugin with an async function!",
-    );
+    ).toThrow("Unknown webpack stage: invalid-stage");
   });
 });

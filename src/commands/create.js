@@ -2,7 +2,15 @@ const fs = require("fs-extra");
 const path = require("path");
 const chalk = require("chalk");
 const { execSync } = require("child_process");
-const inquirer = require("inquirer");
+
+// Handle inquirer ES module import
+let inquirer;
+try {
+  inquirer = require("inquirer");
+} catch (err) {
+  // inquirer v9+ is ESM only, fall back to dynamic import
+  inquirer = null;
+}
 
 // For CommonJS compatibility after Babel compilation
 const getTemplatePath = (template) => {

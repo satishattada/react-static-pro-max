@@ -82,6 +82,7 @@ async function create(name) {
     const templatePath = getTemplatePath(template);
 
     console.log(chalk.gray(`Template path: ${templatePath}`));
+    console.log(chalk.gray(`Template exists: ${fs.existsSync(templatePath)}`));
 
     if (!fs.existsSync(templatePath)) {
       console.log(
@@ -99,25 +100,90 @@ async function create(name) {
       );
 
       if (fs.existsSync(altTemplatePath)) {
-        console.log(chalk.blue("Copying template files...\n"));
-        fs.copySync(altTemplatePath, projectPath, {
-          filter: (src) => {
-            // Skip node_modules when copying
-            return !src.includes("node_modules");
-          },
-        });
+        console.log(chalk.blue("Copying template files with Template path...\n"));
+        console.log(chalk.gray(`From: ${altTemplatePath}`));
+        console.log(chalk.gray(`To: ${projectPath}`));
+
+        try {
+          const templateFiles = fs.readdirSync(altTemplatePath);
+          console.log(
+            chalk.gray(
+              `Template contains ${templateFiles.length} items: ${templateFiles.slice(0, 5).join(", ")}${templateFiles.length > 5 ? "..." : ""}`,
+            ),
+          );
+
+          fs.copySync(altTemplatePath, projectPath, {
+            filter: (src) => {
+              // Skip node_modules when copying
+              return !src.includes("node_modules");
+            },
+            errorOnExist: false,
+            overwrite: true,
+            dereference: true,
+          });
+
+          const copiedFiles = fs.readdirSync(projectPath);
+          console.log(
+            chalk.gray(`Successfully copied ${copiedFiles.length} items`),
+          );
+
+          if (copiedFiles.length === 0) {
+            throw new Error("No files were copied!");
+          }
+        } catch (copyError) {
+          console.error(
+            chalk.red("\nError copying files:"),
+            copyError.message,
+          );
+          throw copyError;
+        }
       } else {
         console.log(chalk.red(`Template not found at either location!\n`));
         process.exit(1);
       }
     } else {
-      console.log(chalk.blue("Copying template files...\n"));
-      fs.copySync(templatePath, projectPath, {
-        filter: (src) => {
-          // Skip node_modules when copying
-          return !src.includes("node_modules");
-        },
-      });
+      console.log(chalk.blue("Copying template files without Template path...\n"));
+      console.log(chalk.gray(`From: ${templatePath}`));
+      console.log(chalk.gray(`To: ${projectPath}`));
+
+      try {
+        // List files in template before copying
+        const templateFiles = fs.readdirSync(templatePath);
+        console.log(
+          chalk.gray(
+            `Template contains ${templateFiles.length} items: ${templateFiles.slice(0, 5).join(", ")}${templateFiles.length > 5 ? "..." : ""}`,
+          ),
+        );
+
+        fs.copySync(templatePath, projectPath, {
+          filter: (src) => {
+            // Skip node_modules when copying
+            return !src.includes("node_modules");
+          },
+          errorOnExist: false,
+          overwrite: true,
+          dereference: true,
+        });
+
+        // Verify copy
+        const copiedFiles = fs.readdirSync(projectPath);
+        console.log(
+          chalk.gray(`Successfully copied ${copiedFiles.length} items`),
+        );
+
+        if (copiedFiles.length === 0) {
+          throw new Error(
+            "No files were copied! Copy operation may have failed silently.",
+          );
+        }
+      } catch (copyError) {
+        console.error(
+          chalk.red("\nError during file copy:"),
+          copyError.message,
+        );
+        console.error(copyError.stack);
+        throw copyError;
+      }
     }
 
     // Update package.json with project name

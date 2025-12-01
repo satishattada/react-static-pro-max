@@ -1,59 +1,64 @@
-import webpack from 'webpack';
-import path from 'path';
-import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import webpack from "webpack";
+import path from "path";
+import CaseSensitivePathsPlugin from "case-sensitive-paths-webpack-plugin";
+import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 
 // Import webpack configurations properly
-import webpackConfigDev from './webpack.config.dev';
-import webpackConfigProd from './webpack.config.prod';
+import webpackConfigDev from "./webpack.config.dev";
+import webpackConfigProd from "./webpack.config.prod";
 
 export default function makeWebpackConfig(state) {
   const { config } = state;
-  const stage = config.stage || 'dev';
+  const stage = config.stage || "dev";
 
   let webpackConfig;
 
   // Select the appropriate webpack config based on stage
-  if (stage === 'dev') {
+  if (stage === "dev") {
     webpackConfig = webpackConfigDev({ config });
-  } else if (stage === 'prod') {
+  } else if (stage === "prod") {
     webpackConfig = webpackConfigProd({ config });
-  } else if (stage === 'node') {
-    webpackConfig = webpackConfigProd({ 
+  } else if (stage === "node") {
+    webpackConfig = webpackConfigProd({
       config: {
         ...config,
-        stage: 'node',
-      }
+        stage: "node",
+      },
     });
   } else {
     throw new Error(`Unknown webpack stage: ${stage}`);
   }
 
   // Validate that we got a config object
-  if (!webpackConfig || typeof webpackConfig !== 'object') {
-    throw new Error(`Webpack config for stage "${stage}" is invalid or undefined`);
+  if (!webpackConfig || typeof webpackConfig !== "object") {
+    throw new Error(
+      `Webpack config for stage "${stage}" is invalid or undefined`,
+    );
   }
 
   // Apply bundle analyzer if enabled
   if (process.env.ANALYZE && webpackConfig.plugins) {
     webpackConfig.plugins.push(
       new BundleAnalyzerPlugin({
-        analyzerMode: 'static',
+        analyzerMode: "static",
         openAnalyzer: false,
-        reportFilename: path.join(config.paths.DIST, 'bundle-analyzer-report.html'),
-      })
+        reportFilename: path.join(
+          config.paths.DIST,
+          "bundle-analyzer-report.html",
+        ),
+      }),
     );
   }
 
   // Apply user webpack customizations from static.config.js
   if (config.webpack) {
-    if (typeof config.webpack === 'function') {
+    if (typeof config.webpack === "function") {
       const userConfig = config.webpack(webpackConfig, { stage, config });
-      
-      if (userConfig && typeof userConfig === 'object') {
+
+      if (userConfig && typeof userConfig === "object") {
         webpackConfig = userConfig;
       }
-    } else if (typeof config.webpack === 'object') {
+    } else if (typeof config.webpack === "object") {
       // Merge webpack config objects
       webpackConfig = {
         ...webpackConfig,
@@ -85,13 +90,13 @@ export default function makeWebpackConfig(state) {
 
   // Final validation
   if (!webpackConfig.mode) {
-    throw new Error('Webpack config must have a mode property');
+    throw new Error("Webpack config must have a mode property");
   }
   if (!webpackConfig.entry) {
-    throw new Error('Webpack config must have an entry property');
+    throw new Error("Webpack config must have an entry property");
   }
   if (!webpackConfig.output) {
-    throw new Error('Webpack config must have an output property');
+    throw new Error("Webpack config must have an output property");
   }
 
   return webpackConfig;

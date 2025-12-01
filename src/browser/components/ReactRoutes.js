@@ -141,7 +141,7 @@ const ReactRoutes = ({ ...originalProps }) => {
   // Get the Routes hook - check if plugins.Routes exists
   const CompWrapper = useMemo(() => {
     // Check if plugins.Routes is defined, otherwise use identity function
-    if (plugins && typeof plugins.Routes === 'function') {
+    if (plugins && typeof plugins.Routes === "function") {
       return plugins.Routes((props) => <RoutesInner {...props} />);
     }
     // Fallback to just return RoutesInner if no plugin

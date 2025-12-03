@@ -1,4 +1,4 @@
-import ExtractCssChunks from "extract-css-chunks-webpack-plugin";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import path from "path";
 
 export default function ({ config, stage }) {
@@ -9,13 +9,17 @@ export default function ({ config, stage }) {
   const cssLoader = {
     loader: require.resolve("css-loader"),
     options: {
-      importLoaders: 1,
+      importLoaders: 2,
       sourceMap: isDev,
       modules: {
         auto: true,
         localIdentName: isDev
           ? "[path][name]__[local]--[hash:base64:5]"
           : "[hash:base64]",
+      },
+      url: {
+        // Don't process URLs starting with / - these are already public assets
+        filter: (url) => !url.startsWith('/'),
       },
     },
   };
@@ -39,21 +43,58 @@ export default function ({ config, stage }) {
     },
   };
 
+  // SCSS/SASS loader configuration
+  const sassLoader = {
+    loader: require.resolve("sass-loader"),
+    options: {
+      sourceMap: isDev,
+      sassOptions: {
+        includePaths: [
+          path.resolve(process.cwd(), "src"),
+          path.resolve(process.cwd(), "src/app"),
+          path.resolve(process.cwd(), "src/app/scss"),
+        ],
+        quietDeps: true,
+        silenceDeprecations: ['import'],
+      },
+    },
+  };
+
   // For server-side rendering (node stage)
   if (isNode) {
     return {
-      test: /\.css$/,
-      loader: require.resolve("css-loader/locals"),
+      oneOf: [
+        {
+          test: /\.s[ac]ss$/,
+          use: [
+            require.resolve("css-loader/locals"),
+            postcssLoader,
+            sassLoader,
+          ],
+        },
+        {
+          test: /\.css$/,
+          loader: require.resolve("css-loader/locals"),
+        },
+      ],
     };
   }
 
   // For client-side (dev and prod)
+  const styleLoader = isDev
+    ? require.resolve("style-loader")
+    : MiniCssExtractPlugin.loader;
+
   return {
-    test: /\.css$/,
-    use: [
-      isDev ? require.resolve("style-loader") : ExtractCssChunks.loader,
-      cssLoader,
-      postcssLoader,
+    oneOf: [
+      {
+        test: /\.s[ac]ss$/,
+        use: [styleLoader, cssLoader, postcssLoader, sassLoader],
+      },
+      {
+        test: /\.css$/,
+        use: [styleLoader, cssLoader, postcssLoader],
+      },
     ],
   };
 }

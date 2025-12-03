@@ -188,6 +188,9 @@ export const onReloadClientData = (fn) => {
 };
 onReloadClientData.listeners = [];
 
+// Singleton socket instance to prevent multiple connections
+let socketInstance = null;
+
 if (typeof document !== "undefined") {
   init();
 }
@@ -197,26 +200,33 @@ if (typeof document !== "undefined") {
 function init() {
   // In development, we need to open a socket to listen for changes to data
   if (process.env.REACT_STATIC_ENV === "development") {
-    const io = require("socket.io-client");
-    const run = async () => {
-      try {
-        const socket = io();
-        socket.on("connect", () => {
-          console.log("Client connected to Socket.IO");
-        });
-        socket.on("message", ({ type }) => {
-          if (type === "reloadClientData") {
-            reloadClientData();
-          }
-        });
-      } catch (err) {
-        console.log(
-          "react-static-pro-max data hot-loader websocket encountered the following error:",
-        );
-        console.error(err);
-      }
-    };
-    run();
+    // Only create socket if it doesn't exist
+    if (!socketInstance) {
+      const io = require("socket.io-client");
+      const run = async () => {
+        try {
+          socketInstance = io();
+          socketInstance.on("connect", () => {
+            console.log("Client connected to Socket.IO");
+          });
+          socketInstance.on("disconnect", () => {
+            console.log("Client disconnected from Socket.IO");
+            socketInstance = null; // Reset on disconnect
+          });
+          socketInstance.on("message", ({ type }) => {
+            if (type === "reloadClientData") {
+              reloadClientData();
+            }
+          });
+        } catch (err) {
+          console.log(
+            "react-static-pro-max data hot-loader websocket encountered the following error:",
+          );
+          console.error(err);
+        }
+      };
+      run();
+    }
   }
 
   if (process.env.REACT_STATIC_DISABLE_PRELOAD === "false") {

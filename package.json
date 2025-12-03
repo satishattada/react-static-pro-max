@@ -119,6 +119,8 @@
     "resolve-from": "^5.0.0",
     "run-async": "^3.0.0",
     "rxjs": "^7.8.1",
+    "sass": "^1.94.2",
+    "sass-loader": "^16.0.6",
     "serve": "^14.2.4",
     "shorthash": "^0.0.2",
     "socket.io": "^4.8.1",

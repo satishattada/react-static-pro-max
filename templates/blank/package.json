@@ -13,7 +13,7 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-static-pro-max": "^2.0.13"
+    "react-static-pro-max": "^2.0.14"
   },
   "devDependencies": {
     "serve": "^14.2.4"

@@ -13,6 +13,7 @@ export { useStaticInfo } from "./browser/hooks/useStaticInfo";
 export { useRoutePath, routePathContext } from "./browser/hooks/useRoutePath";
 export { RouteData, withRouteData } from "./browser/components/RouteData";
 export { SiteData, withSiteData } from "./browser/components/SiteData";
+export { initSocketIO } from "./browser/utils/socketIO";
 export {
   addPrefetchExcludes,
   getRouteInfo,

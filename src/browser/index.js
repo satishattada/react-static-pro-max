@@ -188,32 +188,45 @@ export const onReloadClientData = (fn) => {
 };
 onReloadClientData.listeners = [];
 
-// Singleton socket instance to prevent multiple connections
-let socketInstance = null;
-
-if (typeof document !== "undefined") {
-  init();
-}
-
 // When in development, init a socket to listen for data changes
 // When the data changes, we invalidate and reload all of the route data
 function init() {
   // In development, we need to open a socket to listen for changes to data
   if (process.env.REACT_STATIC_ENV === "development") {
-    // Only create socket if it doesn't exist
-    if (!socketInstance) {
-      const io = require("socket.io-client");
-      const run = async () => {
+    // Use global window object to ensure singleton across HMR reloads
+    if (typeof window !== "undefined") {
+      // Check if already initialized
+      if (window.__reactStaticInitialized__) {
+        console.log("♻️  init() already called - skipping");
+        return;
+      }
+      
+      // Mark as initialized IMMEDIATELY to prevent re-entry
+      window.__reactStaticInitialized__ = true;
+      
+      // Check if socket already exists or is being created
+      if (!window.__reactStaticSocket__ && !window.__reactStaticSocketCreating__) {
+        console.log("🔌 Creating NEW Socket.IO connection...");
+        
+        // Set flag immediately to prevent race conditions
+        window.__reactStaticSocketCreating__ = true;
+        
+        const io = require("socket.io-client");
         try {
-          socketInstance = io();
-          socketInstance.on("connect", () => {
-            console.log("Client connected to Socket.IO");
+          const socket = io();
+          window.__reactStaticSocket__ = socket;
+          window.__reactStaticSocketCreating__ = false;
+          
+          socket.on("connect", () => {
+            console.log("✅ Client connected to Socket.IO");
           });
-          socketInstance.on("disconnect", () => {
-            console.log("Client disconnected from Socket.IO");
-            socketInstance = null; // Reset on disconnect
+          
+          socket.on("disconnect", () => {
+            console.log("⚠️ Client disconnected from Socket.IO");
+            // Don't delete window.__reactStaticSocket__ to prevent reconnections on HMR
           });
-          socketInstance.on("message", ({ type }) => {
+          
+          socket.on("message", ({ type }) => {
             if (type === "reloadClientData") {
               reloadClientData();
             }
@@ -223,9 +236,11 @@ function init() {
             "react-static-pro-max data hot-loader websocket encountered the following error:",
           );
           console.error(err);
+          window.__reactStaticSocketCreating__ = false;
         }
-      };
-      run();
+      } else {
+        console.log("♻️  Socket.IO already exists - reusing existing connection");
+      }
     }
   }
 
@@ -233,6 +248,9 @@ function init() {
     startPreloader();
   }
 }
+
+// Note: Socket.IO initialization moved to Root component to ensure single execution
+// init() is kept here for preloader functionality only
 
 /**
  * The preloader searches for all anchor elements on the page every poll

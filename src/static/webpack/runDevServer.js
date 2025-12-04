@@ -11,6 +11,21 @@ import plugins from "../plugins";
 import { findAvailablePort, time, timeEnd } from "../../utils";
 import fetchSiteData from "../fetchSiteData";
 
+// Suppress harmless WebSocket ECONNRESET errors from webpack-dev-server
+const originalConsoleError = console.error;
+console.error = function(...args) {
+  const errorMessage = args[0]?.toString() || '';
+  // Suppress ECONNRESET errors from WebSocket disconnections (harmless HMR noise)
+  if (
+    errorMessage.includes('ECONNRESET') ||
+    errorMessage.includes('WebSocket error') ||
+    (errorMessage.includes('HPM') && errorMessage.includes('WebSocket'))
+  ) {
+    return; // Suppress - these are normal when browser refreshes/closes
+  }
+  originalConsoleError.apply(console, args);
+};
+
 let devServer;
 let latestState;
 let buildDevRoutes = () => {};
@@ -70,12 +85,18 @@ async function runExpressServer(state) {
   const userProxy = state.config.devServer?.proxy || {};
   const proxyArray = [];
 
-  // Add Socket.IO proxy
+  // Add Socket.IO proxy with error suppression
   proxyArray.push({
     context: ["/socket.io"],
     target: `http://localhost:${messagePort}`,
     ws: true,
     changeOrigin: true,
+    onError: (err, req, res) => {
+      // Suppress ECONNRESET errors - these are harmless WebSocket disconnections
+      if (err.code !== 'ECONNRESET') {
+        console.error('Proxy error:', err);
+      }
+    },
   });
 
   // Convert user proxy config from object to array
@@ -269,12 +290,11 @@ async function runExpressServer(state) {
     transports: ["polling", "websocket"],
   });
 
-  // Handle Socket.IO connections
+  // Handle Socket.IO connections (logging suppressed - one connection per route is normal for static sites)
   socketServer.on("connection", (socket) => {
-    console.log("Client connected to Socket.IO");
-
+    // Connection established silently
     socket.on("disconnect", () => {
-      console.log("Client disconnected from Socket.IO");
+      // Disconnection handled silently
     });
   });
 

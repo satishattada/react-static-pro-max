@@ -650,3 +650,10 @@ export function makePathAbsolute(path: string): string
  * @returns {string} the joined path
  */
 export function pathJoin(...paths: ReadonlyArray<string>): string
+
+/**
+ * Initialize Socket.IO connection for development hot reloading.
+ * Call this once in your application's entry point (e.g., src/app/index.tsx).
+ * Only runs in development mode.
+ */
+export function initSocketIO(): void

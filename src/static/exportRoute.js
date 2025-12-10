@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import React from "react";
 import { renderToString, renderToStaticMarkup } from "react-dom/server";
-import { StaticRouter } from "react-router-dom/server";
+import { StaticRouter } from "react-router-dom";
 import Helmet from "react-helmet";
 import ReportChunks from "./components/ReportChunks";
 import flushChunks from "webpack-flush-chunks";

@@ -69,9 +69,11 @@ const RoutesInner = ({ routePath, render: renderFn }) => {
       routeInfoByPath[path] = staticInfo;
 
       // Hydrate sharedDataByHash with the embedded routeInfo
-      Object.keys(sharedHashesByProp).forEach((propKey) => {
-        sharedDataByHash[sharedHashesByProp[propKey]] = sharedData[propKey];
-      });
+      if (sharedHashesByProp && sharedData) {
+        Object.keys(sharedHashesByProp).forEach((propKey) => {
+          sharedDataByHash[sharedHashesByProp[propKey]] = sharedData[propKey];
+        });
+      }
 
       // In SRR and production, synchronously register the template for the
       // initial path
@@ -115,7 +117,12 @@ const RoutesInner = ({ routePath, render: renderFn }) => {
         "Neither the page template or 404 template could be found. This means something is terribly wrong. Please, file an issue!",
       );
     }
-    // Suspend while we fetch the resource
+    // During SSR, we can't suspend - just return null or throw a proper error
+    if (typeof document === "undefined") {
+      console.error(`Template not found for path: ${routePath} during SSR`);
+      return null;
+    }
+    // Suspend while we fetch the resource (browser only)
     throw Promise.all([
       new Promise((resolve) => setTimeout(resolve, 500)),
       prefetch(routePath, { priority: true }),

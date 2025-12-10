@@ -8,6 +8,14 @@ import webpackConfigDev from "./webpack.config.dev";
 import webpackConfigProd from "./webpack.config.prod";
 
 export default function makeWebpackConfig(state) {
+  // Logging FIRST THING
+  try {
+    const fs = require('fs');
+    fs.writeFileSync('/tmp/makeweb-called.txt', 'Called at ' + new Date().toISOString());
+  } catch(e) {
+    console.error('Failed to write debug file:', e);
+  }
+  
   const { config } = state;
   const stage = config.stage || "dev";
 
@@ -98,6 +106,12 @@ export default function makeWebpackConfig(state) {
   if (!webpackConfig.output) {
     throw new Error("Webpack config must have an output property");
   }
+
+  // Debug output
+  const fs = require('fs');
+  fs.appendFileSync('/tmp/webpack-configs.log', 
+    `Config for stage=${stage}: output.path=${webpackConfig.output.path}, output.filename=${webpackConfig.output.filename}, target=${webpackConfig.target}\n`
+  );
 
   return webpackConfig;
 }

@@ -5,7 +5,6 @@ import FancyDiv from 'components/FancyDiv'
 import Dynamic from 'containers/Dynamic'
 
 import './app.css'
-import logo from './logo.png'
 
 // Any routes that start with 'dynamic' will be treated as non-static routes
 addPrefetchExcludes(['dynamic'])
@@ -20,14 +19,12 @@ function App() {
         <Link to="/dynamic">Dynamic</Link>
       </nav>
       <div className="content">
-        <img src={logo} className="App-logo" alt="logo" />
+        <img src="/logo.png" className="App-logo" alt="logo" />
         <FancyDiv>
-          <React.Suspense fallback={<em>Loading...</em>}>
-            <Routes>
-              <Route path="/dynamic" element={<Dynamic />} />
-              <Route path="*" element={<ReactRoutes />} />
-            </Routes>
-          </React.Suspense>
+          <Routes>
+            <Route path="/dynamic" element={<Dynamic />} />
+            <Route path="*" element={<ReactRoutes />} />
+          </Routes>
         </FancyDiv>
       </div>
     </Root>

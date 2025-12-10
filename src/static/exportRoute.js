@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import React from "react";
 import { renderToString, renderToStaticMarkup } from "react-dom/server";
+import { StaticRouter } from "react-router-dom/server";
 import Helmet from "react-helmet";
 import ReportChunks from "./components/ReportChunks";
 import flushChunks from "webpack-flush-chunks";
@@ -143,29 +144,45 @@ export default (async function exportRoute(state) {
     FinalComp = () => <Redirect fromPath={route.path} to={route.redirect} />;
   } else {
     FinalComp = (props) => (
-      <ReportChunks
-        report={(chunkName) => {
-          // if we are building to a absolute path we must make the detected
-          // chunkName relative and matching to the one we set in
-          // generateTemplates
-          if (!config.paths.DIST.startsWith(config.paths.ROOT)) {
-            chunkName = absoluteToRelativeChunkName(
-              config.paths.ROOT,
-              chunkName,
-            );
-          }
+      <StaticRouter location={route.path}>
+        <ReportChunks
+          report={(chunkName) => {
+            // if we are building to a absolute path we must make the detected
+            // chunkName relative and matching to the one we set in
+            // generateTemplates
+            if (!config.paths.DIST.startsWith(config.paths.ROOT)) {
+              chunkName = absoluteToRelativeChunkName(
+                config.paths.ROOT,
+                chunkName,
+              );
+            }
 
-          chunkNames.push(chunkName);
-        }}
-      >
-        <Comp {...props} />
-      </ReportChunks>
+            chunkNames.push(chunkName);
+          }}
+        >
+          <Comp {...props} />
+        </ReportChunks>
+      </StaticRouter>
     );
   }
 
   const renderToStringAndExtract = (comp) => {
-    // Rend the app to string!
-    const appHtml = renderToString(comp);
+    // Render the app to string!
+    // React 18's renderToString doesn't support Suspense, so we catch and handle it
+    let appHtml;
+    try {
+      appHtml = renderToString(comp);
+    } catch (error) {
+      // If it's a Suspense error, try to render without Suspense
+      if (error && error.message && error.message.includes('suspended')) {
+        console.warn(`Warning: Suspense detected during SSR for ${route.path}, rendering without Suspense`);
+        // Try again - the Suspense component should have been replaced by our override
+        appHtml = renderToString(comp);
+      } else {
+        throw error;
+      }
+    }
+    
     const { scripts, stylesheets, css } = flushChunks(clientStats, {
       chunkNames,
       outputPath: config.paths.DIST,

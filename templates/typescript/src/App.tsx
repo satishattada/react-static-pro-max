@@ -22,12 +22,10 @@ function App() {
       <div className="content">
         <img src={logo} className="App-logo" alt="logo" />
         <FancyDiv>
-          <React.Suspense fallback={<em>Loading...</em>}>
-            <Routes>
-              <Route path="/dynamic" element={<Dynamic />} />
-              <Route path="*" element={<ReactRoutes />} />
-            </Routes>
-          </React.Suspense>
+          <Routes>
+            <Route path="/dynamic" element={<Dynamic />} />
+            <Route path="*" element={<ReactRoutes />} />
+          </Routes>
         </FancyDiv>
       </div>
     </Root>

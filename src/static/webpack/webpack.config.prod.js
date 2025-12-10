@@ -5,14 +5,27 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import CaseSensitivePathsPlugin from "case-sensitive-paths-webpack-plugin";
 import TerserPlugin from "terser-webpack-plugin";
 import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
+import nodeExternals from "webpack-node-externals";
 import path from "path";
 
 import rules from "./rules";
 
 export default function ({ config }) {
-  const { DIST, NODE_MODULES, SRC, HTML_TEMPLATE } = config.paths;
+  const { DIST, NODE_MODULES, SRC, HTML_TEMPLATE, ARTIFACTS } = config.paths;
   const isNode = config.stage === "node";
 
+  // CRITICAL DEBUG - WILL SHOW IN BUILD OUTPUT
+  process.stdout.write(`\n🔍 WEBPACK CONFIG: stage="${config.stage}", isNode=${isNode}, ARTIFACTS="${ARTIFACTS}"\n`);
+  
+  console.log('=== WEBPACK CONFIG DEBUG ===');
+  console.log('Stage:', config.stage);
+  console.log('isNode:', isNode);
+  console.log('ARTIFACTS:', ARTIFACTS);
+  console.log('DIST:', DIST);
+  console.log('===========================');
+
+  process.env.REACT_STATIC_ENTRY_PATH = config.entry;
+  process.env.REACT_STATIC_SITE_ROOT = config.siteRoot;
   process.env.REACT_STATIC_BASE_PATH = config.basePath;
   process.env.REACT_STATIC_PUBLIC_PATH = config.publicPath;
   process.env.REACT_STATIC_ASSETS_PATH = config.assetsPath;
@@ -61,15 +74,26 @@ export default function ({ config }) {
           },
     },
     context: path.resolve(__dirname, "../../../node_modules"),
-    entry: [
-      ...(config.disableRuntime
-        ? []
-        : [
-            require.resolve("../../bootstrapPlugins"),
-            require.resolve("../../bootstrapTemplates"),
-          ]),
-      config.entry,
-    ].filter(Boolean),
+    entry: (() => {
+      const entries = [
+        ...(isNode ? [require.resolve("./nodeGlobals")] : []),
+        ...(config.disableRuntime
+          ? []
+          : [
+              require.resolve("../../bootstrapPlugins"),
+              require.resolve("../../bootstrapTemplates"),
+            ]),
+        ...(config.disableRuntime || !isNode
+          ? [config.entry]
+          : [require.resolve("../../bootstrapApp")]),
+      ].filter(Boolean);
+      console.log('=== WEBPACK ENTRIES ===');
+      console.log('isNode:', isNode);
+      console.log('Entries:', entries);
+      console.log('======================');
+      // Return as object for node build to ensure proper naming
+      return isNode ? { 'static-app': entries } : entries;
+    })(),
     stats: {
       warnings: false,
       errorDetails: true,
@@ -79,11 +103,25 @@ export default function ({ config }) {
       chunkFilename: isNode
         ? "[name].js"
         : "static/js/[name].[contenthash:8].chunk.js",
-      path: DIST,
+      path: isNode ? ARTIFACTS : DIST,
       publicPath: process.env.REACT_STATIC_ASSETS_PATH || "/",
       pathinfo: false,
       libraryTarget: isNode ? "commonjs2" : undefined,
     },
+    // Externalize all node_modules for node builds
+    externals: isNode
+      ? [
+          nodeExternals({
+            allowlist: [
+              // Include files that need to be bundled
+              /\.css$/,
+              /\.s[ac]ss$/,
+              /\.less$/,
+              /\.(png|jpe?g|gif|svg|webp)$/i,
+            ],
+          }),
+        ]
+      : undefined,
     module: {
       rules: rules({ config, stage: config.stage || "prod" }),
       strictExportPresence: false,
@@ -110,11 +148,18 @@ export default function ({ config }) {
         react$: resolveFrom(NODE_MODULES, "react"),
         "react-dom$": resolveFrom(NODE_MODULES, "react-dom"),
         __react_static_root__: config.paths.ROOT,
+        ...(isNode ? {} : {
+          "webpack/hot/emitter": resolveFrom(__dirname, "webpack/hot/emitter"),
+        }),
         // Add types alias
         types: path.resolve(config.paths.ROOT, "src/types"),
       },
-      mainFields: ["browser", "module", "main"],
+      mainFields: isNode 
+        ? ["main", "module"]
+        : ["browser", "module", "main"],
+      // IMPORTANT: Set fullySpecified to false for .mjs files
       fullySpecified: false,
+      // Add fallbacks for Node.js core modules
       fallback: isNode
         ? {}
         : {
@@ -168,12 +213,25 @@ export default function ({ config }) {
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": JSON.stringify("production"),
         "process.browser": !isNode,
+        "__REACT_STATIC_SSR__": isNode,
+        ...(isNode
+          ? {
+              // Don't replace typeof checks - they need to work naturally
+              // Instead, rely on __REACT_STATIC_SSR__ flag
+            }
+          : {}),
       }),
     ].filter(Boolean),
     devtool: isNode ? false : "source-map",
     performance: {
       hints: false,
     },
-    node: isNode ? undefined : false,
+    node: isNode
+      ? {
+          __dirname: false,
+          __filename: false,
+          global: false,
+        }
+      : false,
   };
 }

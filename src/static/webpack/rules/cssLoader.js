@@ -67,14 +67,26 @@ export default function ({ config, stage }) {
         {
           test: /\.s[ac]ss$/,
           use: [
-            require.resolve("css-loader/locals"),
+            {
+              loader: require.resolve("css-loader"),
+              options: {
+                modules: {
+                  exportOnlyLocals: true,
+                },
+              },
+            },
             postcssLoader,
             sassLoader,
           ],
         },
         {
           test: /\.css$/,
-          loader: require.resolve("css-loader/locals"),
+          loader: require.resolve("css-loader"),
+          options: {
+            modules: {
+              exportOnlyLocals: true,
+            },
+          },
         },
       ],
     };

@@ -75,6 +75,11 @@ function buildConfigFromPath(state, configPath) {
 }
 
 export function buildConfig(state, config = {}) {
+  // Ensure stage is set on config from state
+  if (state.stage && !config.stage) {
+    config.stage = state.stage;
+  }
+  
   // Default Paths
   let paths = {
     root: nodePath.resolve(process.cwd()),
@@ -115,7 +120,7 @@ export function buildConfig(state, config = {}) {
     EXCLUDE_MODULES:
       paths.excludeResolvedModules || resolvePath(paths.nodeModules),
     PACKAGE: resolvePath("package.json"),
-    HTML_TEMPLATE: nodePath.join(DIST, "index.html"),
+    HTML_TEMPLATE: nodePath.join(resolvePath(paths.public), "index.html"),
     STATIC_DATA: nodePath.join(ASSETS, "staticData"),
   };
 

@@ -2,7 +2,17 @@ import React from "react";
 //
 import { plugins } from "..";
 
+// Check if we're in a browser environment
+const isBrowser = typeof document !== 'undefined';
+
 export default function Root({ children }) {
+  // For SSR, just use a simple passthrough without hooks
+  if (!isBrowser) {
+    const SimpleRoot = plugins.Root(({ children }) => children);
+    return <SimpleRoot>{children}</SimpleRoot>;
+  }
+
+  // For browser, use hooks for error handling and HMR
   const ResolvedRoot = React.useMemo(
     () => plugins.Root(({ children }) => children),
     [plugins],

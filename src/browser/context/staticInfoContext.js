@@ -1,9 +1,9 @@
 import React from "react";
 
-let context = React.createContext({});
-
-if (typeof document !== "undefined") {
-  context = React.createContext(window.__routeInfo);
-}
+// Always use the same context instance, regardless of environment
+// The default value will be overridden by the Provider in bootstrapApp
+const context = React.createContext(
+  typeof document !== "undefined" ? window.__routeInfo : {}
+);
 
 export default context;

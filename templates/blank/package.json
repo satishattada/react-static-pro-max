@@ -11,11 +11,11 @@
     "serve": "serve dist -p 3000 -s"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-static-pro-max": "^2.0.15"
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-static-pro-max": "^2.0.16"
   },
   "devDependencies": {
-    "serve": "^14.2.4"
+    "serve": "^14.2.5"
   }
 }

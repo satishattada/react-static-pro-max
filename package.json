@@ -1,7 +1,7 @@
 {
   "name": "react-static-pro-max",
   "description": "A progressive static site generator for React",
-  "version": "2.0.19",
+  "version": "2.0.20",
   "license": "MIT",
   "repository": "https://github.com/satishattada/react-static-pro-max.git",
   "main": "lib/index.js",
@@ -57,7 +57,7 @@
     "fresh-install": "npm run clean && npm install"
   },
   "peerDependencies": {
-    "react": "^18.0.0 | ^19.2.3"
+    "react": "^18.0.0 || ^19.2.3"
   },
   "dependencies": {
     "@babel/cli": "^7.28.3",

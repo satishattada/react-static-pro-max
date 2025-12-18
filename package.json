@@ -1,7 +1,7 @@
 {
   "name": "react-static-pro-max",
   "description": "A progressive static site generator for React",
-  "version": "2.0.21",
+  "version": "2.0.22",
   "license": "MIT",
   "repository": "https://github.com/satishattada/react-static-pro-max.git",
   "main": "lib/index.js",
@@ -161,7 +161,7 @@
     "react": "^19.2.3",
     "react-dev-utils": "^12.0.1",
     "react-dom": "^19.2.3",
-    "react-router-dom": "^7.10.1",
+    "react-router-dom": "^7.11.0",
     "rimraf": "^6.1.2",
     "webpack-hot-middleware": "^2.26.1",
     "webpack-node-externals": "^3.0.0"

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Root, Routes } from 'react-static-pro-max'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router'
 
 import './app.css'
 

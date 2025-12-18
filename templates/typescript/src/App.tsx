@@ -1,6 +1,6 @@
 import React from 'react'
 import { Root, ReactRoutes, addPrefetchExcludes } from 'react-static-pro-max'
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link } from "react-router";
 import FancyDiv from 'components/FancyDiv'
 import Dynamic from 'containers/Dynamic'
 
